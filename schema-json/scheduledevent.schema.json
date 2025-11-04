@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2022/BXF/scheduledevent.schema.json",
+  "title": "scheduledevent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "ScheduledEvent": {
+      "type": "object",
+      "properties": {
+        "EventData": {
+          "title": "EventData",
+          "type": "string",
+          "description": "Specifies the data for the complete show or a single event"
+        },
+        "Content": {
+          "title": "Content",
+          "type": "object",
+          "properties": {
+            "ContentDetail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [],
+          "description": "This is not expected to be present for comments, program headers and break headers, but is expected in all other cases."
+        },
+        "AlternateAudioContent": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "If audio not directly associated with the primary video content is scheduled to run with the video a separate content for just this audio must be indicated."
+        },
+        "ContentType": {
+          "title": "ContentType",
+          "type": "string",
+          "description": "Used to describe the type of content (eg. network, local, entertainment, news) (See Configuration Section in BXF Protocol Documentation)"
+        },
+        "Format": {
+          "title": "Format",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "Formats": {
+                  "title": "Formats",
+                  "type": "string",
+                  "description": "The definition of the empty structure of a program as used by the traffic system to construct a schedule grid."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Formats"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "FormatId": {
+                  "title": "FormatId",
+                  "type": "string",
+                  "description": "The unique identifier for a format"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "FormatId"
+              ]
+            }
+          ]
+        },
+        "ScheduleElements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "EventData": {
+                "title": "EventData",
+                "type": "string",
+                "description": "Specifies the data for the complete show or a single event"
+              },
+              "AlternateAudioContent": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "If audio not directly associated with the primary video content is scheduled to run with the video a separate content for just this audio must be indicated."
+              },
+              "PrivateInformation": {
+                "title": "PrivateInformation",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "Content": {
+                    "title": "Content",
+                    "type": "object",
+                    "description": "This is not expected to be present for comments, program headers and break headers, but is expected in all other cases."
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "Content"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "MultiContent": {
+                    "title": "MultiContent",
+                    "type": "string",
+                    "description": "Intended in cases where you would have more than one program content embedded within a single program such as compilation programs, cartoons, etc. (v4.0)"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "MultiContent"
+                ]
+              }
+            ]
+          },
+          "description": "Specifies the elemental structure of the show"
+        },
+        "Series": {
+          "title": "Series",
+          "$ref": "#/$defs/Series"
+        },
+        "ParentalRating": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Parental rating for the show for one region (PMCP)"
+        },
+        "EiCode": {
+          "title": "EiCode",
+          "type": "string",
+          "description": "Used for FCC Education/Information Children's code"
+        },
+        "ContentPlayNumber": {
+          "title": "ContentPlayNumber",
+          "type": "integer",
+          "minimum": 1,
+          "description": "The play number value relative to the contract used to authorize the content or the total times the content has been used on the schedule."
+        },
+        "PremiereFlag": {
+          "title": "PremiereFlag",
+          "type": "boolean",
+          "description": "Used to indicate that this is the first airing of the content on this schedule."
+        },
+        "LastPlayFlag": {
+          "title": "LastPlayFlag",
+          "type": "boolean",
+          "description": "Used to indicate that this is the last airing of the content on this schedule."
+        },
+        "TransformationOutput": {
+          "title": "TransformationOutput",
+          "type": "string",
+          "description": "Used to create a transformation of the video from its current stored value to a different transmission value."
+        },
+        "AlternateScheduleEventFlag": {
+          "title": "AlternateScheduleEventFlag",
+          "type": "boolean",
+          "properties": {
+            "@LinkedEventId": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "@LinkedEventId"
+          ],
+          "description": "Allows linkage to standby promo content or other content that serve as backups or alternatives to content that may be missing at airtime.  Must be set to \"1\" and include a LinkedEventId that indicates which event this is a backup to.  Note that there is also a new AlternateEvent element that allows the definition of alternative content underneath a specific Event."
+        },
+        "PlayoutRestrictions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Used to define what is allowed or restricted to the viewing of content in different venues (locations, devices, etc.) and the provisioning of alternative content when this happens.  Each Venue may have only one replacement option or null."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "type": "string"
+        },
+        "@excludeFromEPG": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Series": {
+      "type": "object",
+      "properties": {
+        "SeriesName": {
+          "title": "SeriesName",
+          "type": "string",
+          "description": "The name assigned to represent a related group of produced content."
+        },
+        "EpisodeName": {
+          "title": "EpisodeName",
+          "type": "string",
+          "description": "A distinct name (within the series) assigned by the producer of the content."
+        },
+        "EpisodeCode": {
+          "title": "EpisodeCode",
+          "type": "string",
+          "description": "The identifier that uniquely specifies a title in a series"
+        },
+        "Season": {
+          "title": "Season",
+          "type": "object",
+          "properties": {
+            "SeasonName": {
+              "title": "SeasonName",
+              "type": "string",
+              "description": "The name used to reference the season period"
+            },
+            "StartDate": {
+              "title": "StartDate",
+              "type": "string",
+              "format": "date",
+              "description": "Start date of the season"
+            },
+            "EndDate": {
+              "title": "EndDate",
+              "type": "string",
+              "format": "date",
+              "description": "End date of the season"
+            },
+            "SeasonCode": {
+              "title": "SeasonCode",
+              "type": "string",
+              "description": "Indicates the value for the season within the full episode code."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "SeasonName"
+          ],
+          "description": "A date range that indicates the period of time in which the episode was originally produced"
+        },
+        "SeriesCode": {
+          "title": "SeriesCode",
+          "type": "string",
+          "description": "The series prefix or code that applies to all episodes that are part of the series - eg. SESA for Sesame Street."
+        },
+        "EpisodeNumber": {
+          "title": "EpisodeNumber",
+          "type": "string",
+          "description": "The value associated with the epsiode relative to the full EpisodeCode (eg. SESAHDBA0110 then this would be 0110).  May contain non-numeric characters."
+        },
+        "Producers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Companies that are involved in the production or distribution of the series."
+        },
+        "Synopses": {
+          "title": "Synopses",
+          "type": "object",
+          "properties": {
+            "Synopsis": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "@synopsisName": {
+                    "type": "string"
+                  },
+                  "@synopsisMaxLength": {
+                    "type": "integer"
+                  },
+                  "@synopsisPurpose": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": []
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Synopsis"
+          ],
+          "description": "Allow the addition of one or more synopses of various lengths and for different purposes in multiple languages. (v5.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "SeriesName"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

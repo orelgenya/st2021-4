@@ -1,0 +1,762 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/audio.schema.json",
+  "title": "audio",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "AudioChannel": {
+      "type": "object",
+      "properties": {
+        "SoundfieldGroupLinkID": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+          },
+          "description": "Used to link an AudioChannel to a specific SoundfieldGroup."
+        },
+        "AudioChannelType": {
+          "title": "AudioChannelType",
+          "type": "string",
+          "enum": [
+            "Left",
+            "Center",
+            "Right",
+            "LFE",
+            "Left Surround",
+            "Right Surround",
+            "Left Side Surround",
+            "Right Side Surround",
+            "Left Rear Surround",
+            "Right Rear Surround ",
+            "Left Center",
+            "Right Center",
+            "Center Surround",
+            "Mono One",
+            "Mono Two",
+            "Left Total",
+            "Right Total",
+            "Left Sorrund Total",
+            "Right Surround Total",
+            "Surround",
+            "Control",
+            "Other"
+          ],
+          "description": "The type of labeling used for each AudioChannel such as LEFT, RIGHT, CENTER, etc. and further extended for UK requirements to include control channels.  (ST 428-12:2013; ST2067-8:2013)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@audioChannelID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@audioChannelReference": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@directPCMTrack": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@directPCMTrackID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Distinct collection of sequenced audio samples that are intended for delivery to a single loudspeaker or other reproduction device. (v6.0)"
+    },
+    "Audios": {
+      "type": "object",
+      "description": "Extends PMCP AudiosType"
+    },
+    "Ac3AudioExt": {
+      "type": "object",
+      "description": "Extends PMCP Ac3Audio"
+    },
+    "AnalogAudio": {
+      "type": "object",
+      "properties": {
+        "@audioReference": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@audioType": {
+          "type": "string",
+          "enum": [
+            "Mono",
+            "Stereo-Left",
+            "Stereo-Right"
+          ]
+        },
+        "@audioLevel": {
+          "type": "integer"
+        },
+        "@audioChannel": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@lang": {
+          "type": "string"
+        },
+        "@secondaryAudioProgram": {
+          "type": "boolean"
+        },
+        "@sapMode": {
+          "type": "string",
+          "enum": [
+            "Active",
+            "Silent"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "description": "Enumerates the settings of audio included in analog content"
+    },
+    "Audio": {
+      "type": "object",
+      "properties": {
+        "@voiceOver": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "description": "The base for all audio definitions",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Null": {
+              "title": "Null",
+              "type": "object",
+              "description": "No audio is associated to the media"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Null"
+          ]
+        }
+      ]
+    },
+    "AudioTransition": {
+      "type": "object",
+      "properties": {
+        "AudioMode": {
+          "title": "AudioMode",
+          "$ref": "#/$defs/AudioModeType",
+          "description": "Indicates whether the audio should go over, under or is a breakaway"
+        },
+        "TransitionType": {
+          "title": "TransitionType",
+          "$ref": "#/$defs/AudioTransitionEnumType",
+          "description": "Indicates if the transition is a cut or a mix (crossfade)"
+        },
+        "TransitionRate": {
+          "title": "TransitionRate",
+          "$ref": "#/$defs/AudioRateType",
+          "description": "The speed of the transition, fast, medium or slow"
+        },
+        "AudioSwap": {
+          "title": "AudioSwap",
+          "type": "boolean",
+          "description": "If set to True then the analog audio channels left and right are swapped."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Enumerates the settings to transition from one audio to another"
+    },
+    "DigitalAudio": {
+      "type": "object",
+      "properties": {
+        "@audioReference": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@truePeak": {
+          "type": "integer",
+          "maximum": 0,
+          "minimum": -146
+        },
+        "@measuredLoudness": {
+          "type": "integer",
+          "maximum": 0,
+          "minimum": -146
+        },
+        "@measurementMethod": {
+          "type": "string",
+          "enum": [
+            "dBFS",
+            "LKFS",
+            "LUFS"
+          ]
+        },
+        "@dialnorm": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31
+        },
+        "@lowAudioLevels": {
+          "type": "integer",
+          "maximum": 0,
+          "minimum": -146
+        },
+        "@audioEncodingRefID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@loudnessMeasurementType": {
+          "type": "string",
+          "enum": [
+            "Program loudness",
+            "Max short-term loudness",
+            "Max momentary loudness"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "description": "Enumerates the different types of digital audio streams. (v3.0)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Ac3Audio": {
+              "title": "Ac3Audio",
+              "$ref": "#/$defs/Ac3AudioExt"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Ac3Audio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "DEAudio": {
+              "title": "DEAudio",
+              "$ref": "#/$defs/DigitalAudioAttribute"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "DEAudio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "MPEGAACAudio": {
+              "title": "MPEGAACAudio",
+              "$ref": "#/$defs/DigitalAudioAttribute"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "MPEGAACAudio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "MPEGLayerIIAudio": {
+              "title": "MPEGLayerIIAudio",
+              "$ref": "#/$defs/DigitalAudioAttribute"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "MPEGLayerIIAudio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "PCMAudio": {
+              "title": "PCMAudio",
+              "type": "object",
+              "properties": {
+                "@exactBitRate": {
+                  "type": "boolean"
+                },
+                "@bitRateKbps": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "PCMAudio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "DED2Audio": {
+              "title": "DED2Audio",
+              "$ref": "#/$defs/DigitalAudioAttribute",
+              "description": "(v6.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "DED2Audio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Ac4Audio": {
+              "title": "Ac4Audio",
+              "$ref": "#/$defs/DigitalAudioAttribute",
+              "description": "(v6.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Ac4Audio"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "MPEGHAudio": {
+              "title": "MPEGHAudio",
+              "$ref": "#/$defs/DigitalAudioAttribute",
+              "description": "(v6.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "MPEGHAudio"
+          ]
+        }
+      ]
+    },
+    "DigitalAudioAttribute": {
+      "type": "object",
+      "properties": {
+        "@audioId": {
+          "type": "string"
+        },
+        "@lang": {
+          "type": "string"
+        },
+        "@numChannels": {
+          "type": "string"
+        },
+        "@bitRateKbps": {
+          "type": "string"
+        },
+        "@exactBitRate": {
+          "type": "boolean"
+        },
+        "@surround": {
+          "type": "boolean"
+        },
+        "@dualMono": {
+          "type": "boolean"
+        },
+        "@muteOnSound": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Enumerates the parameters of a digital audio stream",
+      "required": [
+        "@audioId"
+      ]
+    },
+    "GroupofSoundfieldGroups": {
+      "type": "object",
+      "properties": {
+        "GroupContent": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          },
+          "description": "Information about the content in the Group, which is common for all SoundfieldGroups in the Group of SoundfieldGroups. (V8.1)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@groupOfSoundfieldGroupsID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        }
+      },
+      "additionalProperties": false,
+      "description": "A group of groups allows encapsulation of SoundfieldGroups into defined streams. It is often used to classify the purpose of the audio such as Main Program, Alternate Program, etc.(v6.0)"
+    },
+    "Loudness": {
+      "type": "object",
+      "properties": {
+        "MeasuredLoudness": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@loudnessValue": {
+                "type": "integer",
+                "maximum": 0,
+                "minimum": -146
+              },
+              "@loudnessUnit": {
+                "type": "string",
+                "enum": [
+                  "dBFS",
+                  "LKFS",
+                  "LUFS"
+                ]
+              },
+              "@measurementType": {
+                "type": "string",
+                "enum": [
+                  "Program loudness",
+                  "Max short-term loudness",
+                  "Max momentary loudness"
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "description": "The measured loudness value of the SoundfieldGroup. Can be program loudness, maximum short-term loudness or maximum momentary loudness expressed by the measurement Type attribute. The unit attribute allows for various measurement units. (v8.1)"
+        },
+        "MeasuredMaximumTruePeak": {
+          "title": "MeasuredMaximumTruePeak",
+          "type": "integer",
+          "maximum": 0,
+          "minimum": -146,
+          "description": "The measured maximumTruePeak - unit of the value is dBTP"
+        },
+        "DesiredLoudnessStandard": {
+          "title": "DesiredLoudnessStandard",
+          "type": "string",
+          "enum": [
+            "ATSC A/85",
+            "EBU R128",
+            "OP 57",
+            "None"
+          ],
+          "description": "The Loudness standard that the SoundfieldGroup meets."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Indicates the loudness of the SoundfieldGroup as measured in various ways and using various standards. (v6.0)"
+    },
+    "MultiChannelAudioStreams": {
+      "type": "object",
+      "properties": {
+        "GroupofSoundfieldGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/$defs/GroupofSoundfieldGroups"
+              }
+            ]
+          },
+          "description": "A group of groups allows encapsulation of SoundfieldGroups into defined streams. It is often used to classify the purpose of the audio such as Main Program, Alternate Program, etc.(v6.0)"
+        },
+        "SoundfieldGroup": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/$defs/SoundfieldGroup"
+              }
+            ]
+          },
+          "description": "Used to organize a group of multiple audio channels that comprise the complete audio structure for the program, for example, Stereo, or Stereo-Spanish, or 5.1.  It may comprise a single audio stream using a specific encoding or multiple channels (Left, Right, Center LFE, etc.)  It can also comprise multiple complete streams assigned to various channels. (v8.1)"
+        },
+        "AudioChannel": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/$defs/AudioChannel"
+              }
+            ]
+          },
+          "description": "Distinct collection of sequenced audio samples that are intended for delivery to a single loudspeaker or other reproduction device. (v6.0)"
+        },
+        "AudioEncoding": {
+          "title": "AudioEncoding",
+          "$ref": "#/$defs/DigitalAudio",
+          "description": "The single audio encoding method used within this MCA across all AudioChannels included.  It can be either indicated at this level or alternatively referenced using the encodingReferenceID."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@essenceReference": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@audioEncodingRefID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@numberOfSoundfieldGroups": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@firstTrack": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@firstTrackID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@lastTrack": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@lastTrackID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        }
+      },
+      "additionalProperties": false,
+      "description": "A collection of one or more audio streams with the same encoding method that further incorporates groups of audio channels in a specific format as defined in ST 377-4. If a data stream (MXF audio essence track) contains multiple encodings (e.g., PCM and Dolby E), then multiple MultiChannelAudioStreams must be used. (v8.1)"
+    },
+    "SoundfieldGroup": {
+      "type": "object",
+      "properties": {
+        "GroupofSoundfieldGroupsLinkID": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+          },
+          "description": "Used to link a SoundfieldGroup to a specific Group of SoundfieldGroups. (v8.1)"
+        },
+        "MultichannelType": {
+          "title": "MultichannelType",
+          "type": "string",
+          "enum": [
+            "Mono",
+            "Dual Mono",
+            "Stereo",
+            "Lt-Rt",
+            "3.0",
+            "4.0",
+            "5.0",
+            "5.1",
+            "5.1EX",
+            "6.0",
+            "6.1",
+            "7.0",
+            "7.1DS",
+            "7.1SDS",
+            "Other"
+          ],
+          "description": "Describes the multichannel type of SoundfieldGroup.  For example MONO, STEREO, 5.1, etc. Can be sourced from MXF MCATagname of a SoundfieldGroup (e.g., AS-11 X1 MXF), if it contains this information.\n(ST 428-12:2013 and ST2067-8:2013)"
+        },
+        "AudioContent": {
+          "title": "AudioContent",
+          "type": "object",
+          "properties": {
+            "AudioContentKind": {
+              "title": "AudioContentKind",
+              "type": "string",
+              "enum": [
+                "Primary",
+                "Secondary Audio Program",
+                "Hearing Impaired",
+                "Descriptive Video",
+                "Dialog",
+                "Music",
+                "Effects",
+                "Music and Effects",
+                "Optional Music and Effects",
+                "Program Narration",
+                "Optional Narration",
+                "Voice Over",
+                "Visually Impaired",
+                "Visually Impaired with control channel",
+                "Recorded Commentary",
+                "Live Commentary",
+                "International",
+                "Other"
+              ],
+              "description": "Describes the high level purpose or use of the audio content.  The assigned value can be sourced form MXF MCA Content (e.g. Video Description equals the Audio Descriprion term widely used in the UK).  If MCA content is not available, may be sourced from MCAContentKind."
+            },
+            "AudioContentUse": {
+              "title": "AudioContentUse",
+              "type": "string",
+              "enum": [
+                "Finished Composite",
+                "Intermediary Composite",
+                "Simplified",
+                "Singular"
+              ],
+              "description": "Describes the condition of the content (e.g. finished, intermediate) as a modifier to the AudioContentKind value and indicates its intended use. Value can be sourced from MXF MCA Use Class."
+            },
+            "AudioContentSubType": {
+              "title": "AudioContentSubType",
+              "type": "string",
+              "enum": [
+                "Director",
+                "Technical",
+                "Writer",
+                "Cast",
+                "Announcer",
+                "Commentator",
+                "Other"
+              ],
+              "description": "Describes particular aspects of the content, such as whether a commentary is a Director, Cast or Writer’s commentary.  This property is absent if it is not relevant to a particular AudioContentKind value."
+            },
+            "PrimarySpokenlanguage": {
+              "title": "PrimarySpokenlanguage",
+              "type": "string",
+              "properties": {
+                "@dubbed": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [],
+              "description": "Intelligible primery spoken language that potentially distinguishes this Soundfield Group from another Soundfield Group. Value can be sourced form MXF MCA RFC 5646 Spoken Language."
+            },
+            "AdditionalSpokenLanguage": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "properties": {
+                  "@dubbed": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": []
+              },
+              "description": "Additional intelligible spoken languages that are present in the audio, but are not considered primary."
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Additional details concerning the language spoken and the purpose of the audio."
+        },
+        "Loudness": {
+          "title": "Loudness",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Loudness"
+            }
+          ],
+          "description": "Indicates the loudness of the SoundfieldGroup as measured in various ways and using various standards. (v6.0)"
+        },
+        "AudioMetadata": {
+          "title": "AudioMetadata",
+          "type": "object",
+          "properties": {
+            "AudioMetadataInVANC": {
+              "title": "AudioMetadataInVANC",
+              "type": "boolean",
+              "description": "Indicates that audio metadata is in VANC (required if multichannel audio is in an uncompressed stream) ST 2020-2"
+            },
+            "AudioMetadataInAudioStream": {
+              "title": "AudioMetadataInAudioStream",
+              "type": "boolean",
+              "description": "Indicates that audio metadata is in the compressed audio stream."
+            },
+            "AudioMetadataInRDD6XML": {
+              "title": "AudioMetadataInRDD6XML",
+              "type": "boolean"
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Flags indicating whether the audio metadata in stored in the VANC or the Audio Stream or if it is contained in the RDD6 XML."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@soundfieldGroupID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@numberOfChannels": {
+          "type": "integer"
+        },
+        "@firstPCMTrack": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@firstPCMTrackID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@lastPCMTrack": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@lastPCMTrackID": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to organize a group of multiple audio channels that comprise the complete audio structure for the program, for example, Stereo, or Stereo-Spanish, or 5.1.  It may comprise a single audio stream using a specific encoding or multiple channels (Left, Right, Center LFE, etc.)  It can also comprise multiple complete streams assigned to various channels. (v8.1)"
+    },
+    "TSAudio": {
+      "type": "object",
+      "description": "Enumerates the parameters of digital audio in a transport stream",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Null": {
+              "title": "Null",
+              "type": "object",
+              "description": "No audio is associated to the media"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Null"
+          ]
+        }
+      ]
+    },
+    "AudioModeType": {
+      "type": "string",
+      "enum": [
+        "Breakaway",
+        "Over",
+        "Under"
+      ]
+    },
+    "AudioRateType": {
+      "type": "string",
+      "enum": [
+        "Fast",
+        "Medium",
+        "Slow"
+      ]
+    },
+    "AudioTransitionEnumType": {
+      "type": "string",
+      "enum": [
+        "Cut",
+        "Mix"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

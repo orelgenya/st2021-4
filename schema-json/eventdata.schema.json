@@ -1,0 +1,379 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/eventdata.schema.json",
+  "title": "eventdata",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "SCTE-35DistributionRestrictions": {
+      "type": "object",
+      "properties": {
+        "@deliveryNotRestricted": {
+          "type": "boolean"
+        },
+        "@webDeliveryAllowed": {
+          "type": "boolean"
+        },
+        "@noRegionalBlackout": {
+          "type": "boolean"
+        },
+        "@archiveAllowed": {
+          "type": "boolean"
+        },
+        "@deviceRestrictions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Group0",
+              "Group1",
+              "Group2",
+              "None"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "description": "Accommodates the 2012 revision to SCTE-35 that adds distribution bits. (v3.0)"
+    },
+    "EventExtId": {
+      "type": "object",
+      "properties": {
+        "BillingReferenceCode": {
+          "title": "BillingReferenceCode",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "description": "Used to link an event back to its billing record"
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Null": {
+              "title": "Null",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Null"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "EventId": {
+              "title": "EventId",
+              "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+              "description": "Unique within a schedule reference for each event required to be a UUID."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "EventId"
+          ]
+        }
+      ]
+    },
+    "EventData": {
+      "type": "object",
+      "properties": {
+        "EventId": {
+          "title": "EventId",
+          "$ref": "#/$defs/EventExtId",
+          "description": "Unique identifier for each event"
+        },
+        "EventTitle": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "InsertAfterEventId": {
+          "title": "InsertAfterEventId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "A pointer to the event prior to the position used to insert a new event in an existing list.  Required to be a UUID."
+        },
+        "StartDateTime": {
+          "title": "StartDateTime",
+          "type": "object",
+          "properties": {
+            "@nominalFlag": {}
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfDateTime"
+            }
+          ],
+          "required": [],
+          "description": "The date and time of the beginning of the event"
+        },
+        "LengthOption": {
+          "title": "LengthOption",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "Duration": {
+                  "title": "Duration",
+                  "type": "object",
+                  "properties": {
+                    "EstimatedDurationOffset": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "maxItems": 2,
+                      "description": "Used to indicate the amount of time in plus or minus total minutes that the duration may be adjusted"
+                    },
+                    "@nominalFlag": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "allOf": [
+                    {
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfDuration"
+                    }
+                  ],
+                  "required": []
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Duration"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "EndDateTime": {
+                  "title": "EndDateTime",
+                  "type": "object",
+                  "properties": {
+                    "EstimatedDurationOffset": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "maxItems": 2,
+                      "description": "Used to indicate the amount of time in plus or minus total minutes that the end time may be adjusted"
+                    },
+                    "@nominalFlag": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "allOf": [
+                    {
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfDateTime"
+                    }
+                  ],
+                  "required": []
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "EndDateTime"
+              ]
+            }
+          ],
+          "description": "Duration or end time of the event"
+        },
+        "StartMode": {
+          "title": "StartMode",
+          "$ref": "./bxftypes.schema.json#/$defs/StartModeType",
+          "description": "The way the event will start relative to the previous event or time"
+        },
+        "EndMode": {
+          "title": "EndMode",
+          "$ref": "./bxftypes.schema.json#/$defs/EndModeType",
+          "description": "The way an event will end relative to its duration or other events"
+        },
+        "Transitions": {
+          "title": "Transitions",
+          "type": "object",
+          "properties": {
+            "AudioTransitions": {
+              "type": "array",
+              "items": {
+                "$ref": "./audio.schema.json#/$defs/AudioTransition"
+              }
+            },
+            "VideoTransitions": {
+              "title": "VideoTransitions",
+              "$ref": "./video.schema.json#/$defs/VideoTransition"
+            }
+          },
+          "additionalProperties": false
+        },
+        "FederalId": {
+          "title": "FederalId",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "description": "Some countries require a content identifier to be attached to indicate that the content has been cleared or reviewed."
+        },
+        "FederalSource": {
+          "title": "FederalSource",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Some countries require an indication as to the original source of the content being aired.  The values will vary by country.  Examples are live, prerecorded, network, syndicated.  (See Configuration Section in BXF Protocol Documentation)"
+        },
+        "FederalType": {
+          "title": "FederalType",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "description": "Some countries require further codification of the content such as the FCC Type or CRTC Code.  This is typically a specialized value limited by the countries regulatory body. (e.g. CM, PR, PSA, PRO, PRC) (See Configuration Section in BXF Protocol Documentation) (v3.0)"
+        },
+        "EventDescription": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          },
+          "description": "Description of the event"
+        },
+        "EventNotes": {
+          "title": "EventNotes",
+          "$ref": "./bxftypes.schema.json#/$defs/EventNotes",
+          "description": "Operator notes used to annotate the event with reference to the person that created the note."
+        },
+        "JipFlag": {
+          "title": "JipFlag",
+          "type": "boolean",
+          "description": "If the event is joined in progress set to true"
+        },
+        "Expendable": {
+          "title": "Expendable",
+          "type": "boolean",
+          "description": "If event can be preempted then set to true"
+        },
+        "Protection": {
+          "title": "Protection",
+          "type": "object",
+          "properties": {
+            "ProtectionSourceRequested": {
+              "title": "ProtectionSourceRequested",
+              "type": "boolean",
+              "description": "If set to true then type is required.  Default is false.  Indicates that the event should have a protected source (ie backup) that can be used if the primary source is unavailable or fails."
+            },
+            "ProtectionSourceName": {
+              "title": "ProtectionSourceName",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "description": "Name of the type of protection source to be used.  This must be configured within the system. (See Configuration Section in BXF Protocol Documentation)"
+            },
+            "SCTE-35DistributionRestrictions": {
+              "title": "SCTE-35DistributionRestrictions",
+              "type": "object",
+              "properties": {
+                "@tierLevel": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4096
+                }
+              },
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "$ref": "#/$defs/SCTE-35DistributionRestrictions"
+                }
+              ],
+              "required": [],
+              "description": "Accommodates the 2012 revision to SCTE-35 that adds distribution bits. (v3.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ProtectionSourceRequested"
+          ]
+        },
+        "AlternateEvent": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EventData"
+          },
+          "description": "Allow the linkage to standby promo content or other content that are backups or alternatives to content that may be missing at airtime."
+        },
+        "Series": {
+          "title": "Series",
+          "type": "string",
+          "description": "If the content is part of a series this allows the entry of the episodic information"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@eventType": {
+          "type": "string",
+          "enum": [
+            "Primary",
+            "Primary-ProgramHeader",
+            "Primary-BreakHeader",
+            "NonPrimary",
+            "Comment",
+            "Macro"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "PrimaryEvent": {
+              "title": "PrimaryEvent",
+              "$ref": "./primaryevent.schema.json#/$defs/PrimaryEvent"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "PrimaryEvent"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "NonPrimaryEvent": {
+              "title": "NonPrimaryEvent",
+              "$ref": "./nonprimaryevent.schema.json#/$defs/NonPrimaryEvent"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "NonPrimaryEvent"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "MacroEvent": {
+              "title": "MacroEvent",
+              "$ref": "./macro.schema.json#/$defs/Macro"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "MacroEvent"
+          ]
+        }
+      ],
+      "required": [
+        "EventId",
+        "StartDateTime",
+        "LengthOption",
+        "StartMode",
+        "EndMode"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

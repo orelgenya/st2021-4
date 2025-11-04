@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/programcontent.schema.json",
+  "title": "programcontent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "ProgramContent": {
+      "type": "object",
+      "properties": {
+        "ContentMetaData": {
+          "title": "ContentMetaData",
+          "$ref": "./contentmetadata.schema.json#/$defs/ContentMetaData",
+          "description": "Content identification and other details"
+        },
+        "Elements": {
+          "title": "Elements",
+          "type": "object",
+          "properties": {
+            "Element": {
+              "type": "array",
+              "items": {
+                "$ref": "./element.schema.json#/$defs/Element"
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Element"
+          ],
+          "description": "If the program is being delivered in segmented form this describes each segment's content, position and offset from the start of the program as well as other embedded content such as inserted barter content"
+        },
+        "Series": {
+          "title": "Series",
+          "type": "string",
+          "description": "If the content is part of a series this allows the entry of the episodic information"
+        },
+        "ProgramContract": {
+          "type": "array",
+          "items": {
+            "$ref": "./contract.schema.json#/$defs/ProgramContract"
+          },
+          "description": "If the program is purchased, it may be linked to a rights contract"
+        },
+        "ParentalRating": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxfparentalrating.schema.json#/$defs/BxfParentalRating"
+          },
+          "description": "Parental rating for the show for one region (PMCP)"
+        },
+        "ContentType": {
+          "title": "ContentType",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Used to describe the type of content (e.g. network, local, entertainment, news) (See Configuration Section in BXF Protocol Documentation) (v3.0)"
+        },
+        "EiCode": {
+          "title": "EiCode",
+          "$ref": "./bxftypes.schema.json#/$defs/EiCode",
+          "description": "Used for FCC Education/Information Children's code. (v3.0)"
+        },
+        "PaidProgramming": {
+          "title": "PaidProgramming",
+          "$ref": "./contract.schema.json#/$defs/SalesContract"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ContentMetaData"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

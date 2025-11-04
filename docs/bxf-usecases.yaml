@@ -1,0 +1,2465 @@
+asyncapi: 3.0.0
+info:
+  title: BXF Use Case Library
+  version: 1.0.0
+  description: |
+    AsyncAPI catalogue derived from the SMPTE ST 2021-4 sample messages.
+    Each channel groups documented use cases that share the same BXF
+    messageType attribute.
+defaultContentType: application/xml
+servers:
+  sandbox:
+    host: bxf.example.test
+    protocol: ws
+channels:
+  Information:
+    address: bxf/Information
+    messages:
+      BxfInformationMessage:
+        $ref: '#/components/messages/BxfInformationMessage'
+    subscribe:
+      message:
+        $ref: '#/components/messages/BxfInformationMessage'
+  Heartbeat:
+    address: bxf/Heartbeat
+    messages:
+      BxfHeartbeatMessage:
+        $ref: '#/components/messages/BxfHeartbeatMessage'
+    subscribe:
+      message:
+        $ref: '#/components/messages/BxfHeartbeatMessage'
+  Request:
+    address: bxf/Request
+    messages:
+      BxfRequestMessage:
+        $ref: '#/components/messages/BxfRequestMessage'
+    subscribe:
+      message:
+        $ref: '#/components/messages/BxfRequestMessage'
+  Reply:
+    address: bxf/Reply
+    messages:
+      BxfReplyMessage:
+        $ref: '#/components/messages/BxfReplyMessage'
+    subscribe:
+      message:
+        $ref: '#/components/messages/BxfReplyMessage'
+components:
+  messages:
+    BxfInformationMessage:
+      name: Information
+      summary: BXF Information message
+      schemaFormat: application/schema+json;version=draft-2020-12
+      payload:
+        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+      examples:
+      - name: Acquisition Failure Use Case
+        summary: Acquisition Failure Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F5" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd" userName="AutomationUser" dateTime="2006-11-23T14:23:55" originType="Automation" messageType="Information" origin="Automation System">
+          	<BxfData>
+          		<ContentTransfer transferType="File transfer" transferId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1">
+          			<Content action="read" contentExists="false" error="system_unavailable">
+          				<NonProgramContent>
+          					<Details>
+          						<AdType>Promo</AdType>
+          						<SpotType>Standard</SpotType>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId>
+          							<HouseNumber>ITVS_HYP</HouseNumber>
+          						</ContentId>
+          						<Name>ITVS HYPERBOLE</Name>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          		</ContentTransfer>
+          	</BxfData>
+          </BxfMessage>
+      - name: AddProgram
+        summary: AddProgram
+        payload: |
+          <BxfMessage id="urn:uuid:11111111-1111-1111-1111-111111111111" dateTime="2012-12-28T09:30:47.0Z" messageType="Information" origin="External System" originType="Ingest" destination="BXF Import Content" userName="external" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF bxfschema.xsd">
+          	<BxfData action="add">
+          		<Content>
+          			<ProgramContent>
+          				<ContentMetaData>
+          					<ContentId>
+          						<HouseNumber>BXFMATERIAL</HouseNumber>
+          					</ContentId>
+          					<Name>TITLE GOES HERE</Name>
+          					<Media>
+          						<BaseBand>
+          							<Video>
+          								<AspectRatio>16:9</AspectRatio>
+          							</Video>
+          						</BaseBand>
+          						<MediaLocation>
+          							<Location>
+          								<AssetServer playoutAllowed="true" fileTransferAllowed="true">
+          									<PathName>\\SV1\CLIPFOLDER</PathName>
+          									<ReferenceName>SV1</ReferenceName>
+          								</AssetServer>
+          							</Location>
+          							<SOM>
+          								<SmpteTimeCode>00:00:01:00</SmpteTimeCode>
+          							</SOM>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</MediaLocation>
+          					</Media>
+          				</ContentMetaData>
+          			</ProgramContent>
+          		</Content>
+          	</BxfData>
+          </BxfMessage>
+      - name: Asrun Use Case
+        summary: Asrun Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" dateTime="2006-09-05T13:38:26.28" messageType="Information" origin="Automation System" originType="Automation" userName="Automation System User" destination="Traffic System" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd" xmlns:pmcp="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1" pmcp:schemaLocation="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1">
+          	<BxfData action="add">
+          		<Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-0038338391E0" scheduleName="WXXX Ch 6-1" scheduleStart="2006-06-21T17:30:00.00" scheduleEnd="2006-06-21T18:00:00.00">
+          			<Channel channelNumber="6-1" status="active" type="digital_television" ca="false" shortName="WXXX-DT" outOfBand="true">
+          			<pmcp:Name lang="eng">WXXX-DT Ch 6-1</pmcp:Name>
+          			</Channel>
+          			<AsRun>
+          				<BasicAsRun>
+          					<AsRunEventId>
+          						<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F1</EventId>
+          					</AsRunEventId>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>Network-1</HouseNumber>
+          						</ContentId>
+          						<Name>Evening News Segment-1</Name>
+          					</Content>
+          					<AsRunDetail>
+          						<Status>Aired Without Discrepancy</Status>
+          						<Type>ProgramHeader</Type>
+          						<StartDateTime>
+          							<SmpteDateTime broadcastDate="2006-06-21">
+          								<SmpteTimeCode>15:30:01:10</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:12:02:10</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</AsRunDetail>
+          				</BasicAsRun>
+          			</AsRun>
+          			<AsRun>
+          				<BasicAsRun>
+          					<AsRunEventId>
+          						<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F2</EventId>
+          						<BillingReferenceCode>JFMC1201-0012</BillingReferenceCode>
+          					</AsRunEventId>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>JFMC1201</HouseNumber>
+          							<AlternateId idType="ISCI" authorativeSource="AAAA">JFMC1201</AlternateId>
+          						</ContentId>
+          						<Name>Johnson Motors Super Sales Event</Name>
+          					</Content>
+          					<AsRunDetail>
+          						<Status>Aired Without Discrepancy</Status>
+          						<Type>BreakHeader</Type>
+          						<StartDateTime>
+          							<SmpteDateTime broadcastDate="2006-06-21">
+          								<SmpteTimeCode>15:42:03:20</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</AsRunDetail>
+          				</BasicAsRun>
+          			</AsRun>
+          			<AsRun>
+          				<BasicAsRun>
+          					<AsRunEventId>
+          						<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F3</EventId>
+          					</AsRunEventId>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>Network-1</HouseNumber>
+          						</ContentId>
+          						<Name>Evening News Segment-2</Name>
+          					</Content>
+          					<AsRunDetail>
+          						<Status>Aired Without Discrepancy</Status>
+          						<Type>ProgramHeader</Type>
+          						<StartDateTime>
+          							<SmpteDateTime broadcastDate="2006-06-21">
+          								<SmpteTimeCode>15:42:33:20</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:09:28:03</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</AsRunDetail>
+          				</BasicAsRun>
+          			</AsRun>
+          			<AsRun>
+          				<BasicAsRun>
+          					<AsRunEventId>
+          						<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F4</EventId>
+          						<BillingReferenceCode>FBIN0901-0001</BillingReferenceCode>
+          					</AsRunEventId>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>FBIN0901</HouseNumber>
+          							<AlternateId idType="ISCI" authorativeSource="AAAA">FBIN0901</AlternateId>
+          						</ContentId>
+          						<Name>Discount Mortgage Promotion</Name>
+          					</Content>
+          					<AsRunDetail>
+          						<Status>Aired with Duration Discrepancy</Status>
+          						<Type>BreakHeader</Type>
+          						<StartDateTime>
+          							<SmpteDateTime broadcastDate="2006-06-21">
+          								<SmpteTimeCode>15:52:01:23</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:29:25</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          						<EventNotes>
+          							<EventNote>Upcut by switcher</EventNote>
+          						</EventNotes>
+          					</AsRunDetail>
+          				</BasicAsRun>
+          			</AsRun>
+          			<AsRun>
+          				<BasicAsRun>
+          					<AsRunEventId>
+          						<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F5</EventId>
+          					</AsRunEventId>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>Network-1</HouseNumber>
+          						</ContentId>
+          						<Name>Evening News Segment-3</Name>
+          					</Content>
+          					<AsRunDetail>
+          						<Status>Aired Without Discrepancy</Status>
+          						<Type>ProgramHeader</Type>
+          						<StartDateTime>
+          							<SmpteDateTime broadcastDate="2006-06-21">
+          								<SmpteTimeCode>15:52:31:18</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:07:28:05</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</AsRunDetail>
+          				</BasicAsRun>
+          			</AsRun>
+          		</Schedule>
+          	</BxfData>
+          </BxfMessage>
+      - name: Content Notify Use Case
+        summary: Content Notify Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:F1234568-0022-92EE-9BA6-C293A1FA6693" messageType="Information" dateTime="2006-09-06T07:50:23.26" origin="Content Delivery System" originType="Content Delivery" destination="Traffic System" userName="Content Delivery System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          <BxfData action="add">
+          	<ContentTransfer transferId="urn:uuid:FF56FE68-3D41-11DB-8AF6-B622A1EF5492" transferType="File transfer" priority="Normal" status="Completed" statusDescription="Content recently arrived--date and time reflected in the 'recordEventStart' and 'recordEventEnd' fields" recordEventStart="2006-09-06T07:50:23.26" recordEventEnd="2006-09-06T07:55:23.26">
+          		<Content location="http://edgeserver.com/incoming_files" source="Regional Distributor">
+          			<ProgramContent>
+          				<ContentMetaData>
+          					<ContentId action="add">
+          						<Isan root="2B1A-FF17-3E20" episodeOrPart="6541" check1="7" version="48CD-78B1" check2="B"/>
+          					</ContentId>
+          						<Name>The One With the Thumb</Name>
+          						<Description>Ross discovers the fate of his childhood pet, Chi-Chi.  Chandler starts smoking again; when the group complains, he diverts their attention to their own faults. Phoebe gets money she doesn't want; she complains and gets more; she gives it away and gets a can of soda in return...which contains a thumb. The beverage company gives her $7000. Monica's new boyfriend is a hit with her friends, but Monica's not too sure.</Description>
+          				</ContentMetaData>
+          				<Series>
+          					<SeriesName>Friends</SeriesName>
+          				</Series>
+          			</ProgramContent>
+          		</Content>
+          	</ContentTransfer>
+          </BxfData>
+          </BxfMessage>
+      - name: Dub Order Use Case
+        summary: Dub Order Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0048338391E1" messageType="Information" dateTime="2006-08-25T13:19:41.28" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="add">
+          		<ContentTransfer transferId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" transferType="Duplication" priority="Normal">
+          			<Content>
+          				<NonProgramContent>
+          					<Details>
+          						<AdType>Promo</AdType>
+          						<SpotType>Standard</SpotType>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId>
+          							<HouseNumber>ITVS_HYP</HouseNumber>
+          						</ContentId>
+          						<Name>ITVS HYPERBOLE</Name>
+          						<Description/>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Source>
+          				<Media>
+          					<BaseBand>
+          						<Audio>
+          							<DigitalAudio>
+          								<Ac3Audio audioId="1"/>
+          							</DigitalAudio>
+          						</Audio>
+          						<Video>
+          							<Encoding>MPEG-2</Encoding>
+          							<DigitalVideo>true</DigitalVideo>
+          							<Format>720p</Format>
+          							<AspectRatio>4:3</AspectRatio>
+          						</Video>
+          					</BaseBand>
+          					<MediaLocation>
+          						<Location>
+          							<PhysicalAsset assetName="Tape">
+          								<MediaReferenceName>31-109</MediaReferenceName>
+          							</PhysicalAsset>
+          						</Location>
+          						<SOM>
+          							<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          						</SOM>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</MediaLocation>
+          				</Media>
+          			</Source>
+          			<Destination>
+          				<Media>
+          					<BaseBand/>
+          					<MediaLocation>
+          						<Location>
+          							<AssetServer playoutAllowed="true" fileTransferAllowed="true">
+          								<PathName>C:\media\commercials</PathName>
+          								<ReferenceName>AssetServerA</ReferenceName>
+          							</AssetServer>
+          						</Location>
+          						<SOM>
+          							<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          						</SOM>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          						<ArchiveGroup>
+          							<ArchiveName>Interstitial</ArchiveName>
+          						</ArchiveGroup>
+          					</MediaLocation>
+          				</Media>
+          				<UsagePolicy>
+          					<PurgeDate>9999-12-31T00:00:00.00</PurgeDate>
+          				</UsagePolicy>
+          			</Destination>
+          		</ContentTransfer>
+          	</BxfData>
+          </BxfMessage>
+      - name: FormatChange
+        summary: FormatChange
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-6000-11D3-8CFE-0050048383C9" dateTime="2006-08-16T20:44:43.16" messageType="Information" origin="Traffic System" originType="Traffic" destination="Program Management" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="update">
+          		<Format action="update">
+          			<FormatId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D9</FormatId>
+          			<FormatLength>
+          				<SmpteDuration>
+          					<SmpteTimeCode>00:30:00:00</SmpteTimeCode>
+          				</SmpteDuration>
+          			</FormatLength>
+          			<FormatName>SampleFormat_PrimeTime_Sitcom</FormatName>
+          			<FormatStructure>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D1</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="false">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D2</PrimaryElementId>
+          					<FormatElementType>Segment</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:09:00:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          					<NonPrimaryElements>
+          						<NonPrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D2</NonPrimaryElementId>
+          						<NonPrimaryOffset>
+          							<OffsetTime>
+          								<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          							</OffsetTime>
+          						</NonPrimaryOffset>
+          						<NonPrimaryDuration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</NonPrimaryDuration>
+          						<NonPrimaryDescription>Station ID Bug</NonPrimaryDescription>
+          					</NonPrimaryElements>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D3</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:09:30:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="false">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D4</PrimaryElementId>
+          					<FormatElementType>Segment</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:10:00:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:09:00:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          					<NonPrimaryElements>
+          						<NonPrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D4</NonPrimaryElementId>
+          						<NonPrimaryOffset>
+          							<OffsetTime>
+          								<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          							</OffsetTime>
+          						</NonPrimaryOffset>
+          						<NonPrimaryDuration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</NonPrimaryDuration>
+          						<NonPrimaryDescription>Station ID Bug for segment 2</NonPrimaryDescription>
+          					</NonPrimaryElements>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D5</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:19:00:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:45:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D6</PrimaryElementId>
+          					<FormatElementType>Segment</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:19:45:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:10:00:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          					<NonPrimaryElements>
+          						<NonPrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D6</NonPrimaryElementId>
+          						<NonPrimaryOffset>
+          							<OffsetTime>
+          								<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          							</OffsetTime>
+          						</NonPrimaryOffset>
+          						<NonPrimaryDuration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</NonPrimaryDuration>
+          						<NonPrimaryDescription>Station ID Bug for segment 3</NonPrimaryDescription>
+          					</NonPrimaryElements>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D7</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:29:45:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="false">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:15:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          			</FormatStructure>
+          		</Format>
+          	</BxfData>
+          </BxfMessage>
+      - name: Metadata Update Use Case
+        summary: Metadata Update Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-6000-11D3-8CFE-0050048383C9" dateTime="2006-08-16T20:44:43.16" messageType="Information" origin="Traffic System" originType="Traffic" destination="Program Management" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="update">
+          		<Format action="update">
+          			<FormatId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D9</FormatId>
+          			<FormatLength>
+          				<SmpteDuration>
+          					<SmpteTimeCode>00:30:00:00</SmpteTimeCode>
+          				</SmpteDuration>
+          			</FormatLength>
+          			<FormatName>SampleFormat_PrimeTime_Sitcom</FormatName>
+          			<FormatStructure>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D1</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="false">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D2</PrimaryElementId>
+          					<FormatElementType>Segment</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:09:00:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          					<NonPrimaryElements>
+          						<NonPrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D2</NonPrimaryElementId>
+          						<NonPrimaryOffset>
+          							<OffsetTime>
+          								<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          							</OffsetTime>
+          						</NonPrimaryOffset>
+          						<NonPrimaryDuration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</NonPrimaryDuration>
+          						<NonPrimaryDescription>Station ID Bug</NonPrimaryDescription>
+          					</NonPrimaryElements>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D3</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:09:30:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="false">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D4</PrimaryElementId>
+          					<FormatElementType>Segment</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:10:00:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:09:00:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          					<NonPrimaryElements>
+          						<NonPrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D4</NonPrimaryElementId>
+          						<NonPrimaryOffset>
+          							<OffsetTime>
+          								<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          							</OffsetTime>
+          						</NonPrimaryOffset>
+          						<NonPrimaryDuration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</NonPrimaryDuration>
+          						<NonPrimaryDescription>Station ID Bug for segment 2</NonPrimaryDescription>
+          					</NonPrimaryElements>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D5</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:19:00:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:45:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D6</PrimaryElementId>
+          					<FormatElementType>Segment</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:19:45:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="true">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:10:00:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          					<NonPrimaryElements>
+          						<NonPrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D6</NonPrimaryElementId>
+          						<NonPrimaryOffset>
+          							<OffsetTime>
+          								<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          							</OffsetTime>
+          						</NonPrimaryOffset>
+          						<NonPrimaryDuration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:10:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</NonPrimaryDuration>
+          						<NonPrimaryDescription>Station ID Bug for segment 3</NonPrimaryDescription>
+          					</NonPrimaryElements>
+          				</FormatElements>
+          				<FormatElements>
+          					<PrimaryElementId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391D7</PrimaryElementId>
+          					<FormatElementType>Break</FormatElementType>
+          					<PrimaryOffset>
+          						<SmpteTimeCode>00:29:45:00</SmpteTimeCode>
+          					</PrimaryOffset>
+          					<PrimaryDuration variable="false">
+          						<SmpteDuration>
+          							<SmpteTimeCode>00:00:15:00</SmpteTimeCode>
+          						</SmpteDuration>
+          					</PrimaryDuration>
+          				</FormatElements>
+          			</FormatStructure>
+          		</Format>
+          	</BxfData>
+          </BxfMessage>
+      - name: Network Cable Use Case
+        summary: Network Cable Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-6000-11D3-8CFE-0050048383C9" dateTime="2013-04-22T12:00:47Z" messageType="Information" origin="ECN" originType="Copy Instructions" userName="ECN"  xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData>
+          		<JobDetail jobId="7614093_2175">
+          			<JobType>Traffic Instructions</JobType>
+          			<JobRequester>
+          				<CompanyName>Grey Advertiser</CompanyName>
+          				<CompanyType>Agency</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>3089_ECN2175</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>Grey Advertiser</LocationName>
+          						<Street1>200 Fifth Avenue</Street1>
+          						<City>New York</City>
+          						<StateProv>NY</StateProv>
+          						<PostalCode>10010</PostalCode>
+          					</Locations>
+          					<Contacts>
+          						<ContactFirstName>Kristine</ContactFirstName>
+          						<ContactLastName>Majestic</ContactLastName>
+          						<Phones>
+          							<PhoneNumber>212-546-1657</PhoneNumber>
+          							<PhoneType>Business</PhoneType>
+          						</Phones>
+          						<EMails>
+          							<Email primaryFlag="true">kmajestic@grey.com</Email>
+          						</EMails>
+          					</Contacts>
+          				</CompanyDetails>
+          			</JobRequester>
+          			<JobManager>
+          				<CompanyName>Entertainment Communications Network, Inc.</CompanyName>
+          				<CompanyType>Other</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>613</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>ECN</LocationName>
+          						<Street1>4370 Tujunga Ave., Suite 210</Street1>
+          						<City>Studio City</City>
+          						<StateProv>CA</StateProv>
+          						<PostalCode>91604</PostalCode>
+          					</Locations>
+          				</CompanyDetails>
+          			</JobManager>
+          			<JobPerformers>
+          				<CompanyName>Bloomberg</CompanyName>
+          				<CompanyType>Cable Network</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>34706</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          				</CompanyDetails>
+          				<Station>
+          					<StationId>34706</StationId>
+          					<StationName>Bloomberg Television</StationName>
+          					<Contacts>
+          						<ContactFirstName>Theresa</ContactFirstName>
+          						<ContactLastName>Caruso</ContactLastName>
+          						<ContactJobTitle>Traffic Manager</ContactJobTitle>
+          						<Phones>
+          							<PhoneNumber>212-617-1701</PhoneNumber>
+          						</Phones>
+          						<EMails>
+          							<Email>tlucatorto@bloomberg.net</Email>
+          						</EMails>
+          					</Contacts>
+          				</Station>
+          			</JobPerformers>
+          			<JobInstruction jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" instructionType="Traffic Instructions" instructionStartDate="2013-04-29" instructionEndDate="2013-06-16">
+          				<JobReference>
+          					<ReferenceType>String</ReferenceType>
+          					<ReferenceName>String</ReferenceName>
+          					<ReferenceCode>String</ReferenceCode>
+          				</JobReference>
+          				<Disclaimer>This does not constitute an order for time.  If you do not have an order from a Media Buyer, this is not an authorization to run advertising.  Questions regarding time purchased and/or product allocations should be directed to the buyer or your station representative.</Disclaimer>
+          				<InstructionComment>Please schedule in accordance with your media contract for the period shown above.  Questions regarding materials should be directed to Kristine Majestic at 212-546-1647 or kmajestic@grey.com.  </InstructionComment>
+          			</JobInstruction>
+          		</JobDetail>
+          		<TrafficInstructions action="read">
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0276-000</AlternateId>
+          						</ContentId>
+          						<Name>Poolside Rev 1</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:15,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C2">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0295-000</AlternateId>
+          						</ContentId>
+          						<Name>Your Guy</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:15,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C3">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0273-000</AlternateId>
+          						</ContentId>
+          						<Name>Your Guy</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C3">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0273-000</AlternateId>
+          						</ContentId>
+          						<Name>Runaway Baby Rev 1</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C4">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0268-000</AlternateId>
+          						</ContentId>
+          						<Name>Save It</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C5">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0188-000</AlternateId>
+          						</ContentId>
+          						<Name>Time Out Solitary</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C6">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0277-000</AlternateId>
+          						</ContentId>
+          						<Name>Poolside Rev 1</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C7">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0269-000</AlternateId>
+          						</ContentId>
+          						<Name>Your Guy</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-04-22T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C8">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>ETRADE</AdvertiserName>
+          						</Advertiser>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">YETR-0275-000</AlternateId>
+          						</ContentId>
+          						<Name>Unbaised Rev 2</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D1">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-04-29</StartDate>
+          							<EndDate>2013-06-19</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          				<ContentRotation>
+          					<RotationPercentage>50</RotationPercentage>
+          				</ContentRotation>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-04-29</StartDate>
+          							<EndDate>2013-06-19</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          				<ContentRotation>
+          					<RotationPercentage>15</RotationPercentage>
+          				</ContentRotation>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-04-29</StartDate>
+          							<EndDate>2013-06-19</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          				<ContentRotation>
+          					<RotationPercentage>10</RotationPercentage>
+          				</ContentRotation>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D4">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-04-29</StartDate>
+          							<EndDate>2013-06-19</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          				<ContentRotation>
+          					<RotationPercentage>30</RotationPercentage>
+          				</ContentRotation>
+          			</InstructionDetail>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C1" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061D1"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C2" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061D1"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C3" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C4" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C5" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C6" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C7" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038347061C8" stationId="34706" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D4"/>
+          			<PrivateInformation/>
+          		</TrafficInstructions>
+          		<PrivateInformation/>
+          	</BxfData>
+          </BxfMessage>
+      - name: Network TV Use Case
+        summary: Network TV Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-6000-11D3-8CFE-0050048383C9" dateTime="2013-04-22T12:00:47Z" messageType="Information" origin="ECN" originType="Copy Instructions" userName="ECN"  xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="add">
+          		<JobDetail jobId="7612823_1844">
+          			<JobType>Traffic Instructions</JobType>
+          			<JobRequester>
+          				<CompanyName>Talent Partners</CompanyName>
+          				<CompanyType>Agency</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>2639_ECN1844</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>Talent Partners</LocationName>
+          						<Street1>115 West 18th Street</Street1>
+          						<Street2>5th Floor</Street2>
+          						<City>New York</City>
+          						<StateProv>NY</StateProv>
+          						<PostalCode>10011</PostalCode>
+          					</Locations>
+          					<Contacts>
+          						<ContactFirstName>Kate</ContactFirstName>
+          						<ContactLastName>McGuire</ContactLastName>
+          						<Phones>
+          							<PhoneNumber>570-319-1161</PhoneNumber>
+          							<PhoneType>Business</PhoneType>
+          						</Phones>
+          						<EMails>
+          							<Email primaryFlag="true">cmcguire@talentpartners.com</Email>
+          						</EMails>
+          					</Contacts>
+          				</CompanyDetails>
+          			</JobRequester>
+          			<JobManager>
+          				<CompanyName>Entertainment Communications Network, Inc.</CompanyName>
+          				<CompanyType>Other</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>613</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>ECN</LocationName>
+          						<Street1>4370 Tujunga Ave., Suite 210</Street1>
+          						<City>Studio City</City>
+          						<StateProv>CA</StateProv>
+          						<PostalCode>91604</PostalCode>
+          					</Locations>
+          				</CompanyDetails>
+          			</JobManager>
+          			<JobPerformers>
+          				<CompanyName>ABC Television Network</CompanyName>
+          				<CompanyType>TV Network</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>34505</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          				</CompanyDetails>
+          				<Station>
+          					<StationId>34505</StationId>
+          					<StationName>ABC</StationName>
+          					<StationType>TV Network</StationType>
+          					<Contacts>
+          						<ContactFirstName>Jeff</ContactFirstName>
+          						<ContactLastName>Bellofatto</ContactLastName>
+          						<ContactJobTitle>Director Commercial Sales</ContactJobTitle>
+          						<Phones>
+          							<PhoneNumber>212-456-7836</PhoneNumber>
+          						</Phones>
+          						<EMails>
+          							<Email>jeffrey.bellofatto@abc.com</Email>
+          						</EMails>
+          					</Contacts>
+          				</Station>
+          			</JobPerformers>
+          			<JobInstruction jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" instructionType="Traffic Instructions" instructionStartDate="2013-04-20" instructionEndDate="2013-04-28" revisionNumber="2" revisionDateTime="2013-04-24T09:30:47Z" revisionReason="To update ABC Game 4 unit. Please see below.">
+          				<JobReference>
+          					<ReferenceType>AdvertiserName</ReferenceType>
+          					<ReferenceName>Cree</ReferenceName>
+          				</JobReference>
+          				<Disclaimer>This does not constitute an order for time and it is not an authorization to run advertising.  Questions regarding time purchased and/or product allocations should be addressed to the media buying service or your station rep.  Questions regarding instructions or delivery of commercial material should be addressed to the traffic contact indicated on these instructions.</Disclaimer>
+          				<InstructionComment>Spots arrived via DG Friday 4/12/13.</InstructionComment>
+          			</JobInstruction>
+          		</JobDetail>
+          		<TrafficInstructions action="add">
+          			<Content timestamp="2013-04-24T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1">
+          				<NonProgramContent action="add">
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>CREE</AdvertiserName>
+          						</Advertiser>
+          						<Agency action="read">
+          							<AgencyName>Poh Media</AgencyName>
+          						</Agency>
+          					</Details>
+          					<ContentMetaData action="add">
+          						<ContentId action="add">
+          							<AlternateId idType="Ad-ID" authoritativeSource="www.adid.org">CCRE0007000H</AlternateId>
+          						</ContentId>
+          						<Name>1879</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D1" action="add">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Programs>Program: First Round, Game1</Programs>
+          						<Daypart action="add">
+          							<DaypartDetail localTimeZoneFlag="true">
+          								<DayOfWeek>0000010</DayOfWeek>
+          								<StartTime>
+          									<SmpteTimeCode>15:00:00,00</SmpteTimeCode>
+          								</StartTime>
+          								<EndTime>
+          									<SmpteTimeCode>17:30:00,00</SmpteTimeCode>
+          								</EndTime>
+          							</DaypartDetail>
+          							<StartDate>2013-04-20</StartDate>
+          							<EndDate>2013-04-20</EndDate>
+          						</Daypart>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2" action="add">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Programs>Program: First Round, Game1</Programs>
+          						<Daypart action="add">
+          							<DaypartDetail localTimeZoneFlag="true">
+          								<DayOfWeek>0000001</DayOfWeek>
+          								<StartTime>
+          									<SmpteTimeCode>15:30:00,00</SmpteTimeCode>
+          								</StartTime>
+          								<EndTime>
+          									<SmpteTimeCode>18:00:00,00</SmpteTimeCode>
+          								</EndTime>
+          							</DaypartDetail>
+          							<StartDate>2013-04-21</StartDate>
+          							<EndDate>2013-04-21</EndDate>
+          						</Daypart>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3" action="add">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Programs>Program: First Round, Game4</Programs>
+          						<Daypart action="add">
+          							<DaypartDetail localTimeZoneFlag="false">
+          								<DayOfWeek>0000001</DayOfWeek>
+          								<StartTime>
+          									<SmpteTimeCode>15:30:00,00</SmpteTimeCode>
+          								</StartTime>
+          								<EndTime>
+          									<SmpteTimeCode>18:00:00,00</SmpteTimeCode>
+          								</EndTime>
+          							</DaypartDetail>
+          							<StartDate>2013-04-28</StartDate>
+          							<EndDate>2013-04-28</EndDate>
+          						</Daypart>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          			</InstructionDetail>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1" stationId="34505" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D1"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1" stationId="34505" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1" stationId="34505" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3"/>
+          		</TrafficInstructions>
+          	</BxfData>
+          </BxfMessage>
+      - name: Playlist Update Use Case
+        summary: Playlist Update Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:904e104a-3345-4261-bac3-da80bb988b6a" dateTime="2006-11-16T08:11:12.00" messageType="Information" origin="Traffic System" originType="Traffic" userName="TrafficUser1" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData>
+          		<Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-0038338391E0" scheduleName="KXXX111706" scheduleStart="2006-11-17T17:30:00.00" scheduleEnd="2006-11-30T17:30:30.00">
+          			<Channel channelNumber="2-1" status="active">
+          			</Channel>
+          			<!-- This is an example of a schedule update for AlternateId, Name, Description of content based on HouseNumber, scheduleStart and scheduleEnd -->
+          			<ScheduledEvent>
+          				<Content action="update">
+          					<ContentId>
+          						<HouseNumber action="update">90120</HouseNumber>
+          						<AlternateId action="update" idType="ISCI">JFMC1205</AlternateId>
+          					</ContentId>
+          					<Name lang="eng">Johnson Motors</Name>
+          					<Description lang="eng">Super Sales Event - Extended</Description>
+          				</Content>
+          			</ScheduledEvent>
+          			<!-- This is an example of a schedule update for MediaLocation based on scheduleStart and scheduleEnd -->
+          			<ScheduledEvent>
+          				<!-- Content element provided for readability only -->
+          				<Content>
+          					<ContentId action="update">
+          						<HouseNumber>90120</HouseNumber>
+          						<AlternateId idType="ISCI">JFMC1205</AlternateId>
+          					</ContentId>
+          					<Media action="update">
+          						<BaseBand/>
+          						<MediaLocation>
+          							<Location action="update">
+          								<AssetServer fileTransferAllowed="true" playoutAllowed="true">
+          									<PathName>\\server2\content\commercials</PathName>
+          								</AssetServer>
+          							</Location>
+          							<SOM>
+          								<SmpteTimeCode>00:00:00;00</SmpteTimeCode>
+          							</SOM>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:00:30;00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</MediaLocation>
+          					</Media>
+          				</Content>
+          			</ScheduledEvent>
+          		</Schedule>
+          	</BxfData>
+          </BxfMessage>
+      - name: Program with QC - Audio and Video - Automatic - fail
+        summary: Program with QC - Audio and Video - Automatic - fail
+        payload: |
+          <BxfMessage id="urn:uuid:11111111-1111-1111-1111-111111111111" dateTime="2012-12-28T09:30:47.0Z" messageType="Information" 
+          origin="External System" originType="Ingest" destination="BXF Import Content" userName="external" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF bxfschema.xsd">
+          	<BxfData action="add">
+          		<Content>
+          			<ProgramContent>
+          				<ContentMetaData>
+          					<ContentId>
+          						<HouseNumber>BXFMATERIAL</HouseNumber>
+          					</ContentId>
+          					<Name>TITLE</Name>
+          					<Media>
+          						<BaseBand>
+          							<Video>
+          								<AspectRatio>16:9</AspectRatio>
+          							</Video>
+          						</BaseBand>
+          						<MediaLocation>
+          							<Location>
+          								<AssetServer playoutAllowed="true" fileTransferAllowed="true">
+          									<PathName>\\SV1\CLIPFOLDER</PathName>
+          									<ReferenceName>SV1</ReferenceName>
+          								</AssetServer>
+          							</Location>
+          							<SOM>
+          								<SmpteTimeCode>00:00:01;00</SmpteTimeCode>
+          							</SOM>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:15:10;00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          							<QualityControl>
+          								<QCReport lastModified="2012-12-28T09:30:47.0Z">
+          									<QCReportID>urn:uuid:33333333-3333-3333-3333-333333333333</QCReportID>
+          									<QCProfile>
+          										<QCProfileID>urn:uuid:22222222-2222-2222-2222-222222222222</QCProfileID>
+          										<QCProfileName>QC v1</QCProfileName>
+          										<QCProfileDescription>Check Video and Audio</QCProfileDescription>
+          										<QCProfileItem>
+          											<QCItemID>0122B</QCItemID>
+          											<QCItemName>Audibility (baseband) v1.0</QCItemName>
+          										</QCProfileItem>
+          										<QCProfileItem>
+          											<QCItemID>0001F</QCItemID>
+          											<QCItemName>Active Format Description</QCItemName>
+          										</QCProfileItem>
+          									</QCProfile>
+          									<QCReportStatus>Error</QCReportStatus>
+          									<QCToolInformation>
+          										<QCToolID>urn:uuid:22222222-2222-2222-2222-222222222222</QCToolID>
+          										<QCToolName>Software to QC</QCToolName>
+          										<VendorName>SMPTE Software LTD</VendorName>
+          										<QCToolVersion>1.2.3.98080</QCToolVersion>
+          									</QCToolInformation>
+          									<QCItemResult>
+          										<QCItemID>0122B</QCItemID>
+          										<QCReportStatus>Completed</QCReportStatus>
+          									</QCItemResult>
+          									<QCItemResult>
+          										<QCItemID>0001F</QCItemID>
+          										<QCReportStatus>Error</QCReportStatus>
+          										<QCItemOutput>
+          											<KeyWord>Active Format Description Absent</KeyWord>
+          											<TestValue>True</TestValue>
+          										</QCItemOutput>
+          									</QCItemResult>
+          								</QCReport>
+          							</QualityControl>
+          						</MediaLocation>
+          					</Media>
+          				</ContentMetaData>
+          			</ProgramContent>
+          		</Content>
+          	</BxfData>
+          </BxfMessage>
+      - name: Program with QC - Audio and Video - Automatic - pass
+        summary: Program with QC - Audio and Video - Automatic - pass
+        payload: |
+          <BxfMessage id="urn:uuid:11111111-1111-1111-1111-111111111111" dateTime="2012-12-28T09:30:47.0Z" messageType="Information" 
+          origin="External System" originType="Ingest" destination="BXF Import Content" userName="external" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF bxfschema.xsd">
+          	<BxfData action="add">
+          		<Content>
+          			<ProgramContent>
+          				<ContentMetaData>
+          					<ContentId>
+          						<HouseNumber>BXFMATERIAL</HouseNumber>
+          					</ContentId>
+          					<Name>TITLE</Name>
+          					<Media>
+          						<BaseBand>
+          							<Video>
+          								<AspectRatio>16:9</AspectRatio>
+          							</Video>
+          						</BaseBand>
+          						<MediaLocation>
+          							<Location>
+          								<AssetServer playoutAllowed="true" fileTransferAllowed="true">
+          									<PathName>\\SV1\CLIPFOLDER</PathName>
+          									<ReferenceName>SV1</ReferenceName>
+          								</AssetServer>
+          							</Location>
+          							<SOM>
+          								<SmpteTimeCode>00:00:01;00</SmpteTimeCode>
+          							</SOM>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:15:10;00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          							<QualityControl>
+          								<QCReport lastModified="2012-12-28T09:30:47.0Z">
+          									<QCReportID>urn:uuid:33333333-3333-3333-3333-333333333333</QCReportID>
+          									<QCProfile>
+          										<QCProfileID>urn:uuid:22222222-2222-2222-2222-222222222222</QCProfileID>
+          										<QCProfileName>QC v1</QCProfileName>
+          										<QCProfileDescription>Check Video and Audio</QCProfileDescription>
+          										<QCProfileItem>
+          											<QCItemID>0122B</QCItemID>
+          											<QCItemName>Audibility (baseband) v1.0</QCItemName>
+          										</QCProfileItem>
+          										<QCProfileItem>
+          											<QCItemID>0001F</QCItemID>
+          											<QCItemName>Active Format Description</QCItemName>
+          										</QCProfileItem>
+          									</QCProfile>
+          									<QCReportStatus>Completed</QCReportStatus>
+          									<QCToolInformation>
+          										<QCToolID>urn:uuid:22222222-2222-2222-2222-222222222222</QCToolID>
+          										<QCToolName>Software to QC</QCToolName>
+          										<VendorName>SMPTE Software LTD</VendorName>
+          										<QCToolVersion>1.2.3.98080</QCToolVersion>
+          									</QCToolInformation>
+          									<QCItemResult>
+          										<QCItemID>0122B</QCItemID>
+          										<QCReportStatus>Completed</QCReportStatus>
+          									</QCItemResult>
+          									<QCItemResult>
+          										<QCItemID>0001F</QCItemID>
+          										<QCReportStatus>Completed</QCReportStatus>
+          										<QCItemOutput>
+          											<KeyWord>Active Format Description Absent</KeyWord>
+          											<TestValue>False</TestValue>
+          										</QCItemOutput>
+          										<QCItemOutput>
+          											<KeyWord>Active Format Description</KeyWord>
+          											<TestValue>True</TestValue>
+          										</QCItemOutput>
+          										<QCItemOutput>
+          											<KeyWord>Active Format Description Value</KeyWord>
+          											<TestValue>9</TestValue>
+          										</QCItemOutput>
+          										<QCItemOutput>
+          											<KeyWord>Active Format Description Desc</KeyWord>
+          											<TestValue>In a 4:3 coded frame: Full frame 4:3 image, the same as the coded frame.
+          In a 16:9 coded frame: Pillarbox 4:3 image, horizontally centered in the coded frame</TestValue>
+          										</QCItemOutput>
+          									</QCItemResult>
+          								</QCReport>
+          							</QualityControl>
+          						</MediaLocation>
+          					</Media>
+          				</ContentMetaData>
+          			</ProgramContent>
+          		</Content>
+          	</BxfData>
+          </BxfMessage>
+      - name: Program with QC - Audio and Video - Manual - Video failed
+        summary: Program with QC - Audio and Video - Manual - Video failed
+        payload: |
+          <BxfMessage id="urn:uuid:11111111-1111-1111-1111-111111111111" dateTime="2012-12-28T09:30:47.0Z" messageType="Information" 
+          origin="External System" originType="Ingest" destination="BXF Import Content" userName="external" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF bxfschema.xsd">
+          	<BxfData action="add">
+          		<Content>
+          			<ProgramContent>
+          				<ContentMetaData>
+          					<ContentId>
+          						<HouseNumber>BXFMATERIAL</HouseNumber>
+          					</ContentId>
+          					<Name>TITLE</Name>
+          					<Media>
+          						<BaseBand>
+          							<Video>
+          								<AspectRatio>16:9</AspectRatio>
+          							</Video>
+          						</BaseBand>
+          						<MediaLocation>
+          							<Location>
+          								<AssetServer playoutAllowed="true" fileTransferAllowed="true">
+          									<PathName>\\SV1\CLIPFOLDER</PathName>
+          									<ReferenceName>SV1</ReferenceName>
+          								</AssetServer>
+          							</Location>
+          							<SOM>
+          								<SmpteTimeCode>00:00:01;00</SmpteTimeCode>
+          							</SOM>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:15:10;00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          							<QualityControl>
+          								<QCReport lastModified="2012-12-28T09:30:47.0Z">
+          									<QCReportID>urn:uuid:33333333-3333-3333-3333-333333333333</QCReportID>
+          									<QCProfile>
+          										<QCProfileID>urn:uuid:22222222-2222-2222-2222-222222222222</QCProfileID>
+          										<QCProfileName>Manual test</QCProfileName>
+          										<QCProfileDescription>Check Video and Audio</QCProfileDescription>
+          										<QCProfileItem>
+          											<QCItemID>0122B</QCItemID>
+          											<QCItemName>Audibility (baseband) v1.0</QCItemName>
+          										</QCProfileItem>
+          										<QCProfileItem>
+          											<QCItemID>Video</QCItemID>
+          											<QCItemName>Video check</QCItemName>
+          										</QCProfileItem>
+          									</QCProfile>
+          									<QCReportStatus>Completed</QCReportStatus>
+          									<ErrorDescription>There are black frames on the video</ErrorDescription>
+          									<QCToolInformation>
+          										<QCToolID>Manual</QCToolID>
+          										<QCToolName>Manual</QCToolName>
+          									</QCToolInformation>
+          									<QCItemResult>
+          										<QCItemID>0122B</QCItemID>
+          										<QCReportStatus>Completed</QCReportStatus>
+          										<QCTestPerformer>
+          											<QCPerformerName>Gleison</QCPerformerName>
+          										</QCTestPerformer>
+          									</QCItemResult>
+          									<QCItemResult>
+          										<QCItemID>Video</QCItemID>
+          										<QCReportStatus>Error</QCReportStatus>
+          										<QCTestPerformer>
+          											<QCPerformerName>Gleison</QCPerformerName>
+          										</QCTestPerformer>
+          										<QCItemOutput>
+          											<KeyWord>Video</KeyWord>
+          											<Description>Visual check</Description>
+          											<TestValue>Black</TestValue>
+          											<FragmentLocation>
+          												<StartTime>
+          													<SmpteTimeCode>00:00:10;01</SmpteTimeCode>
+          												</StartTime>
+          												<EndTime>
+          													<SmpteTimeCode>00:00:13;00</SmpteTimeCode>
+          												</EndTime>
+          											</FragmentLocation>
+          										</QCItemOutput>
+          										<QCItemOutput>
+          											<KeyWord>Video</KeyWord>
+          											<Description>Visual check</Description>
+          											<TestValue>Black</TestValue>
+          											<FragmentLocation>
+          												<StartTime>
+          													<SmpteTimeCode>00:12:01;00</SmpteTimeCode>
+          												</StartTime>
+          												<EndTime>
+          													<SmpteTimeCode>00:12:07;00</SmpteTimeCode>
+          												</EndTime>
+          											</FragmentLocation>
+          										</QCItemOutput>
+          									</QCItemResult>
+          								</QCReport>
+          							</QualityControl>
+          						</MediaLocation>
+          					</Media>
+          				</ContentMetaData>
+          			</ProgramContent>
+          		</Content>
+          	</BxfData>
+          </BxfMessage>
+      - name: Purge Order Use Case
+        summary: Purge Order Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-2222-22E3-9AFF-0038338391E1" messageType="Information" dateTime="2006-08-16T20:44:43.16" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="add">
+          		<ContentTransfer transferId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" transferType="Purge" priority="Normal">
+          			<Content user="Traffic User">
+          				<ProgramContent>
+          					<ContentMetaData>
+          						<ContentId>
+          							<HouseNumber>311</HouseNumber>
+          						</ContentId>
+          						<Name>A2: SIGN ON</Name>
+          					</ContentMetaData>
+          				</ProgramContent>
+          			</Content>
+          		</ContentTransfer>
+          	</BxfData>
+          </BxfMessage>
+      - name: Record Order Use Case
+        summary: Record Order Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-2223-22E3-9AFF-0038338391E1" messageType="Information" dateTime="2006-08-25T13:08:59.91" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="add">
+          		<ContentTransfer transferId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" transferType="Recording" priority="Normal" recordEventStart="2006-10-01T03:00:00.00" recordEventEnd="2006-10-01T03:29:30.00">
+          			<Content>
+          				<ProgramContent>
+          					<ContentMetaData>
+          						<ContentId>
+          							<HouseNumber>PBC5-1</HouseNumber>
+          						</ContentId>
+          					</ContentMetaData>
+          				</ProgramContent>
+          			</Content>
+          			<Source>
+          				<Media>
+          					<BaseBand>
+          						<Audio>
+          							<DigitalAudio>
+          								<Ac3Audio audioId="1"/>
+          							</DigitalAudio>
+          						</Audio>
+          						<Video>
+          							<Encoding>MPEG-2</Encoding>
+          							<DigitalVideo>true</DigitalVideo>
+          							<Format>720p</Format>
+          							<AspectRatio>4:3</AspectRatio>
+          						</Video>
+          					</BaseBand>
+          					<MediaLocation>
+          						<Location>
+          							<Satellite>
+          								<SatelliteName>XYZ1</SatelliteName>
+          								<Transponders primaryAlternate="Primary">
+          									<TransponderDetail>
+          										<TransponderNumber>501</TransponderNumber>
+          										<TransponderFrequency>12700.0</TransponderFrequency>
+          										<Polarity>Horizontal</Polarity>
+          									</TransponderDetail>
+          								</Transponders>
+          								<Receiver>RCVR2</Receiver>
+          								<Encoder>ENC1</Encoder>
+          							</Satellite>
+          						</Location>
+          						<SOM>
+          							<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          						</SOM>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:29:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</MediaLocation>
+          				</Media>
+          			</Source>
+          			<Destination>
+          				<Media>
+          					<BaseBand/>
+          					<MediaLocation>
+          						<Location>
+          							<PhysicalAsset assetName="Tape">
+          								<MediaReferenceName>PBC5-1</MediaReferenceName>
+          							</PhysicalAsset>
+          						</Location>
+          						<SOM>
+          							<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          						</SOM>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:29:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          						<ArchiveGroup>
+          							<ArchiveName>Archive A</ArchiveName>
+          						</ArchiveGroup>
+          					</MediaLocation>
+          				</Media>
+          			</Destination>
+          		</ContentTransfer>
+          		<ContentTransfer transferId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E2" transferType="Recording" priority="Normal" recordEventStart="2006-10-01T06:00:00.00" recordEventEnd="2006-10-01T06:28:46.00">
+          			<Content>
+          				<ProgramContent>
+          					<ContentMetaData>
+          						<ContentId>
+          							<HouseNumber>6BC-102</HouseNumber>
+          						</ContentId>
+          						<Name>A Half Hour Program</Name>
+          					</ContentMetaData>
+          				</ProgramContent>
+          			</Content>
+          			<Source>
+          				<Media>
+          					<BaseBand>
+          						<Audio>
+          							<DigitalAudio>
+          								<Ac3Audio audioId="1"/>
+          							</DigitalAudio>
+          						</Audio>
+          						<Video>
+          							<Encoding EncodingReference="Digital Betacam">MPEG-2</Encoding>
+          							<Format>480i</Format>
+          							<AspectRatio>4:3</AspectRatio>
+          						</Video>
+          						<Captions>
+          							<Caption608/>
+          						</Captions>
+          					</BaseBand>
+          					<MediaLocation>
+          						<Location>
+          							<Satellite>
+          								<SatelliteName>XYZ1</SatelliteName>
+          								<Transponders>
+          									<TransponderDetail>
+          										<TransponderNumber>500</TransponderNumber>
+          										<TransponderFrequency>12500.0</TransponderFrequency>
+          										<Polarity>Horizontal</Polarity>
+          									</TransponderDetail>
+          								</Transponders>
+          								<Receiver>RCVR1</Receiver>
+          								<Encoder>ENC2</Encoder>
+          							</Satellite>
+          						</Location>
+          						<SOM>
+          							<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          						</SOM>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:28:46:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          					</MediaLocation>
+          				</Media>
+          			</Source>
+          			<Destination>
+          				<Media>
+          					<PrecompressedTS/>
+          					<MediaLocation>
+          						<Location>
+          							<AssetServer playoutAllowed="true" fileTransferAllowed="true">
+          								<PathName>C:\MediaFiles\Programs</PathName>
+          							</AssetServer>
+          						</Location>
+          						<SOM>
+          							<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          						</SOM>
+          						<Duration>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:28:46:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</Duration>
+          						<ArchiveGroup>
+          							<ArchiveName>Archive B</ArchiveName>
+          						</ArchiveGroup>
+          					</MediaLocation>
+          				</Media>
+          			</Destination>
+          		</ContentTransfer>
+          	</BxfData>
+          </BxfMessage>
+      - name: Schedule Use Case
+        summary: Schedule Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F2" dateTime="2006-09-05T13:38:26.28" messageType="Information" origin="Traffic System" originType="Traffic" userName="Traffic System User" destination="Automation" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd" xmlns:pmcp="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1" pmcp:schemaLocation="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1/pmcp31.xsd">
+          	<BxfData action="add">
+          		<Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-0038338391E0" scheduleName="WXXX Ch 6-1" scheduleStart="2006-06-21T17:30:00.00" scheduleEnd="2006-06-21T17:30:00.00">
+          			<Channel channelNumber="6-1" status="active" type="digital_television" ca="false" shortName="WXXX-DT" outOfBand="true">
+          				<pmcp:Name lang="eng">WXXX-DT Ch 6-1</pmcp:Name>
+          			</Channel>
+          			<ScheduledEvent>
+          				<ScheduleElements>
+          					<EventData eventType="Primary-ProgramHeader">
+          						<EventId>
+          							<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F1</EventId>
+          						</EventId>
+          						<PrimaryEvent>
+          							<ProgramEvent>
+          								<SegmentNumber>1</SegmentNumber>
+          								<ProgramName>Evening News</ProgramName>
+          							</ProgramEvent>
+          						</PrimaryEvent>
+          						<StartDateTime nominalFlag="false">
+          							<SmpteDateTime broadcastDate="2006-10-01">
+          								<SmpteTimeCode>15:30:00:00</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<LengthOption>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:12:00:00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</LengthOption>
+          						<StartMode>Fixed</StartMode>
+          						<EndMode>Duration</EndMode>
+          					</EventData>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>Network-1</HouseNumber>
+          						</ContentId>
+          						<Name>Evening News Segment-1</Name>
+          						<Media>
+          							<BaseBand/>
+          							<MediaLocation>
+          								<Location>
+          									<RouterSource>
+          										<Name>NEWS</Name>
+          										<CrossPoint>PCL</CrossPoint>
+          									</RouterSource>
+          								</Location>
+          								<SOM>
+          									<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          								</SOM>
+          								<Duration>
+          									<SmpteDuration>
+          										<SmpteTimeCode>00:12:00:00</SmpteTimeCode>
+          									</SmpteDuration>
+          								</Duration>
+          							</MediaLocation>
+          						</Media>
+          					</Content>
+          				</ScheduleElements>
+          				<ScheduleElements>
+          					<EventData eventType="Primary-BreakHeader">
+          						<EventId>
+          							<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F2</EventId>
+          						</EventId>
+          						<PrimaryEvent>
+          							<NonProgramEvent>
+          								<Details>
+          									<AdType>General</AdType>
+          									<SpotType>Standard</SpotType>
+          									<Advertiser>
+          										<AdvertiserName>Johnson Ford Motors</AdvertiserName>
+          									</Advertiser>
+          									<Product>
+          										<Name>Car Sales Event</Name>
+          									</Product>
+          								</Details>
+          							</NonProgramEvent>
+          						</PrimaryEvent>
+          						<StartDateTime nominalFlag="false">
+          							<SmpteDateTime broadcastDate="2006-10-01">
+          								<SmpteTimeCode>15:42:00:00</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<LengthOption>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</LengthOption>
+          						<StartMode>Follow</StartMode>
+          						<EndMode>Duration</EndMode>
+          					</EventData>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>JFMC1201</HouseNumber>
+          							<AlternateId idType="ISCI" authorativeSource="AAAA">JFMC1201</AlternateId>
+          						</ContentId>
+          						<Name>Johnson Motors Super Sales Event</Name>
+          						<Media>
+          							<BaseBand/>
+          							<MediaLocation>
+          								<Location>
+          									<AssetServer fileTransferAllowed="true" playoutAllowed="true">
+          										<PathName>C:\MediaFiles\Commercials</PathName>
+          									</AssetServer>
+          								</Location>
+          								<SOM>
+          									<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          								</SOM>
+          								<Duration>
+          									<SmpteDuration>
+          										<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          									</SmpteDuration>
+          								</Duration>
+          							</MediaLocation>
+          						</Media>
+          					</Content>
+          				</ScheduleElements>
+          				<ScheduleElements>
+          					<EventData eventType="Primary-ProgramHeader">
+          						<EventId>
+          							<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F3</EventId>
+          						</EventId>
+          						<PrimaryEvent>
+          							<ProgramEvent>
+          								<SegmentNumber>2</SegmentNumber>
+          								<ProgramName>Evening News</ProgramName>
+          							</ProgramEvent>
+          						</PrimaryEvent>
+          						<StartDateTime nominalFlag="false">
+          							<SmpteDateTime broadcastDate="2006-10-01">
+          								<SmpteTimeCode>15:42:30:00</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<LengthOption>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:10:00:00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</LengthOption>
+          						<StartMode>Fixed</StartMode>
+          						<EndMode>Duration</EndMode>
+          					</EventData>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>Network-1</HouseNumber>
+          						</ContentId>
+          						<Name>Evening News Segment-2</Name>
+          						<Media>
+          							<BaseBand/>
+          							<MediaLocation>
+          								<Location>
+          									<RouterSource>
+          										<Name>NEWS</Name>
+          										<CrossPoint>PCL</CrossPoint>
+          									</RouterSource>
+          								</Location>
+          								<SOM>
+          									<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          								</SOM>
+          								<Duration>
+          									<SmpteDuration>
+          										<SmpteTimeCode>00:10:00:00</SmpteTimeCode>
+          									</SmpteDuration>
+          								</Duration>
+          							</MediaLocation>
+          						</Media>
+          					</Content>
+          				</ScheduleElements>
+          				<ScheduleElements>
+          					<EventData eventType="Primary-BreakHeader">
+          						<EventId>
+          							<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F4</EventId>
+          						</EventId>
+          						<PrimaryEvent>
+          							<NonProgramEvent>
+          								<Details>
+          									<AdType>General</AdType>
+          									<SpotType>Standard</SpotType>
+          									<Advertiser>
+          										<AdvertiserName>Fortified Banks</AdvertiserName>
+          									</Advertiser>
+          									<Product>
+          										<Name>Discount Mortgage Promotion</Name>
+          									</Product>
+          								</Details>
+          							</NonProgramEvent>
+          						</PrimaryEvent>
+          						<StartDateTime nominalFlag="false">
+          							<SmpteDateTime broadcastDate="2006-10-01">
+          								<SmpteTimeCode>15:52:30:00</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<LengthOption>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</LengthOption>
+          						<StartMode>Follow</StartMode>
+          						<EndMode>Duration</EndMode>
+          					</EventData>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>FBIN0901</HouseNumber>
+          							<AlternateId idType="ISCI" authorativeSource="AAAA">FBIN0901</AlternateId>
+          						</ContentId>
+          						<Name>Discount Mortgage Promotion</Name>
+          						<Media>
+          							<BaseBand/>
+          							<MediaLocation>
+          								<Location>
+          									<AssetServer fileTransferAllowed="true" playoutAllowed="true">
+          										<PathName>C:\MediaFiles\Commercials</PathName>
+          									</AssetServer>
+          								</Location>
+          								<SOM>
+          									<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          								</SOM>
+          								<Duration>
+          									<SmpteDuration>
+          										<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          									</SmpteDuration>
+          								</Duration>
+          							</MediaLocation>
+          						</Media>
+          					</Content>
+          				</ScheduleElements>
+          				<ScheduleElements>
+          					<EventData>
+          						<EventId>
+          							<EventId>urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F5</EventId>
+          						</EventId>
+          						<PrimaryEvent>
+          							<ProgramEvent>
+          								<SegmentNumber>3</SegmentNumber>
+          								<ProgramName>Evening News</ProgramName>
+          							</ProgramEvent>
+          						</PrimaryEvent>
+          						<StartDateTime nominalFlag="false">
+          							<SmpteDateTime broadcastDate="2006-10-01">
+          								<SmpteTimeCode>15:53:00:00</SmpteTimeCode>
+          							</SmpteDateTime>
+          						</StartDateTime>
+          						<LengthOption>
+          							<Duration>
+          								<SmpteDuration>
+          									<SmpteTimeCode>00:07:00:00</SmpteTimeCode>
+          								</SmpteDuration>
+          							</Duration>
+          						</LengthOption>
+          						<StartMode>Fixed</StartMode>
+          						<EndMode>Duration</EndMode>
+          					</EventData>
+          					<Content>
+          						<ContentId>
+          							<HouseNumber>Network-1</HouseNumber>
+          						</ContentId>
+          						<Name>Evening News Segment-3</Name>
+          						<Media>
+          							<BaseBand/>
+          							<MediaLocation>
+          								<Location>
+          									<RouterSource>
+          										<Name>NEWS</Name>
+          										<CrossPoint>PCL</CrossPoint>
+          									</RouterSource>
+          								</Location>
+          								<SOM>
+          									<SmpteTimeCode>00:00:00:00</SmpteTimeCode>
+          								</SOM>
+          								<Duration>
+          									<SmpteDuration>
+          										<SmpteTimeCode>00:07:00:00</SmpteTimeCode>
+          									</SmpteDuration>
+          								</Duration>
+          							</MediaLocation>
+          						</Media>
+          					</Content>
+          				</ScheduleElements>
+          			</ScheduledEvent>
+          		</Schedule>
+          	</BxfData>
+          </BxfMessage>
+      - name: SpotTV Billboard Use Case
+        summary: SpotTV Billboard Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:00000000-0000-0000-0000-000000000000" dateTime="2013-05-06T12:00:47Z" messageType="Information" origin="ECN" originType="CopyInstructions" userName="ECN"  xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF bxfschema.xsd">
+          	<BxfData action="add">
+          		<JobDetail jobId="99999_1844">
+          			<JobType>Traffic Instructions</JobType>
+          			<JobRequester>
+          				<CompanyName>Talent Partners</CompanyName>
+          				<CompanyType>Agency</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>2639_ECN1844</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>Talent Partners</LocationName>
+          						<Street1>115 West 18th Street</Street1>
+          						<Street2>5th Floor</Street2>
+          						<City>New York</City>
+          						<StateProv>NY</StateProv>
+          						<PostalCode>10011</PostalCode>
+          					</Locations>
+          					<Contacts>
+          						<ContactFirstName>Kate</ContactFirstName>
+          						<ContactLastName>McGuire</ContactLastName>
+          						<Phones>
+          							<PhoneNumber>570-319-1161</PhoneNumber>
+          							<PhoneType>Business</PhoneType>
+          						</Phones>
+          						<EMails>
+          							<Email primaryFlag="true">cmcguire@talentpartners.com</Email>
+          						</EMails>
+          					</Contacts>
+          				</CompanyDetails>
+          			</JobRequester>
+          			<JobManager>
+          				<CompanyName>Entertainment Communications Network, Inc.</CompanyName>
+          				<CompanyType>Other</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>613</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>ECN</LocationName>
+          						<Street1>4370 Tujunga Ave., Suite 210</Street1>
+          						<City>Studio City</City>
+          						<StateProv>CA</StateProv>
+          						<PostalCode>91604</PostalCode>
+          					</Locations>
+          				</CompanyDetails>
+          			</JobManager>
+          			<JobPerformers>
+          				<CompanyName>WABC</CompanyName>
+          				<CompanyType>TV Station</CompanyType>
+          				<CompanyDetails>
+          					<Identifiers>
+          						<Identifier>613</Identifier>
+          						<AuthoritativeIdSource>ECN</AuthoritativeIdSource>
+          					</Identifiers>
+          					<Locations>
+          						<LocationName>ECN</LocationName>
+          						<Street1>4370 Tujunga Ave., Suite 210</Street1>
+          						<City>Studio City</City>
+          						<StateProv>CA</StateProv>
+          						<PostalCode>91604</PostalCode>
+          					</Locations>
+          				</CompanyDetails>
+          				<Station>
+          					<StationId>7842</StationId>
+          					<StationName>WABC-TV</StationName>
+          					<StationType>TV Broadcast</StationType>
+          					<Contacts>
+          						<ContactFirstName>Omni</ContactFirstName>
+          						<ContactLastName>Lozano</ContactLastName>
+          						<ContactJobTitle>Senior Traffic Coordinator</ContactJobTitle>
+          						<Phones>
+          							<PhoneNumber>212-456-3202</PhoneNumber>
+          						</Phones>
+          						<EMails>
+          							<Email>wabctv-traffic@abc.com</Email>
+          						</EMails>
+          					</Contacts>
+          				</Station>
+          			</JobPerformers>
+          			<JobInstruction jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" instructionType="Traffic Instructions" instructionStartDate="2013-05-06" instructionEndDate="2013-06-02" revisionNumber="1" revisionDateTime="2013-05-13T09:30:47Z" revisionReason="Adds QVNB-00160000/H into rotation 5/15-6/2/13">
+          				<JobReference>
+          					<ReferenceType>AdvertiserName</ReferenceType>
+          					<ReferenceName>Valley National Bank</ReferenceName>
+          					<ReferenceType>EstimateNumber</ReferenceType>
+          					<ReferenceName>$499 buy</ReferenceName>
+          				</JobReference>
+          				<Disclaimer>Note: This does not constitute an order for time and it is not an authorization to run advertising. Questions regarding time purchased and/or product allocations should be addressed to the media buying service or your station rep. Questions regarding instructions or delivery of commercial material should be addressed to the traffic contact indicated on these instructions.</Disclaimer>
+          			</JobInstruction>
+          		</JobDetail>
+          		<TrafficInstructions action="add">
+          			<Content timestamp="2013-05-13T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1">
+          				<NonProgramContent>
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>Valley National Bank</AdvertiserName>
+          						</Advertiser>
+          						<Agency action="add">
+          							<AgencyName>DFG/NJ</AgencyName>
+          							<EstimateName>$499 buy</EstimateName>
+          						</Agency>
+          						<Product>
+          							<Name>Valley National Bank</Name>
+          						</Product>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId>
+          							<AlternateId idType="Ad-ID" authoritativeSource="www.adid.org">QVNB0016000H</AlternateId>
+          						</ContentId>
+          						<Name>Skeptic Male </Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-05-13T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C2">
+          				<NonProgramContent>
+          					<Details action="add">
+          						<AdType>General</AdType>
+          						<SpotType>Standard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>Valley National Bank</AdvertiserName>
+          						</Advertiser>
+          						<Agency>
+          							<AgencyName>DFG/NJ</AgencyName>
+          							<EstimateName>$499 buy</EstimateName>
+          						</Agency>
+          						<Product>
+          							<Name>Valley National Bank</Name>
+          						</Product>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId>
+          							<AlternateId idType="Ad-ID" authoritativeSource="www.adid.org">QVNB0018000H</AlternateId>
+          						</ContentId>
+          						<Name>Valley Business</Name>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:30:00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-05-13T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C3">
+          				<NonProgramContent>
+          					<Details action="add">
+          						<AdType>Other</AdType>
+          						<SpotType>BillBoard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>Valley National Bank</AdvertiserName>
+          						</Advertiser>
+          						<Agency>
+          							<AgencyName>DFG/NJ</AgencyName>
+          							<EstimateName>$499 buy</EstimateName>
+          						</Agency>
+          						<Product>
+          							<Name>Valley National Bank</Name>
+          						</Product>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" action="add" errorDescription="Agency">QVNB2000</AlternateId>
+          						</ContentId>
+          						<BillBoard>
+          							<ContentId action="add">
+          								<AlternateId idType="ISCI" action="add" errorDescription="Agency">QVNB2000</AlternateId>
+          							</ContentId>
+          							<BillBoardName>Logo</BillBoardName>
+          							<BillBoardComment action="add">please email:  ebrown@talentpartners.com</BillBoardComment>
+          						</BillBoard>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-05-13T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C4">
+          				<NonProgramContent>
+          					<Details action="add">
+          						<AdType>Other</AdType>
+          						<SpotType>BillBoard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>Valley National Bank</AdvertiserName>
+          						</Advertiser>
+          						<Agency>
+          							<AgencyName>DFG/NJ</AgencyName>
+          							<EstimateName>$499 buy</EstimateName>
+          						</Agency>
+          						<Product>
+          							<Name>Valley National Bank</Name>
+          						</Product>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">QVNB2001</AlternateId>
+          						</ContentId>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:05,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          						<BillBoard>
+          							<ContentId>
+          								<AlternateId idType="ISCI" authoritativeSource="Agency">QVNB2001</AlternateId>
+          							</ContentId>
+          							<BillBoardName>Copy</BillBoardName>
+          							<Copy>(Brought to you by…) Valley National Bank.  The Perfect Fit </Copy>
+          						</BillBoard>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<Content timestamp="2013-05-13T09:30:47Z" action="add" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C5">
+          				<NonProgramContent>
+          					<Details>
+          						<AdType>Other</AdType>
+          						<SpotType>BillBoard</SpotType>
+          						<Advertiser action="add">
+          							<AdvertiserName>Valley National Bank</AdvertiserName>
+          						</Advertiser>
+          						<Agency>
+          							<AgencyName>DFG/NJ</AgencyName>
+          							<EstimateName>$499 buy</EstimateName>
+          						</Agency>
+          						<Product>
+          							<Name>Valley National Bank</Name>
+          						</Product>
+          					</Details>
+          					<ContentMetaData>
+          						<ContentId action="add">
+          							<AlternateId idType="ISCI" authoritativeSource="Agency">QVNB2002</AlternateId>
+          						</ContentId>
+          						<DefaultLength>
+          							<SmpteDuration>
+          								<SmpteTimeCode>00:00:05,00</SmpteTimeCode>
+          							</SmpteDuration>
+          						</DefaultLength>
+          						<BillBoard>
+          							<ContentId>
+          								<AlternateId idType="ISCI" authoritativeSource="Agency">QVNB2002</AlternateId>
+          							</ContentId>
+          							<BillBoardName>Copy</BillBoardName>
+          							<Copy>(Brought to you by…) Valley National Bank.  The Perfect Fit for all your banking needs</Copy>
+          						</BillBoard>
+          					</ContentMetaData>
+          				</NonProgramContent>
+          			</Content>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D1" stationId="7842">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-05-15</StartDate>
+          							<EndDate>2013-06-02</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          				<ContentRotation>
+          					<RotationPercentage>50</RotationPercentage>
+          				</ContentRotation>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2" stationId="7842">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-05-06</StartDate>
+          							<EndDate>2013-05-14</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          				<ContentRotation>
+          					<RotationPercentage>100</RotationPercentage>
+          				</ContentRotation>
+          			</InstructionDetail>
+          			<InstructionDetail actionType="Add" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3" stationId="7842">
+          				<PlacementMethod>
+          					<NPCSchedule>
+          						<Dayparts>
+          							<StartDate>2013-05-06</StartDate>
+          							<EndDate>2013-06-02</EndDate>
+          						</Dayparts>
+          					</NPCSchedule>
+          				</PlacementMethod>
+          			</InstructionDetail>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C1" stationId="7842" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D1"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C2" stationId="7842" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D1"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C2" stationId="7842" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D2"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C3" stationId="7842" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C4" stationId="7842" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3"/>
+          			<InstructionMap jobInstructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051A1" contentMapId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051C5" stationId="7842" instructionId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038345051D3"/>
+          		</TrafficInstructions>
+          	</BxfData>
+          </BxfMessage>
+      - name: Transfer Order Use Case
+        summary: Transfer Order Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:F1234568-0022-92EE-9BA6-C293A1FA6693" messageType="Information" dateTime="2006-09-06T07:50:23.26" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          <BxfData action="add">
+          <ContentTransfer transferId="urn:uuid:FF56FE68-3D41-11DB-8AF6-B622A1EF5492" transferType="File transfer" priority="Normal">
+          	<Content location="http://edgeserver.com/incoming_files" source="Regional Distributor">
+          			<ProgramContent>
+          				<ContentMetaData>
+          					<ContentId action="add">
+          						<Isan root="0000-0001-6134" episodeOrPart="008B" check1="C" version="0000-0000" check2="1"/>
+          					</ContentId>
+          					<Name>Hello World</Name>
+          					<Description>A small town standard makes it to the big time.</Description>
+          				</ContentMetaData>
+          				<Series>
+          					<SeriesName>Hello World, The Series</SeriesName>
+          				</Series>
+          			</ProgramContent>
+          		</Content>
+          	</ContentTransfer>
+          </BxfData>
+          </BxfMessage>
+    BxfHeartbeatMessage:
+      name: Heartbeat
+      summary: BXF Heartbeat message
+      schemaFormat: application/schema+json;version=draft-2020-12
+      payload:
+        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+      examples:
+      - name: Heartbeat Use Case
+        summary: Heartbeat Use Case
+        payload: |
+          <?xml version='1.0' encoding='UTF-8' ?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" dateTime="2006-08-16T20:44:43.16" messageType="Heartbeat" origin="Traffic System" originType="Traffic" userName="Traffic System User" destination="ContentDelivery" originId="urn:uuid:12345678-1234-1234-1234-123456789012" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          </BxfMessage>
+    BxfRequestMessage:
+      name: Request
+      summary: BXF Request message
+      schemaFormat: application/schema+json;version=draft-2020-12
+      payload:
+        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+      examples:
+      - name: Invoke Schedule Use Case
+        summary: Invoke Schedule Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" dateTime="2006-08-02T13:27:48.80" messageType="Request" origin="Traffic System" originType="Traffic" userName="Traffic System User" destination="Automation" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfData action="add">
+          		<Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-0038338391E0" invokeSchedule="true"/>
+          	</BxfData>
+          </BxfMessage>
+      - name: Query Request 1a Use Case
+        summary: Query Request 1a Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          <BxfQuery>
+          		<WhereClause>Schedule/@scheduleStart="2006-08-16T05:00:00.00"</WhereClause>
+          		<ReturnStructure>Schedule/Channel/*</ReturnStructure>
+          </BxfQuery>
+          </BxfMessage>
+      - name: Query Request 2a Use Case
+        summary: Query Request 2a Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          <BxfQuery>
+          		<WhereClause>Schedule/@scheduleStart>="2006-08-16T05:00:00.00"</WhereClause>
+          		<ReturnStructure>Schedule</ReturnStructure>
+          </BxfQuery>
+          </BxfMessage>
+      - name: Query Request 3a Use Case
+        summary: Query Request 3a Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd" xmlns:pmcp="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1" pmcp:schemaLocation="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1/pmcp31.xsd">
+          <BxfQuery>
+          		<WhereClause>Schedule/Channel/Name="WXYZ" and Schedule/@scheduleStart>="2006-08-16T05:00:00.00"</WhereClause>
+          		<ReturnStructure>Schedule/*</ReturnStructure>
+          </BxfQuery>
+          </BxfMessage>
+      - name: Query Request 3b Use Case
+        summary: Query Request 3b Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd" xmlns:pmcp="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1" pmcp:schemaLocation="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1/pmcp31.xsd">
+          <BxfQueryResponse>
+          	  	<Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-003833839122">
+          			<Channel>
+          				<pmcp:Name>WXYZ</pmcp:Name>
+          </Channel>
+          	 		<ScheduledEvent></ScheduledEvent>
+           </Schedule>
+          	</BxfQueryResponse>
+          </BxfMessage>
+      - name: Query Request 4 Use Case
+        summary: Query Request 4 Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Traffic System" originType="Traffic" destination="Automation" userName="Traffic System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd" xmlns:pmcp="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1" pmcp:schemaLocation="http://www.atsc.org/XMLSchemas/pmcp/2007/3.1/pmcp31.xsd">
+          <BxfQuery>
+          		<WhereClause>Schedule/Channel/Name="WXYZ" and Schedule/@scheduleStart="2006-08-16T05:00:00.00"</WhereClause>
+          		<ReturnStructure>Schedule/AsRun/*</ReturnStructure>
+          </BxfQuery>
+          </BxfMessage>
+      - name: Query Request 5a Use Case
+        summary: Query Request 5a Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Automation System" originType="Automation" destination="Content Transfer" userName="Content Transfer System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          <BxfQuery>
+          		<WhereClause>*</WhereClause>
+          		<ReturnStructure>ContentTransfer</ReturnStructure>
+          </BxfQuery>
+          </BxfMessage>
+      - name: Query Request 5b Use Case
+        summary: Query Request 5b Use Case
+        payload: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" messageType="Request" dateTime="2006-08-16T20:44:43.16" origin="Automation System" originType="Automation" destination="Content Transfer" userName="Content Transfer System User" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          <BxfQueryResponse>
+          	 <ContentTranfer></ContentTranfer>
+          	  <ContentTranfer></ContentTranfer>
+            </BxfQueryResponse>
+          </BxfMessage>
+    BxfReplyMessage:
+      name: Reply
+      summary: BXF Reply message
+      schemaFormat: application/schema+json;version=draft-2020-12
+      payload:
+        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+      examples:
+      - name: Query Request 1b Use Case
+        summary: Query Request 1b Use Case
+        payload: |
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F2" messageType="Reply" dateTime="2006-08-16T20:44:50.16" origin="Automation" originType="Automation" destination="Traffic System" userName="Automation System User"  originMessageId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          
+          	<BxfQueryResponse>
+          	  <Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-003833839122">
+          		<Channel>....</Channel>
+          	  </Schedule>
+          	  <Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-003833839123">
+          		<Channel>....</Channel>
+          	  </Schedule>
+          	</BxfQueryResponse>
+          </BxfMessage>
+      - name: Query Request 2b Use Case
+        summary: Query Request 2b Use Case
+        payload: |
+          <BxfMessage id="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391F2" messageType="Reply" dateTime="2006-08-16T20:44:50.16" origin="Automation" originType="Automation" destination="Traffic System" userName="Automation System User"  originMessageId="urn:uuid:ABCCDDDD-1111-22E3-9AFF-0038338391E1" xmlns="http://smpte-ra.org/schemas/2021/2017/BXF" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://smpte-ra.org/schemas/2021/2017/BXF BxfSchema.xsd">
+          	<BxfQueryResponse>
+          	  <Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-003833839122">
+          	  </Schedule>
+          	  <Schedule type="Primary" scheduleId="urn:uuid:00000000-0000-0000-0000-003833839123">
+          	  </Schedule>
+          	</BxfQueryResponse>
+          </BxfMessage>

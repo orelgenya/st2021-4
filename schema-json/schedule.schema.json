@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/schedule.schema.json",
+  "title": "schedule",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Schedule": {
+      "type": "object",
+      "properties": {
+        "Channel": {
+          "title": "Channel",
+          "$ref": "./bxfchannel.schema.json#/$defs/Channel",
+          "description": "ATSC Channel Defninition used in PMCP"
+        },
+        "ScheduleName": {
+          "title": "ScheduleName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "A name to describe the schedule"
+        },
+        "RealTimeDetail": {
+          "title": "RealTimeDetail",
+          "type": "object",
+          "properties": {
+            "EventId": {
+              "title": "EventId",
+              "$ref": "./eventdata.schema.json#/$defs/EventExtId",
+              "description": "Links to the events as described in ScheduledEvent if in the future or in the AsRun if current or in the past. Can be null if the event was added manually."
+            },
+            "RealTimeSequence": {
+              "title": "RealTimeSequence",
+              "type": "integer",
+              "description": "If zero, indicates the current airing event; if negative, indicates that the event was in the past and has aired; if positive, indicates an event that will air.  The integer number indicates the sequence order going forward or backward in time."
+            },
+            "EventStartTime": {
+              "title": "EventStartTime",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfDateTime",
+              "description": "Either the actual start time if the event already aired or is airing or the expected start time if in the future."
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "EventId",
+            "RealTimeSequence"
+          ]
+        },
+        "PlayoutRestrictions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PlayoutRestrictions"
+          },
+          "description": "Used to define what is allowed or restricted to the viewing of content in different venues (locations, devices, etc.) and the provisioning of alternative content when this happens.  Each Venue may have only one replacement option or null. (v4.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@type": {
+          "$ref": "./bxftypes.schema.json#/$defs/ScheduleType"
+        },
+        "@scheduleId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@dayPattern": {
+          "$ref": "./bxftypes.schema.json#/$defs/DayPattern"
+        },
+        "@scheduleStart": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "@scheduleEnd": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "@invokeSchedule": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "description": "A schedule",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ScheduledEvent": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ScheduledEvent"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "AsRun": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "CompleteAsRun": {
+                        "title": "CompleteAsRun",
+                        "$ref": "./asrun.schema.json#/$defs/CompleteAsRun"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "CompleteAsRun"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "BasicAsRun": {
+                        "title": "BasicAsRun",
+                        "$ref": "./asrun.schema.json#/$defs/BasicAsRun"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "BasicAsRun"
+                    ]
+                  }
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "AsRun"
+          ]
+        }
+      ],
+      "required": [
+        "@type",
+        "@scheduleId"
+      ]
+    },
+    "PlayoutRestrictions": {
+      "type": "object",
+      "properties": {
+        "Period": {
+          "title": "Period",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "FullLength": {
+                  "title": "FullLength",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "FullLength"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "PartialDaypart": {
+                  "title": "PartialDaypart",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfDaypart"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "PartialDaypart"
+              ]
+            }
+          ],
+          "description": "The period during which the restriction for the venue applies.  Either the full normal length of the schedule or a defined period when it is restricted."
+        },
+        "ReplacementSchedule": {
+          "title": "ReplacementSchedule",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "NoReplacement": {
+                  "title": "NoReplacement",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "NoReplacement"
+              ]
+            }
+          ],
+          "description": "Content that will be provided to the viewer in place of the regularly scheduled content for the specific vewing option when it is a restriction."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@playoutRestrictionType": {
+          "type": "string",
+          "enum": [
+            "Allow",
+            "Restrict"
+          ]
+        },
+        "@reason": {
+          "type": "string"
+        },
+        "@geography": {
+          "type": "string"
+        },
+        "@screenType": {
+          "type": "string",
+          "enum": [
+            "All",
+            "TV Only",
+            "All Non-TV Devices",
+            "Desktop Computers",
+            "Tablets",
+            "Mobile Phones",
+            "Tablets and Phones",
+            "Computers and Phones",
+            "Computers and Tablets",
+            "Other"
+          ]
+        },
+        "@operatingSystem": {
+          "type": "string",
+          "enum": [
+            "Android",
+            "Linux",
+            "MAC-OSX",
+            "OSI",
+            "PC-Windows",
+            "Unknown"
+          ]
+        },
+        "@featureSet": {
+          "type": "string",
+          "enum": [
+            "DigitalOutput",
+            "LocationAware",
+            "LocalStorage",
+            "AnalogOutput",
+            "HDCP",
+            "FastForward",
+            "ProgrammerBrandingRequired"
+          ]
+        },
+        "@minVersion": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to establish how content on a schedule can be veiwed by defining what is allowed or restricted across various parameters: geography, screen types, operating systems, feature set, or minimum software version.  If viewing is restricted, there is an option to provision alternative content.  VewingOptions is recursive.",
+      "required": [
+        "Period",
+        "ReplacementSchedule",
+        "@playoutRestrictionType"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

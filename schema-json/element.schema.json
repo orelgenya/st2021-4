@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/element.schema.json",
+  "title": "element",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Element": {
+      "type": "object",
+      "properties": {
+        "SequenceNumber": {
+          "title": "SequenceNumber",
+          "type": "integer",
+          "minimum": 1,
+          "description": "Uniique order count that specifies the order of play of all elements within the show including program segments and embedded non-program elements"
+        },
+        "Description": {
+          "title": "Description",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+        },
+        "Offset": {
+          "title": "Offset",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "Offset from the start of the show"
+        },
+        "Duration": {
+          "title": "Duration",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDuration"
+        },
+        "OverlayOpportunity": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OverlayOpportunityType"
+          },
+          "description": "Describes locations in time and space where overlays are either permitted or restricted from use. (v3.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ProgramElement": {
+              "title": "ProgramElement",
+              "$ref": "#/$defs/ProgramElement",
+              "description": "Description of individual show segments"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ProgramElement"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "EmbeddedNonProgramContent": {
+              "title": "EmbeddedNonProgramContent",
+              "$ref": "./nonprogramcontent.schema.json#/$defs/NonProgramContent",
+              "description": "Description of embedded non program elements such as barter spots"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "EmbeddedNonProgramContent"
+          ]
+        }
+      ],
+      "required": [
+        "SequenceNumber",
+        "Offset",
+        "Duration"
+      ]
+    },
+    "ProgramElement": {
+      "type": "object",
+      "properties": {
+        "SegmentNumber": {
+          "title": "SegmentNumber",
+          "type": "integer",
+          "description": "The order identifier for each segment"
+        },
+        "Type": {
+          "title": "Type",
+          "type": "object",
+          "$ref": "#/$defs/ProgramContentType",
+          "description": "Either a program segment or an interactive element. Textless added as a new otpion. (v6.0) Added Black, Bumper and Slate as new options. (v8.0)"
+        },
+        "ContentMetaData": {
+          "title": "ContentMetaData",
+          "$ref": "./contentmetadata.schema.json#/$defs/ContentMetaData",
+          "description": "For each element describes the content identifier and optionally additional details for the content"
+        },
+        "SegmentName": {
+          "title": "SegmentName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Each segment can have a descriptive name for the segment"
+        },
+        "OverlayOpportunity": {
+          "title": "OverlayOpportunity",
+          "$ref": "#/$defs/OverlayOpportunityType",
+          "description": "Describes locations in time and space where overlays are either permitted or restricted from use. (v3.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "For each element this describes the content on the element",
+      "required": [
+        "SegmentNumber",
+        "Type",
+        "ContentMetaData"
+      ]
+    },
+    "OverlayOpportunityType": {
+      "type": "object",
+      "properties": {
+        "Video-Audio": {
+          "title": "Video-Audio",
+          "type": "string",
+          "enum": [
+            "Video",
+            "Audio"
+          ]
+        },
+        "SOM": {
+          "title": "SOM",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+        },
+        "EOM": {
+          "title": "EOM",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+        },
+        "OpportunityComment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ScreenLocation": {
+          "title": "ScreenLocation",
+          "type": "object",
+          "properties": {
+            "Plane": {
+              "title": "Plane",
+              "type": "object",
+              "properties": {
+                "@zOrder": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "@percentOpaque": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "@zOrder",
+                "@percentOpaque"
+              ],
+              "description": "Defines the layer when multiple overlays are allowed."
+            },
+            "TopCorner": {
+              "title": "TopCorner",
+              "type": "object",
+              "properties": {
+                "@horizontalCoordinate": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "@verticalCoordinate": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "@units": {
+                  "type": "string",
+                  "enum": [
+                    "Centimeters",
+                    "Inches",
+                    "Percent of Screen",
+                    "Pixels"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "@horizontalCoordinate",
+                "@verticalCoordinate"
+              ],
+              "description": "Upper left corner definition of the overlay position relative to the upper left corner of the screen."
+            },
+            "Size": {
+              "title": "Size",
+              "type": "object",
+              "properties": {
+                "@width": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "@height": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "@units": {
+                  "type": "string",
+                  "enum": [
+                    "Centimeters",
+                    "Inches",
+                    "Percent of Screen",
+                    "Pixels"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "@width",
+                "@height"
+              ],
+              "description": "The offset from the TopCorner using the same units"
+            },
+            "@interactivity": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Plane",
+            "TopCorner",
+            "Size"
+          ],
+          "description": "Defines the location of one or more video overlays on the screen and if it is interactive."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@allow": {
+          "type": "boolean"
+        },
+        "@opportunityType": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Describes locations in time and space where overlays are either permitted or restricted from use. (v3.0)",
+      "required": [
+        "Video-Audio",
+        "SOM",
+        "EOM"
+      ]
+    },
+    "ProgramContentType": {
+      "type": "string",
+      "enum": [
+        "Black",
+        "Bumper",
+        "Interactive",
+        "LocalBreak",
+        "ProgramSegment",
+        "Slate",
+        "Textless"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

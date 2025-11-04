@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/datacontent.schema.json",
+  "title": "datacontent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "DataContent": {
+      "type": "object",
+      "properties": {
+        "BitRate": {
+          "title": "BitRate",
+          "type": "integer",
+          "minimum": 1
+        },
+        "FileName": {
+          "title": "FileName",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "BitRate",
+        "FileName"
+      ]
+    },
+    "VerticalIntervalData": {
+      "type": "object",
+      "description": "Used to indicate what data is embedded in the vertical interval of the video image",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "VBIData": {
+              "title": "VBIData",
+              "type": "object",
+              "properties": {
+                "@fieldPolarity": {
+                  "type": "string",
+                  "enum": [
+                    "Top",
+                    "Bottom"
+                  ]
+                },
+                "@lineOffSet": {
+                  "type": "integer",
+                  "minimum": 6,
+                  "maximum": 22
+                },
+                "@waveForm": {
+                  "type": "string",
+                  "enum": [
+                    "AMOL",
+                    "TVGuide",
+                    "VITC",
+                    "VITS"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "VBIData"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "VANCData": {
+              "title": "VANCData",
+              "type": "object",
+              "properties": {
+                "@did": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "@sdid": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false,
+              "description": "See SMPTE 291M for appropriate values for attributes."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "VANCData"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

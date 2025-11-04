@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/contract.schema.json",
+  "title": "contract",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "ProgramContract": {
+      "type": "object",
+      "properties": {
+        "ContractId": {
+          "title": "ContractId",
+          "type": "integer",
+          "minimum": 1,
+          "description": "Reference value to identify the contract assigned by distributor or entity"
+        },
+        "Name": {
+          "title": "Name",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Reference name associated to the contract by the entity"
+        },
+        "Distributor": {
+          "title": "Distributor",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Owner or rights holder of the content"
+        },
+        "ContractStartDate": {
+          "title": "ContractStartDate",
+          "type": "string",
+          "format": "date",
+          "description": "Earliest date that any content under this contract can be used by the entity"
+        },
+        "ContractEndDate": {
+          "title": "ContractEndDate",
+          "type": "string",
+          "format": "date",
+          "description": "Last date that any content under this contract can be used by the entity"
+        },
+        "TotalTitleCost": {
+          "title": "TotalTitleCost",
+          "type": "number",
+          "description": "A value associated with playing or using the content"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ContractId"
+      ]
+    },
+    "SalesContract": {
+      "type": "object",
+      "properties": {
+        "ContractNumber": {
+          "title": "ContractNumber",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "description": "Traffic system contract number related to this event"
+        },
+        "ContractStartDate": {
+          "title": "ContractStartDate",
+          "type": "string",
+          "format": "date-time",
+          "description": "Date before which content should not air"
+        },
+        "ContractEndDate": {
+          "title": "ContractEndDate",
+          "type": "string",
+          "format": "date-time",
+          "description": "Date after which content should not air"
+        },
+        "LineNumber": {
+          "title": "LineNumber",
+          "type": "integer",
+          "minimum": 1,
+          "description": "Traffic system contract line number related to this event"
+        },
+        "SpotNumber": {
+          "title": "SpotNumber",
+          "type": "integer",
+          "minimum": 1,
+          "description": "Traffic system spot serial number"
+        },
+        "Cost": {
+          "title": "Cost",
+          "type": "number",
+          "description": "Cost of the spot per play (v3.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

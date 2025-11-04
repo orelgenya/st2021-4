@@ -1,0 +1,1132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/contentdelivery.schema.json",
+  "title": "contentdelivery",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "ContentDelivery": {
+      "type": "object",
+      "properties": {
+        "AirReadyMaster": {
+          "title": "AirReadyMaster",
+          "type": "object",
+          "properties": {
+            "FilePackage": {
+              "title": "FilePackage",
+              "type": "object",
+              "properties": {
+                "FileDescription": {
+                  "title": "FileDescription",
+                  "type": "object",
+                  "properties": {
+                    "FileType": {
+                      "title": "FileType",
+                      "type": "string",
+                      "enum": [
+                        "Video/Audio-Converted",
+                        "Video/Audio-Original",
+                        "Closed Captioning",
+                        "Metadata File",
+                        "Gallery",
+                        "Still Images",
+                        "Custom"
+                      ],
+                      "description": "Select the appropriate file type and its matching extension(s)."
+                    },
+                    "FileExtensions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          ".MXF",
+                          ".MOV",
+                          ".SCC",
+                          ".XML",
+                          "_Gallery.JPEG",
+                          "_Still_#.JPEG (1-4)",
+                          "Custom"
+                        ]
+                      },
+                      "minItems": 1,
+                      "description": "The extension or extensions allowed for this type of file."
+                    },
+                    "@requiredFlag": {
+                      "type": "boolean"
+                    },
+                    "@descriptiveText": {
+                      "type": "string"
+                    },
+                    "@fileReferenceID": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "@maxFileNameLength": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "FileType",
+                    "FileExtensions"
+                  ],
+                  "description": "Each package can consist of one or multiple files of different type, each having a specific purpose and specialized content."
+                },
+                "CustomFileExtensions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "CustomExtensionValue": {
+                        "title": "CustomExtensionValue",
+                        "type": "string",
+                        "description": "Customized or non-standard file xtensions added to the file name in order to properly identify it as of being a specific file type."
+                      },
+                      "ExtensionPurpose": {
+                        "title": "ExtensionPurpose",
+                        "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                        "description": "A brief description of the purpose of the file type and its contents."
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "CustomExtensionValue",
+                      "ExtensionPurpose"
+                    ]
+                  },
+                  "description": "If a custom extension is required, delineate the extension value and its purpose."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "FileDescription"
+              ],
+              "description": "Used to describe the types of files that are reuired or optional in the delivery package to the broadcaster."
+            },
+            "DeliveryOptions": {
+              "title": "DeliveryOptions",
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "MPEG2HDDeliverySpecification": {
+                      "title": "MPEG2HDDeliverySpecification",
+                      "type": "object",
+                      "properties": {
+                        "MPEG2HDVideoAudioEncoding": {
+                          "title": "MPEG2HDVideoAudioEncoding",
+                          "type": "string",
+                          "enum": [
+                            "Option 1a",
+                            "Option 1b",
+                            "Option 2a",
+                            "Option 2b"
+                          ],
+                          "description": "Select between Option 1a, 1b, 2a or 2b.  See the specification for a full description of these options."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "MPEG2HDVideoAudioEncoding"
+                      ],
+                      "description": "NABA DPP MPEG-2 Delivery Specification  (http://www.nabanet.com/nabaweb/news/articles/67_files/NABA_DPP_Technical_Specification_MPEG2_v1.0.pdf)"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "MPEG2HDDeliverySpecification"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "AVCHDDeliverySpecification": {
+                      "title": "AVCHDDeliverySpecification",
+                      "type": "object",
+                      "properties": {
+                        "AVCHDVideoAudioEncoding": {
+                          "title": "AVCHDVideoAudioEncoding",
+                          "type": "object",
+                          "properties": {
+                            "VideoFormat": {
+                              "title": "VideoFormat",
+                              "type": "string",
+                              "enum": [
+                                "720p/59.94",
+                                "1080i/29.97"
+                              ],
+                              "description": "720p or 1080i only"
+                            },
+                            "GoP": {
+                              "title": "GoP",
+                              "type": "string",
+                              "description": "(eg M=X N=Y B=Z)"
+                            },
+                            "BitRate": {
+                              "title": "BitRate",
+                              "type": "integer",
+                              "description": "Mbits/s"
+                            },
+                            "BitDepth": {
+                              "title": "BitDepth",
+                              "type": "integer",
+                              "enum": [
+                                "8",
+                                "10"
+                              ],
+                              "description": "Normally 10 bit, but legacy 8 bit for 1080i only."
+                            },
+                            "ColorSubsampling": {
+                              "title": "ColorSubsampling",
+                              "type": "string",
+                              "enum": [
+                                "4:2:0",
+                                "4:2:2"
+                              ],
+                              "description": "Choose between 4:2:0 or 4:2:2"
+                            },
+                            "AudioFormat": {
+                              "title": "AudioFormat",
+                              "type": "string",
+                              "enum": [
+                                "PCM"
+                              ],
+                              "description": "PCM Audio is Required"
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "VideoFormat",
+                            "BitRate",
+                            "BitDepth",
+                            "ColorSubsampling",
+                            "AudioFormat"
+                          ],
+                          "description": "Note that PCM Audio is the only option for the audio encoding."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "AVCHDVideoAudioEncoding"
+                      ],
+                      "description": "NABA DPP AVC Delivery Specification  (http://www.nabanet.com/nabaweb/news/articles/67_files/NABA_DPP_Technical_Specification_AVC_v1.0.pdf)"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "AVCHDDeliverySpecification"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "UHDDeliverySpecification": {
+                      "title": "UHDDeliverySpecification",
+                      "type": "object",
+                      "properties": {
+                        "UHDVideoAudioEncoding": {
+                          "title": "UHDVideoAudioEncoding",
+                          "type": "object",
+                          "properties": {
+                            "FileFormat-AS11": {
+                              "title": "FileFormat-AS11",
+                              "type": "string",
+                              "enum": [
+                                "X1",
+                                "X2",
+                                "X3",
+                                "X4",
+                                "X5",
+                                "X6",
+                                "X7",
+                                "X8",
+                                "X9"
+                              ],
+                              "description": "The AS-11 family of Specifications defines constrained media file formats for the delivery of finished media assets to a broadcaster or publisher. Each Specification is developed for a particular business purpose. The value must be an \"X\" plus an integer value (1-9) that represents the AS-11 constraint such as X8 or X9."
+                            },
+                            "AudioFormat": {
+                              "title": "AudioFormat",
+                              "type": "object",
+                              "properties": {
+                                "AudioEncoding": {
+                                  "title": "AudioEncoding",
+                                  "type": "string",
+                                  "enum": [
+                                    "PCM"
+                                  ],
+                                  "description": "PCM Audio is Required"
+                                },
+                                "UHDLoudness": {
+                                  "title": "UHDLoudness",
+                                  "type": "object",
+                                  "properties": {
+                                    "MeasuredLoudness": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "@loudnessValue": {
+                                            "type": "integer",
+                                            "maximum": 0,
+                                            "minimum": -146
+                                          },
+                                          "@loudnessUnit": {
+                                            "type": "string",
+                                            "enum": [
+                                              "dBFS"
+                                            ]
+                                          },
+                                          "@measurementType": {
+                                            "type": "string",
+                                            "enum": [
+                                              "Program loudness",
+                                              "Max short-term loudness",
+                                              "Max momentary loudness"
+                                            ]
+                                          }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [
+                                          "@loudnessValue",
+                                          "@loudnessUnit",
+                                          "@measurementType"
+                                        ]
+                                      },
+                                      "minItems": 1,
+                                      "description": "Program loudness, K-weighted, relative to full scale, measured with equipment that implements\nthe algorithm specified by ITU-R BS.1770; Dialog Loudness, in LKFS units, of the Anchor Element"
+                                    },
+                                    "MeasuredMaximumTruePeak": {
+                                      "title": "MeasuredMaximumTruePeak",
+                                      "type": "integer",
+                                      "maximum": 0,
+                                      "minimum": -146,
+                                      "description": "The maximum absolute level of the signal waveform in the continuous time domain, measured per ITU-R BS.1770"
+                                    },
+                                    "LoudnessStandard": {
+                                      "title": "LoudnessStandard",
+                                      "type": "string",
+                                      "enum": [
+                                        "ATSC A/85"
+                                      ],
+                                      "description": "Must be ATSC A/85."
+                                    },
+                                    "Normalization": {
+                                      "title": "Normalization",
+                                      "type": "integer",
+                                      "maximum": 0,
+                                      "description": "Although the target loudness is -24 LKFS, in exceptional circumstances other target levels may be permitted by agreement with the broadcaster. Other target levels must be agreed with the broadcaster before the final mix."
+                                    },
+                                    "PrivateInformation": {
+                                      "title": "PrivateInformation",
+                                      "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "MeasuredLoudness"
+                                  ],
+                                  "description": "Program Loudness requirements and guidelines."
+                                }
+                              },
+                              "additionalProperties": false,
+                              "required": [
+                                "AudioEncoding",
+                                "UHDLoudness"
+                              ]
+                            }
+                          },
+                          "additionalProperties": false,
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "RDD-32Mode": {
+                                  "title": "RDD-32Mode",
+                                  "type": "string",
+                                  "enum": [
+                                    "Option 1a",
+                                    "Option 1b"
+                                  ],
+                                  "description": "Select either Option 1a or 1b as speciified in RDD-32 (XAVC)."
+                                }
+                              },
+                              "additionalProperties": false,
+                              "required": [
+                                "RDD-32Mode"
+                              ]
+                            }
+                          ],
+                          "required": [
+                            "FileFormat-AS11",
+                            "AudioFormat"
+                          ],
+                          "description": "Note that PCM Audio is the only option for audio encoding for UHD content."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "UHDVideoAudioEncoding"
+                      ],
+                      "description": "NABA DPP Air Ready Delivery Speciification for UHD content (v7.0)."
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "UHDDeliverySpecification"
+                  ]
+                }
+              ],
+              "description": "Video specification options - either MPEG-2 or AVC for HD content or AVC for UHD content.  Updated (v7.0)."
+            },
+            "TimeCode": {
+              "title": "TimeCode",
+              "type": "object",
+              "properties": {
+                "StartTimeCode": {
+                  "title": "StartTimeCode",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+                },
+                "EndTimeCode": {
+                  "title": "EndTimeCode",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "StartTimeCode",
+                "EndTimeCode"
+              ],
+              "description": "Start and End Timecode for the media being delivered"
+            },
+            "ProgramSegmentation": {
+              "title": "ProgramSegmentation",
+              "type": "string",
+              "enum": [
+                "Single Part or Soft Parted Program (Single File)",
+                "Hard Parted Program (Single File)",
+                "Multi-part Program Delivered on Multiple Files"
+              ],
+              "description": "Indicates whether or not the media content is contained within a single file or within multiple files and whether it has a single/soft, hard or multi-parted structure."
+            },
+            "SafeArea": {
+              "title": "SafeArea",
+              "type": "object",
+              "properties": {
+                "SafeAreas": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Action Safe (720p)",
+                      "Caption Safe (16:9 - 720p)",
+                      "Caption Safe (4:3 - 720p)",
+                      "Action Safe (1080i)",
+                      "Caption Safe (16:9 - 1080i)",
+                      "Caption Safe (4:3 - 1080i)",
+                      "Custom"
+                    ]
+                  },
+                  "minItems": 1,
+                  "description": "Select one or more options designating the safe areas supported by the media.  Note that a custom option is also available and should be described completely in the description element below."
+                },
+                "CustomSafeDescription": {
+                  "title": "CustomSafeDescription",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "If the \"Custom\" option is selected in the SafeAreas element, a complete description of this design should be included here.  Note that only one \"Custom SafeArea\" should be designated with a single description."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "SafeAreas"
+              ],
+              "description": "Areas within the media frame which are considered to be safe for placement of overlaid content or captioning."
+            },
+            "FileTimings": {
+              "title": "FileTimings",
+              "type": "object",
+              "properties": {
+                "FileStart": {
+                  "title": "FileStart",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                  "description": "First timecode encountered in the file."
+                },
+                "LineUp": {
+                  "title": "LineUp",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                  "description": "100% with BLITS on surround services and GLITS on Stereo."
+                },
+                "LeaderRequirements": {
+                  "title": "LeaderRequirements",
+                  "type": "object",
+                  "properties": {
+                    "LeaderStartTime": {
+                      "title": "LeaderStartTime",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                      "description": "The start time of the leader section."
+                    },
+                    "@colorBars": {
+                      "type": "boolean"
+                    },
+                    "@tones": {
+                      "type": "boolean"
+                    },
+                    "@blackAndSilence": {
+                      "type": "boolean"
+                    },
+                    "@syncPop": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "SlateLength": {
+                          "title": "SlateLength",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                          "description": "Timecode of the location of the slate in the media section of the file."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "BlackAndSilenceLength": {
+                          "title": "BlackAndSilenceLength",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                          "description": "Duration of black and silence provided as a leader to the program content."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ColorBarsLength": {
+                          "title": "ColorBarsLength",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                          "description": "Duration of the Color Bars as specified in SMPTE RP219:2002"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "AudioToneLength": {
+                          "title": "AudioToneLength",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "SyncPopLength": {
+                          "title": "SyncPopLength",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "VocalTrackIDorPinkNoiseLength": {
+                          "title": "VocalTrackIDorPinkNoiseLength",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ],
+                  "required": [
+                    "LeaderStartTime",
+                    "@colorBars",
+                    "@tones",
+                    "@blackAndSilence",
+                    "@syncPop"
+                  ],
+                  "description": "Indicates the existance of various attributes of the leader prior to the program content."
+                },
+                "StartOfProgram": {
+                  "title": "StartOfProgram",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                  "description": "The timecode in tthe file where the actual program content starts."
+                },
+                "ClosedCaptioning": {
+                  "title": "ClosedCaptioning",
+                  "type": "boolean",
+                  "description": "Program identifier for 3 seconds prior to program start. First caption may not appear before StartOfProgram."
+                },
+                "BetweenProgramSegments": {
+                  "title": "BetweenProgramSegments",
+                  "type": "object",
+                  "properties": {
+                    "BlackAndSilence": {
+                      "title": "BlackAndSilence",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                      "description": "Duration of black and silence provided as separation between program segments."
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Length of time to put black and silence between program segments."
+                },
+                "PostProgram": {
+                  "title": "PostProgram",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "PostProgramHold": {
+                          "title": "PostProgramHold",
+                          "type": "boolean",
+                          "description": "Hold or freeze for 5 seconds after end of program"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "PostProgramBlack": {
+                          "title": "PostProgramBlack",
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 120,
+                          "description": "Length of time that black should be added to the end of a program in seconds.  Valid from 0 to 120."
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ],
+                  "description": "After the program content, including credits and all audio, has ended, a requirement to include additional content or black."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "FileStart",
+                "StartOfProgram"
+              ],
+              "description": "Used to indicate the timecode of each element of content that makes up the complete media.  This includes designated start time of the file, the location of each leader element, and start of the program content."
+            },
+            "StaticItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ParameterName": {
+                    "title": "ParameterName",
+                    "type": "string",
+                    "description": "Designated parameter related to the delivery of a file which has only one allowed value."
+                  },
+                  "ParameterRequiredValue": {
+                    "title": "ParameterRequiredValue",
+                    "type": "string",
+                    "description": "The single value allowed for the matching parameter"
+                  },
+                  "@requiredFlag": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "ParameterName",
+                  "ParameterRequiredValue"
+                ]
+              },
+              "description": "There are many parameters or setting values for both video and audio which have only one allowed value.  These can be listed in pairs to be informative to the system."
+            },
+            "ClosedCaptioning": {
+              "title": "ClosedCaptioning",
+              "type": "object",
+              "properties": {
+                "MXFEmbeddedCaptions": {
+                  "title": "MXFEmbeddedCaptions",
+                  "$ref": "./bxfcaptions.schema.json#/$defs/BxfCaptions",
+                  "description": "Designate which captioning formats are embedded in the MXF file structure."
+                },
+                "CaptionFileName": {
+                  "title": "CaptionFileName",
+                  "type": "string",
+                  "description": "If a caption file is required, provide the name of the file if it is known."
+                },
+                "@captionFileRequired": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "MXFEmbeddedCaptions"
+              ],
+              "description": "Describe the method of delivery of captioned content and if a separate file is required or not (CBC Requirement)"
+            },
+            "ContentSlate": {
+              "title": "ContentSlate",
+              "type": "object",
+              "properties": {
+                "FullProgramTitle": {
+                  "title": "FullProgramTitle",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "ProductionNumber": {
+                  "title": "ProductionNumber",
+                  "type": "string"
+                },
+                "SeasonName": {
+                  "title": "SeasonName",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "Include year when applicable."
+                },
+                "SeasonNumber": {
+                  "title": "SeasonNumber",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "EpisodeIdentifier": {
+                  "title": "EpisodeIdentifier",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "Include title name and/or number"
+                },
+                "SafeAreaCompliant": {
+                  "title": "SafeAreaCompliant",
+                  "type": "boolean",
+                  "description": "Indicates whether the content used on the slate is sized appropriately to be safe area compliant (CBC Requirement)"
+                },
+                "AFDData": {
+                  "title": "AFDData",
+                  "$ref": "./video.schema.json#/$defs/AFDData",
+                  "description": "For the conversion of historical programs, indicates the method of conversion from 4:3 format or others to a 16:9 format (CBC Requirement)"
+                },
+                "ProductionCompany": {
+                  "title": "ProductionCompany",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "PostProductionCompany": {
+                  "title": "PostProductionCompany",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "AudioTrackAllocation": {
+                  "title": "AudioTrackAllocation",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "Use SMPTE Notation for describe definitions"
+                },
+                "IntegratedLoudness": {
+                  "title": "IntegratedLoudness",
+                  "type": "integer"
+                },
+                "ProgramLength": {
+                  "title": "ProgramLength",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfDuration",
+                  "description": "Duration of the program"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "FullProgramTitle",
+                "ProductionCompany",
+                "PostProductionCompany",
+                "ProgramLength"
+              ],
+              "description": "The information included on the slate for the program content."
+            },
+            "QualityControl": {
+              "title": "QualityControl",
+              "type": "object",
+              "properties": {
+                "FileCompliant": {
+                  "title": "FileCompliant",
+                  "type": "boolean",
+                  "description": "Confirms that the file meets compliance levles of the requesting entity."
+                }
+              },
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "$ref": "./qualitycontrol.schema.json#/$defs/QualityControl"
+                }
+              ],
+              "required": [
+                "FileCompliant"
+              ],
+              "description": "Media often must be checked for its quality each time it is copied or moved to another location.  Multiple checks are typical to confirm that the audio, video and other attributes meet the standards of the intended usage."
+            },
+            "MXFEmbeddedXML": {
+              "title": "MXFEmbeddedXML",
+              "type": "object",
+              "description": "A copy of the \"programmes descriptive metadata\" XML document that is embedded in the MXF file described by this BXF message.  The authoritative source is always the MXF file."
+            },
+            "CreditDisplay": {
+              "title": "CreditDisplay",
+              "type": "string",
+              "description": "Describe the method of displaying Credits (CBC Requirement)"
+            },
+            "OriginalContentRequired": {
+              "title": "OriginalContentRequired",
+              "type": "object",
+              "properties": {
+                "VideoAudioFormat": {
+                  "title": "VideoAudioFormat",
+                  "$ref": "./video.schema.json#/$defs/Video"
+                },
+                "FilmMaterial": {
+                  "title": "FilmMaterial",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "VideoAudioFormat",
+                "FilmMaterial"
+              ],
+              "description": "If characteristics of the original content are useful, details of its Video and Audio format or Film attributes may be specified here."
+            },
+            "AudioMapping": {
+              "title": "AudioMapping",
+              "type": "object",
+              "properties": {
+                "AudioChannels": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "TrackNumber": {
+                        "title": "TrackNumber",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 16
+                      },
+                      "MainProgram": {
+                        "title": "MainProgram",
+                        "type": "string",
+                        "enum": [
+                          "RightMain",
+                          "LeftMain",
+                          "Unused",
+                          "RRear",
+                          "LRear",
+                          "LFE",
+                          "DV",
+                          "LO",
+                          "RO",
+                          "Center",
+                          "Custom"
+                        ]
+                      },
+                      "@audioChannelName": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "allOf": [
+                      {
+                        "$ref": "./audio.schema.json#/$defs/Audio"
+                      }
+                    ],
+                    "required": [
+                      "TrackNumber",
+                      "MainProgram"
+                    ]
+                  },
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "AudioChannels"
+              ],
+              "description": "Mapping of audio channels (CBC Requirement)"
+            },
+            "SubjectiveQuality": {
+              "title": "SubjectiveQuality",
+              "type": "object",
+              "properties": {
+                "AudioQuality": {
+                  "title": "AudioQuality",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5,
+                  "description": "ITU-R BS.1284-1"
+                },
+                "VideoQuality": {
+                  "title": "VideoQuality",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5,
+                  "description": "ITU-R BT500-13"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "AudioQuality",
+                "VideoQuality"
+              ],
+              "description": "Subjective aspects (both audio and video) of the quality of the material may be noted here, following ITU recommendations on general methods for subjective assessment of sound and television picture quality."
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "DeliveryOptions",
+            "TimeCode",
+            "ProgramSegmentation",
+            "SafeArea",
+            "ClosedCaptioning",
+            "ContentSlate",
+            "QualityControl"
+          ],
+          "description": "Used to specify requirements for delivery of Air Ready Masters. (v5.0).  UHD options added (v7.0)."
+        },
+        "LibraryMaster": {
+          "title": "LibraryMaster",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "ProRes": {
+                  "title": "ProRes",
+                  "$ref": "#/$defs/ProResLibraryMasterApp"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "ProRes"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "J2K": {
+                  "title": "J2K",
+                  "$ref": "#/$defs/J2KLibraryMasterApp"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2K"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "IMFApplications": {
+                  "title": "IMFApplications",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "IMFapp2": {
+                          "title": "IMFapp2",
+                          "$ref": "#/$defs/IMFLibraryMasterApp2"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "IMFapp2"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "IMFapp2E": {
+                          "title": "IMFapp2E",
+                          "$ref": "#/$defs/IMFLibraryMasterApp2e"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "IMFapp2E"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "IMFApplications"
+              ]
+            }
+          ],
+          "description": "Content delivery options for Library Masters using various published specifications (v6.0)"
+        },
+        "DeliveryDetails": {
+          "title": "DeliveryDetails",
+          "type": "object",
+          "properties": {
+            "DeliveryService": {
+              "title": "DeliveryService",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+            },
+            "DeliveryDate": {
+              "title": "DeliveryDate",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfDateTime"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Used to describe how the media is being delivered and when. (v8.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to specify the method by which media content should be created and formatted for downstream use by a designated media company. AirReadyMaster added (v5.0) and LibraryMaster added (v6.0) and minor modifications made (v7.0)."
+    },
+    "DescriptiveMetadata": {
+      "type": "object",
+      "properties": {
+        "AS-11_DPPMetadata": {
+          "title": "AS-11_DPPMetadata",
+          "type": "boolean"
+        },
+        "EBU_QCMetadata": {
+          "title": "EBU_QCMetadata",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "./qualitycontrol.schema.json#/$defs/QualityControl"
+            }
+          ]
+        },
+        "RDD6_DolbyAudioMetadata": {
+          "title": "RDD6_DolbyAudioMetadata",
+          "type": "boolean"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Indicates the presence of various types of desrciptive metadata in the Library Master. (v6.0)",
+      "required": [
+        "AS-11_DPPMetadata",
+        "RDD6_DolbyAudioMetadata"
+      ]
+    },
+    "IMFLibraryMasterApp2": {
+      "type": "object",
+      "properties": {
+        "ImageEssence": {
+          "title": "ImageEssence",
+          "$ref": "./video.schema.json#/$defs/IMFImageEssenceApp2",
+          "description": "Description of the video image essence for IMF Applications as a specialization of the IMF Framework  (v6.0)"
+        },
+        "MultiChannelAudioStreams": {
+          "title": "MultiChannelAudioStreams",
+          "$ref": "./audio.schema.json#/$defs/MultiChannelAudioStreams",
+          "description": "Linear PCM"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Added content delivery options for Library Masters that conform to the IMF Framework as specified by ST 2067  (v6.0)"
+    },
+    "IMFLibraryMasterApp2e": {
+      "type": "object",
+      "properties": {
+        "ImageEssence": {
+          "title": "ImageEssence",
+          "$ref": "./video.schema.json#/$defs/IMFImageEssenceApp2e",
+          "description": "Description of the video image essence for IMF Applications as a specialization of the IMF Framework.  All references are taken from SMPTE ST 2067-21:2016 Section 5.1 and reference Table 3. (v6.0)."
+        },
+        "MultiChannelAudioStreams": {
+          "title": "MultiChannelAudioStreams",
+          "$ref": "./audio.schema.json#/$defs/MultiChannelAudioStreams",
+          "description": "Linear PCM"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Added content delivery options for Library Masters that conform to the IMF Framework as specified by ST 2067  (v6.0)"
+    },
+    "J2KLibraryMasterApp": {
+      "type": "object",
+      "properties": {
+        "ImageEssence": {
+          "title": "ImageEssence",
+          "type": "object",
+          "properties": {
+            "J2KEncodingProfile": {
+              "title": "J2KEncodingProfile",
+              "$ref": "./video.schema.json#/$defs/J2KEncodingProfile",
+              "description": "Implementations shall support the combinations of JPEG 2000 IMF profiles (as specified in ISO/IEC 15444-1:2016). (v7.0)"
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./video.schema.json#/$defs/J2KImageEssence"
+            }
+          ],
+          "required": [
+            "J2KEncodingProfile"
+          ],
+          "description": "Description of the video image essence for J2K content.(v6.0 and updated in v7.0 to remove 4-2-0 that was not appropriate and fix other labeling errors)."
+        },
+        "MultiChannelAudioStreams": {
+          "title": "MultiChannelAudioStreams",
+          "$ref": "./audio.schema.json#/$defs/MultiChannelAudioStreams",
+          "description": "A collection of one or more audio streams with the same encoding method that further incorporates groups of audio channels in a specific format as defined in ST 377-4. If a data stream (MXF audio essence track) contains multiple encodings (e.g., PCM and Dolby E), then multiple MultiChannelAudioStreams must be used. (v8.1)"
+        },
+        "DescriptiveMetadata": {
+          "title": "DescriptiveMetadata",
+          "$ref": "#/$defs/DescriptiveMetadata",
+          "description": "Indicates the presence of various types of descriptive metadata in the Library Master. (v6.0)"
+        },
+        "AccessServices": {
+          "title": "AccessServices",
+          "$ref": "./bxfcaptions.schema.json#/$defs/AccessServices",
+          "description": "Indicators of the type of access services provided as part of the Library Master content. (V6.0)"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Added content delivery options for Library Masters in various configurations (v6.0)",
+      "required": [
+        "MultiChannelAudioStreams"
+      ]
+    },
+    "ProResLibraryMasterApp": {
+      "type": "object",
+      "properties": {
+        "ImageEssence": {
+          "title": "ImageEssence",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "./video.schema.json#/$defs/ImageEssence"
+            }
+          ],
+          "description": "Description of the video image essence for ProRes content.(v6.0)"
+        },
+        "MultiChannelAudioStreams": {
+          "title": "MultiChannelAudioStreams",
+          "$ref": "./audio.schema.json#/$defs/MultiChannelAudioStreams",
+          "description": "A collection of one or more audio streams with the same encoding method that further incorporates groups of audio channels in a specific format as defined in ST 377-4. If a data stream (MXF audio essence track) contains multiple encodings (e.g., PCM and Dolby E), then multiple MultiChannelAudioStreams must be used. (v8.1)"
+        },
+        "DescriptiveMetadata": {
+          "title": "DescriptiveMetadata",
+          "$ref": "#/$defs/DescriptiveMetadata",
+          "description": "Indicates the presence of various types of desrciptive metadata in the Library Master. (v6.0)"
+        },
+        "AccessServices": {
+          "title": "AccessServices",
+          "$ref": "./bxfcaptions.schema.json#/$defs/AccessServices",
+          "description": "Indicators of the type of access services provided as part of the Library Master content. (V6.0)"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Added content delivery options for Library Masters in various configurations (v6.0)"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/bxfschema.schema.json",
+  "title": "bxfschema",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "BxfMessage": {
+      "title": "BxfMessage",
+      "type": "object",
+      "properties": {
+        "@id": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@dateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "@messageType": {
+          "$ref": "./bxftypes.schema.json#/$defs/MessageType"
+        },
+        "@origin": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "@originType": {
+          "$ref": "./bxftypes.schema.json#/$defs/OriginType"
+        },
+        "@userName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "@password": {},
+        "@destination": {
+          "type": "string"
+        },
+        "@destinationId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@destinationType": {
+          "$ref": "./bxftypes.schema.json#/$defs/DestinationType"
+        },
+        "@originId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@originMessageId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@status": {
+          "$ref": "./bxftypes.schema.json#/$defs/BxfStatus"
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "BxfData": {
+              "title": "BxfData",
+              "type": "object",
+              "properties": {
+                "JobDetail": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./jobdetail.schema.json#/$defs/JobDetail"
+                  },
+                  "description": "Allows the message to assign job information.  If more than one company or process for a job, enter multiple records and link with jobId.  If one job is dependent on the completion of another, link using jobID and jobDependency. (v3.0)"
+                },
+                "PrivateInformation": {
+                  "title": "PrivateInformation",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                }
+              },
+              "additionalProperties": false,
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "ContentTransfer": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./contenttransfer.schema.json#/$defs/ContentTransfer"
+                      },
+                      "minItems": 1,
+                      "description": "Used to transfer or transcode media from one location to another location"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "ContentTransfer"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "Schedule": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./schedule.schema.json#/$defs/Schedule"
+                      },
+                      "minItems": 1,
+                      "description": "Used to describe a specific list of content in a linear playout sequence"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Schedule"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "Format": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./format.schema.json#/$defs/Format"
+                      },
+                      "minItems": 1,
+                      "description": "The definition of the empty structure of a program as used by the traffic system to construct a schedule grid."
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Format"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "Content": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./content.schema.json#/$defs/Content"
+                      },
+                      "minItems": 1,
+                      "description": "Used to describe the content at a specific location"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Content"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "Configuration": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./configuration.schema.json#/$defs/Configuration"
+                      },
+                      "minItems": 1,
+                      "description": "Used to describe the configuration values of a system"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Configuration"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "TrafficInstructions": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./jobdetail.schema.json#/$defs/TrafficInstructions"
+                      },
+                      "minItems": 1,
+                      "description": "Used to describe traffic instructions to a single or multiple stations for multiple content.  Requires stations to be defined under a Job. (v3.0)"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "TrafficInstructions"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "QCProfiles": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./qualitycontrol.schema.json#/$defs/QualityControl"
+                      },
+                      "minItems": 1,
+                      "description": "Used to setup quality control profiles or do to specific QC based work. (v5.0)"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "QCProfiles"
+                  ]
+                }
+              ],
+              "description": "Used to perform actions or supply information to another system."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "BxfData"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "BxfQuery": {
+              "title": "BxfQuery",
+              "type": "object",
+              "properties": {
+                "WhereClause": {
+                  "title": "WhereClause",
+                  "$ref": "./bxftypes.schema.json#/$defs/QueryString",
+                  "description": "Simple SQL statements using BxfData elements and restricted by the format specified by QueryStringType (see BxfTypes)."
+                },
+                "ReturnStructure": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./bxftypes.schema.json#/$defs/QueryStringIdentifier"
+                  },
+                  "minItems": 1,
+                  "description": "Describes the form of data you want returned into the BxfQueryResponse based on the format specified by QueryStringIdentifierType (see BxfTypes)."
+                },
+                "@requestChunking": {
+                  "type": "boolean"
+                },
+                "@memoryLimit": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "WhereClause",
+                "ReturnStructure"
+              ],
+              "description": "Used to describe a SQL statement which when applied to another system's database returns data for the structure designated by the ReturnStructure into BxfQueryResponse."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "BxfQuery"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "BxfQueryResponse": {
+              "title": "BxfQueryResponse",
+              "type": "object",
+              "properties": {
+                "@chunkingFlag": {
+                  "type": "boolean"
+                },
+                "@itemNumber": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "@totalItems": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": true,
+              "description": "Used to respond to a BxfQuery request using the structure specified in ReturnStructure and the elemental definitions under BxfData."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "BxfQueryResponse"
+          ]
+        }
+      ],
+      "required": [
+        "@id",
+        "@dateTime",
+        "@messageType",
+        "@origin",
+        "@originType",
+        "@userName"
+      ],
+      "description": "The root for all BXF messages."
+    }
+  },
+  "additionalProperties": false
+}

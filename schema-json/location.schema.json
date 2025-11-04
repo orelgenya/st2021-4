@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/location.schema.json",
+  "title": "location",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Location": {
+      "type": "object",
+      "properties": {
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@fileSize": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Identification of where the media is stored. Used by systems to notify locations of essence instance",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Satellite": {
+              "title": "Satellite",
+              "type": "object",
+              "properties": {
+                "SatelliteName": {
+                  "title": "SatelliteName",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "SatellitePosition": {
+                  "title": "SatellitePosition",
+                  "type": "number",
+                  "minimum": -180.0,
+                  "maximum": 180.0,
+                  "description": "Location of Satellite in degrees east or west relative to the prime meridian (0) -  negative values are west  (-123.0) and positive values are east (+123.0). (v3.0)"
+                },
+                "Transponders": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "@primaryAlternate": {
+                        "type": "string",
+                        "enum": [
+                          "Primary",
+                          "Alternate1",
+                          "Alternate2"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "TransponderName": {
+                            "title": "TransponderName",
+                            "type": "string",
+                            "description": "The designated name for a specific transponder as defined in the Receiver used as a shortcut to select a transponder. (v3.0)"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "TransponderName"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "TransponderDetail": {
+                            "title": "TransponderDetail",
+                            "type": "object",
+                            "properties": {
+                              "TransponderNumber": {
+                                "title": "TransponderNumber",
+                                "type": "integer",
+                                "minimum": 1,
+                                "description": "Transponder number\n1 or greater"
+                              },
+                              "TransponderFrequency": {
+                                "title": "TransponderFrequency",
+                                "type": "number",
+                                "minimum": 0,
+                                "pattern": "[0-9]{1,5}[.][0-9]",
+                                "description": "Frequency (MHz) assigned to the transponder number (12700.0 = 12.7000 GHz for DBS). (v3.0)"
+                              },
+                              "Polarity": {
+                                "title": "Polarity",
+                                "type": "string",
+                                "enum": [
+                                  "Vertical",
+                                  "Horizontal",
+                                  "Right",
+                                  "Left"
+                                ],
+                                "description": "Left or Right for circularly polarized DBS satellites, Horizontal or Vertical for linearly polarized satellites"
+                              },
+                              "TransponderName": {
+                                "title": "TransponderName",
+                                "type": "string",
+                                "description": "The designated name for a specific transponder as defined in the Receiver. (v3.0)"
+                              },
+                              "SymbolRate": {
+                                "title": "SymbolRate",
+                                "type": "integer",
+                                "description": "Rate of transmission in Kilo Symbols/second. (v3.0)"
+                              },
+                              "ForwardErrorCorrection": {
+                                "title": "ForwardErrorCorrection",
+                                "type": "string",
+                                "enum": [
+                                  "34",
+                                  "56",
+                                  "78"
+                                ],
+                                "description": "Error correction used by the transponder 3/4, 5/6 or 7/8. (v3.0)"
+                              },
+                              "EncryptionSystem": {
+                                "title": "EncryptionSystem",
+                                "type": "string",
+                                "description": "None or a specific encryption system. (v3.0)"
+                              },
+                              "PrivateInformation": {
+                                "title": "PrivateInformation",
+                                "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "TransponderNumber",
+                              "TransponderFrequency",
+                              "Polarity"
+                            ],
+                            "description": "Detailed definition for each transponder including ability to name the transponder"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "TransponderDetail"
+                        ]
+                      }
+                    ]
+                  },
+                  "minItems": 1
+                },
+                "Receiver": {
+                  "title": "Receiver",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "A physical device that is used to tune a signal from the satellite and provides an output for media."
+                },
+                "Encoder": {
+                  "title": "Encoder",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "The destination recording device for the media."
+                },
+                "@numberOfTransponders": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "SatelliteName",
+                "Transponders",
+                "Receiver",
+                "Encoder"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Satellite"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "AssetServer": {
+              "title": "AssetServer",
+              "type": "object",
+              "properties": {
+                "PathName": {
+                  "title": "PathName",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfUri",
+                  "description": "Shall include a fully qualified filename"
+                },
+                "ReferenceName": {
+                  "title": "ReferenceName",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "UserName": {
+                  "title": "UserName",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "Password": {
+                  "title": "Password",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "Description": {
+                  "title": "Description",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "@playoutAllowed": {
+                  "type": "boolean"
+                },
+                "@fileTransferAllowed": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "PathName",
+                "@playoutAllowed",
+                "@fileTransferAllowed"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "AssetServer"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "RouterSource": {
+              "title": "RouterSource",
+              "type": "object",
+              "properties": {
+                "Name": {
+                  "title": "Name",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                  "description": "(See Configuration Section in BXF Protocol Documentation)"
+                },
+                "CrossPoint": {
+                  "title": "CrossPoint",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Name"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "RouterSource"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "PhysicalAsset": {
+              "title": "PhysicalAsset",
+              "type": "object",
+              "properties": {
+                "MediaReferenceName": {
+                  "title": "MediaReferenceName",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "PhysicalLocation": {
+                  "title": "PhysicalLocation",
+                  "type": "object",
+                  "properties": {
+                    "Dimension": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "@name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "@value": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Dimension"
+                  ]
+                },
+                "@assetName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "MediaReferenceName",
+                "@assetName"
+              ],
+              "description": "A means of storing essence that can be easily transported"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "PhysicalAsset"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

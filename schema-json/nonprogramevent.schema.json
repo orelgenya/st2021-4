@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/nonprogramevent.schema.json",
+  "title": "nonprogramevent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Constraint": {
+      "type": "object",
+      "properties": {
+        "Rules": {
+          "title": "Rules",
+          "type": "object",
+          "properties": {
+            "RuleName": {
+              "title": "RuleName",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+              "description": "A name to reference the rule"
+            },
+            "StartTimeLimit": {
+              "title": "StartTimeLimit",
+              "type": "string",
+              "format": "time",
+              "description": "The earliest permitted start time for this event under the terms of the contract"
+            },
+            "EndTimeLimit": {
+              "title": "EndTimeLimit",
+              "type": "string",
+              "format": "time",
+              "description": "The latest permitted start time for this event under the terms of the contract"
+            },
+            "StartDateLimit": {
+              "title": "StartDateLimit",
+              "type": "string",
+              "format": "date",
+              "description": "First date that this event can be aired on."
+            },
+            "EndDateLimit": {
+              "title": "EndDateLimit",
+              "type": "string",
+              "format": "date",
+              "description": "Last date that this event can be aired on."
+            },
+            "DaysOfWeekAllowed": {
+              "title": "DaysOfWeekAllowed",
+              "$ref": "./bxftypes.schema.json#/$defs/DayPattern",
+              "description": "Assumes start of week is Monday.  Indicates the days of the week that the content can be aired."
+            },
+            "Classification": {
+              "type": "array",
+              "items": {
+                "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+              },
+              "description": "(See Configuration Section in BXF Protocol Documentation)"
+            },
+            "SCTE-35DistributionRestrictions": {
+              "title": "SCTE-35DistributionRestrictions",
+              "$ref": "./eventdata.schema.json#/$defs/SCTE-35DistributionRestrictions",
+              "description": "Accommodates the 2012 revision to SCTE-35 that adds distribution bits. (v3.0)"
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            },
+            "@ruleId": {
+              "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+            },
+            "@negation": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "RuleName",
+            "@ruleId"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "NonProgramEvent": {
+      "type": "object",
+      "properties": {
+        "Details": {
+          "title": "Details",
+          "$ref": "./nonprogramdetail.schema.json#/$defs/NonProgramDetail"
+        },
+        "SalesContract": {
+          "title": "SalesContract",
+          "$ref": "./contract.schema.json#/$defs/SalesContract",
+          "description": "Originating sales contract for the spot."
+        },
+        "Constraints": {
+          "title": "Constraints",
+          "$ref": "#/$defs/Constraint",
+          "description": "Rules that restrict the movement of the spot to another time."
+        },
+        "TrafficCautionFlag": {
+          "title": "TrafficCautionFlag",
+          "type": "boolean",
+          "description": "Warning indicating that the operator should think twice before preempting or changing the spot."
+        },
+        "SpotSalesClassification": {
+          "title": "SpotSalesClassification",
+          "type": "string",
+          "description": "Rate section or priority code for the spot (See Configuration Section in BXF Protocol Documentation)"
+        },
+        "PreemptionWarning": {
+          "title": "PreemptionWarning",
+          "type": "boolean",
+          "description": "Do not preempt the spot"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "Details"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

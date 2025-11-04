@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/format.schema.json",
+  "title": "format",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Format": {
+      "type": "object",
+      "properties": {
+        "FormatId": {
+          "title": "FormatId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "The unique identifier for a format"
+        },
+        "FormatLength": {
+          "title": "FormatLength",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDuration",
+          "description": "The duration of the complete format"
+        },
+        "FormatName": {
+          "title": "FormatName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "A human readable name for the format"
+        },
+        "FormatNotes": {
+          "title": "FormatNotes",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Additional descriptive information about the format"
+        },
+        "FormatUsage": {
+          "title": "FormatUsage",
+          "$ref": "#/$defs/FormatUsage",
+          "description": "Describes which channels and what dates a format can be used"
+        },
+        "FormatStructure": {
+          "title": "FormatStructure",
+          "type": "object",
+          "properties": {
+            "FormatElements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "PrimaryElementId": {
+                    "title": "PrimaryElementId",
+                    "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+                    "description": "A UUID representing a unique identifier for this element"
+                  },
+                  "FormatElementType": {
+                    "title": "FormatElementType",
+                    "type": "string",
+                    "enum": [
+                      "Break",
+                      "Comment",
+                      "ID",
+                      "Non-commercial Break",
+                      "Segment"
+                    ],
+                    "description": "The type of strucutre for the element such as segment or break"
+                  },
+                  "FormatOrderSequence": {
+                    "title": "FormatOrderSequence",
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Indicates the order of each of the format elements (allows placement of comments without indicating an offset time)."
+                  },
+                  "AvailNumber": {
+                    "title": "AvailNumber",
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Indicates the position of a break element inside the format structure."
+                  },
+                  "TotalAvails": {
+                    "title": "TotalAvails",
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Indicates the total number of break elements inside the format structure"
+                  },
+                  "AuthorizationList": {
+                    "title": "AuthorizationList",
+                    "type": "object",
+                    "properties": {
+                      "AuthorizedName": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                        },
+                        "minItems": 1
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "AuthorizedName"
+                    ],
+                    "description": "Locations that are allowed to use the avail."
+                  },
+                  "IgnoreAvail": {
+                    "title": "IgnoreAvail",
+                    "type": "boolean",
+                    "description": "Describes those avails that can be ignored during playback by certain locations"
+                  },
+                  "PrivateInformation": {
+                    "title": "PrivateInformation",
+                    "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                  }
+                },
+                "additionalProperties": false,
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "Description": {
+                        "title": "Description",
+                        "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                        "description": "If the FormatElementType is a Comment then this field is required"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "Description"
+                    ]
+                  }
+                ],
+                "required": [
+                  "PrimaryElementId",
+                  "FormatElementType"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "FormatElements"
+          ],
+          "description": "A detailed definition of each of the individual elements of the format that include segments, breaks, secondary events and comments."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "FormatId",
+        "FormatLength"
+      ]
+    },
+    "FormatSubElements": {
+      "type": "object",
+      "properties": {
+        "SubElementID": {
+          "title": "SubElementID",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "UUID identfier for the structure."
+        },
+        "SubElementSequence": {
+          "title": "SubElementSequence",
+          "type": "integer",
+          "description": "The ordinal sequence of each element with in the substructure."
+        },
+        "SubElementType": {
+          "title": "SubElementType",
+          "type": "string",
+          "description": "The type of element as defined in Configuration that is acceptable within the substructure.  Typically strings such as National, Local, but can be any unique definition for the element."
+        },
+        "SubElementDuration": {
+          "title": "SubElementDuration",
+          "type": "object",
+          "properties": {
+            "@variable": {}
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfDuration"
+            }
+          ],
+          "required": [],
+          "description": "The expected duration of the subelement."
+        },
+        "SubElementCode": {
+          "title": "SubElementCode",
+          "type": "string",
+          "description": "A string that defines the type of element or localized code for that element."
+        },
+        "SubElementName": {
+          "title": "SubElementName",
+          "type": "string",
+          "description": "An optional name for the subelement."
+        },
+        "SubElementCategory": {
+          "title": "SubElementCategory",
+          "type": "string",
+          "description": "An optional category as defined in Configuration or elsewhere which allows the grouping of the subelements."
+        },
+        "NonPrimaryElements": {
+          "title": "NonPrimaryElements",
+          "$ref": "#/$defs/NonPrimaryElements",
+          "description": "It is possible to add secondary events to a subelement such that one or more events occur at the same time or in overlapping sequence."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to subdivide a format element into smaller structures which when summed in duration would equal the total of the item.",
+      "required": [
+        "SubElementID",
+        "SubElementSequence",
+        "SubElementType",
+        "SubElementDuration"
+      ]
+    },
+    "FormatUsage": {
+      "type": "object",
+      "properties": {
+        "AllowedChannels": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfShortName"
+          },
+          "minItems": 1,
+          "description": "Channels that a format can be used on"
+        },
+        "EmbargoDate": {
+          "title": "EmbargoDate",
+          "type": "string",
+          "format": "date",
+          "description": "First date the format can be used"
+        },
+        "ExpirationDate": {
+          "title": "ExpirationDate",
+          "type": "string",
+          "format": "date",
+          "description": "Last date the format can be used"
+        },
+        "Exclusions": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfExtensions"
+          },
+          "description": "Allows unlimited defined values to be excluded as part of the FormatUsage. (v3.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Describes for a format which channels it can be used on",
+      "required": [
+        "AllowedChannels"
+      ]
+    },
+    "NonPrimaryElements": {
+      "type": "object",
+      "properties": {
+        "NonPrimaryElementId": {
+          "title": "NonPrimaryElementId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "A UUID representing a unique identification of the element"
+        },
+        "NonPrimaryOffset": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "OffsetTime": {
+                "title": "OffsetTime",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                "description": "The time to start the event relative to the start time of the primary event"
+              },
+              "@OffsetFrom": {
+                "type": "string",
+                "enum": [
+                  "BeginningofEvent",
+                  "EndofEvent"
+                ]
+              },
+              "@OffsetType": {
+                "type": "string",
+                "enum": [
+                  "Start",
+                  "End"
+                ]
+              },
+              "@Direction": {
+                "type": "string",
+                "enum": [
+                  "Positive",
+                  "Negative"
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 2,
+          "description": "The definition of how a non-primary event should run relative to the primary event either using the start or end points of either event."
+        },
+        "NonPrimaryDuration": {
+          "title": "NonPrimaryDuration",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDuration"
+        },
+        "NonPrimaryDescription": {
+          "title": "NonPrimaryDescription",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+        },
+        "Macros": {
+          "type": "array",
+          "items": {
+            "$ref": "./macro.schema.json#/$defs/Macro"
+          }
+        },
+        "PrimaryElementId": {
+          "title": "PrimaryElementId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "Used to establish a direct linkage to the Primary Element"
+        }
+      },
+      "additionalProperties": false,
+      "description": "It is possible to add secondary events to a primary event such that one or more events occur at the same time or in overlapping sequence.",
+      "required": [
+        "NonPrimaryElementId",
+        "NonPrimaryOffset",
+        "NonPrimaryDuration"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

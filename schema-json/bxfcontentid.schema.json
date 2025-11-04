@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/bxfcontentid.schema.json",
+  "title": "bxfcontentid",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "BxfAlternateId": {
+      "type": "string",
+      "properties": {
+        "@authoritativeSource": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": []
+    },
+    "BxfHouseNumber": {
+      "type": "object",
+      "properties": {
+        "@DayPattern": {
+          "$ref": "./bxftypes.schema.json#/$defs/DayPattern"
+        },
+        "@endOfDay": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 23
+        },
+        "@uniqueFor": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 511
+        }
+      },
+      "additionalProperties": false,
+      "description": "Generally user defined at a specific site and will only be consistent within the defined group of users  There is no guarantee of transportability or uniqueness.  The endOfDay and uniqueFor attributes are included for consistency under the ATSC  A-57B definition for HouseNumber.",
+      "required": []
+    },
+    "BxfContentId": {
+      "type": "object",
+      "description": "Groups several content IDs that may be used simultaneously to label and reference a show",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "AlternateId": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/BxfAlternateId"
+              },
+              "minItems": 1,
+              "description": "Any proprietary string other than the house number used to identify the material locally or globally"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "AlternateId"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
