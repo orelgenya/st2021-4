@@ -35,5 +35,7 @@ This repository now includes derived artefacts that help document and explore th
   python tools/build_asyncapi.py usecases schema-json asyncapi/bxf-usecases-inline.yaml --inline
   ```
 
+  The inline document embeds the converted JSON Schemas under `components.schemas`, allowing the message DTOs to be inspected independently from the XML examples bundled with each use case.
+
 * A lightweight documentation site that renders the AsyncAPI document is published in [`docs/`](./docs). Open [`docs/index.html`](./docs/index.html) in a browser to view a Swagger-like experience backed by the [`@asyncapi/web-component`](https://github.com/asyncapi/web-component).
 

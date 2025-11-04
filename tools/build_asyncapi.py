@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import json
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 import xml.etree.ElementTree as ET
 
 ASYNCAPI_VERSION = "2.6.0"
@@ -32,6 +34,83 @@ def load_xml(path: Path) -> str:
     return "\n".join([header, indented])
 
 
+def load_schema_catalog(schema_dir: Path) -> Dict[str, Dict[str, Any]]:
+    """Load and normalize the generated JSON Schemas for inline embedding."""
+
+    def schema_name(path: Path) -> str:
+        name = path.name
+        if name.endswith(".schema.json"):
+            name = name[: -len(".schema.json")]
+        return name
+
+    catalog: Dict[str, Dict[str, Any]] = {}
+    for path in sorted(schema_dir.glob("*.schema.json")):
+        catalog[schema_name(path)] = json.loads(path.read_text(encoding="utf-8"))
+
+    lookup = {f"{name}.schema.json": name for name in catalog}
+
+    def rewrite_refs(node: Any) -> Any:
+        if isinstance(node, dict):
+            return {key: rewrite_refs(value) for key, value in node.items()}
+        if isinstance(node, list):
+            return [rewrite_refs(item) for item in node]
+        if isinstance(node, str) and node.startswith("./") and ".schema.json" in node:
+            path_and_fragment = node[2:]
+            filename, _, fragment = path_and_fragment.partition("#")
+            mapped = lookup.get(filename)
+            if mapped is not None:
+                fragment_text = f"#{fragment}" if fragment else ""
+                return f"#/components/schemas/{mapped}{fragment_text}"
+        return node
+
+    normalised: Dict[str, Dict[str, Any]] = {}
+    for name, schema in catalog.items():
+        normalised[name] = rewrite_refs(copy.deepcopy(schema))
+    return normalised
+
+
+def dump_yaml(node: Any, indent: int) -> List[str]:
+    """Serialise basic Python structures to YAML-compatible lines."""
+
+    def format_scalar(value: Any) -> str:
+        return json.dumps(value)
+
+    if isinstance(node, dict):
+        lines: List[str] = []
+        if not node:
+            lines.append(" " * indent + "{}")
+            return lines
+        for key, value in node.items():
+            if isinstance(value, dict):
+                if value:
+                    lines.append(" " * indent + f"{key}:")
+                    lines.extend(dump_yaml(value, indent + 2))
+                else:
+                    lines.append(" " * indent + f"{key}: {{}}")
+            elif isinstance(value, list):
+                if value:
+                    lines.append(" " * indent + f"{key}:")
+                    lines.extend(dump_yaml(value, indent + 2))
+                else:
+                    lines.append(" " * indent + f"{key}: []")
+            else:
+                lines.append(" " * indent + f"{key}: {format_scalar(value)}")
+        return lines
+    if isinstance(node, list):
+        lines = []
+        if not node:
+            lines.append(" " * indent + "[]")
+            return lines
+        for item in node:
+            if isinstance(item, (dict, list)):
+                lines.append(" " * indent + "-")
+                lines.extend(dump_yaml(item, indent + 2))
+            else:
+                lines.append(" " * indent + f"- {format_scalar(item)}")
+        return lines
+    return [" " * indent + format_scalar(node)]
+
+
 def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool) -> str:
     mapping = parse_usecases(usecase_dir)
     lines = [
@@ -51,6 +130,7 @@ def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool)
         "channels:",
     ]
     components: List[str] = ["components:", "  messages:"]
+    schemas: Dict[str, Dict[str, Any]] = {}
     schema_ref = schema_dir.joinpath("bxfschema.schema.json")
     payload_ref = f"{schema_ref.as_posix()}#/$defs/BxfMessage"
 
@@ -84,13 +164,11 @@ def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool)
             ]
         )
         if inline_payload:
+            schemas = schemas or load_schema_catalog(schema_dir)
             components.extend(
                 [
                     "      payload:",
-                    "        type: string",
-                    "        description: |",
-                    "          Raw XML payload defined by the SMPTE ST 2021-4 BXF schema.",
-                    "          See the message examples below for representative documents.",
+                    f"        $ref: '#/components/schemas/bxfschema#/$defs/BxfMessage'",
                 ]
             )
         else:
@@ -103,6 +181,12 @@ def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool)
             )
         components.append("      examples:")
         components.extend(example_lines or ["      []"])
+
+    if inline_payload and schemas:
+        components.append("  schemas:")
+        for name, schema in schemas.items():
+            components.append(f"    {name}:")
+            components.extend(dump_yaml(schema, indent=6))
 
     return "\n".join(lines + components) + "\n"
 
