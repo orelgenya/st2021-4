@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 import xml.etree.ElementTree as ET
 
-ASYNCAPI_VERSION = "2.6.0"
+ASYNCAPI_VERSION = "3.0.0"
 
 
 def parse_usecases(directory: Path) -> Dict[str, List[Path]]:
@@ -50,26 +50,31 @@ def load_schema_catalog(schema_dir: Path) -> Dict[str, Dict[str, Any]]:
 
     lookup = {f"{name}.schema.json": name for name in catalog}
 
-    def rewrite_refs(node: Any) -> Any:
+    def rewrite_refs(node: Any, *, current: str) -> Any:
         if isinstance(node, dict):
-            return {key: rewrite_refs(value) for key, value in node.items()}
+            return {key: rewrite_refs(value, current=current) for key, value in node.items()}
         if isinstance(node, list):
-            return [rewrite_refs(item) for item in node]
-        if isinstance(node, str) and node.startswith("./") and ".schema.json" in node:
-            path_and_fragment = node[2:]
-            filename, _, fragment = path_and_fragment.partition("#")
-            mapped = lookup.get(filename)
-            if mapped is not None:
-                if fragment:
-                    fragment_text = fragment if fragment.startswith("/") else f"/{fragment}"
-                else:
-                    fragment_text = ""
-                return f"#/components/schemas/{mapped}{fragment_text}"
+            return [rewrite_refs(item, current=current) for item in node]
+        if isinstance(node, str):
+            if node == "#":
+                return f"#/components/schemas/{current}"
+            if node.startswith("#/"):
+                return f"#/components/schemas/{current}{node[1:]}"
+            if node.startswith("./") and ".schema.json" in node:
+                path_and_fragment = node[2:]
+                filename, _, fragment = path_and_fragment.partition("#")
+                mapped = lookup.get(filename)
+                if mapped is not None:
+                    if fragment:
+                        fragment_text = fragment if fragment.startswith("/") else f"/{fragment}"
+                    else:
+                        fragment_text = ""
+                    return f"#/components/schemas/{mapped}{fragment_text}"
         return node
 
     normalised: Dict[str, Dict[str, Any]] = {}
     for name, schema in catalog.items():
-        normalised[name] = rewrite_refs(copy.deepcopy(schema))
+        normalised[name] = rewrite_refs(copy.deepcopy(schema), current=name)
     return normalised
 
 
@@ -124,6 +129,7 @@ def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool)
             {"name": "asyncapi"},
         ],
         "channels": {},
+        "operations": {},
         "components": {"messages": {}},
     }
 
@@ -139,14 +145,15 @@ def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool)
         message_key = message_type.replace(" ", "")
         message_name = f"Bxf{message_key}Message"
 
-        document["channels"][channel_name] = {
+        channel_entry = {
+            "address": f"bxf.{channel_name}",
             "description": "BXF channel grouped by messageType",
-            "subscribe": {
-                "summary": "Receive BXF messages of this type",
-                "operationId": f"receive{message_key}",
-                "message": {"$ref": f"#/components/messages/{message_name}"},
+            "messages": {
+                message_name: {"$ref": f"#/components/messages/{message_name}"}
             },
+            "servers": ["sandbox"],
         }
+        document["channels"][channel_name] = channel_entry
 
         message: Dict[str, Any] = {
             "name": message_type,
@@ -162,6 +169,17 @@ def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool)
             message["payload"] = {"$ref": payload_pointer}
 
         document["components"]["messages"][message_name] = message
+
+        document["operations"][f"receive{message_key}"] = {
+            "action": "receive",
+            "summary": f"Receive BXF {message_type} messages",
+            "operationId": f"receive{message_key}",
+            "channel": {"$ref": f"#/channels/{channel_name}"},
+            "messages": [
+                {"$ref": f"#/channels/{channel_name}/messages/{message_name}"}
+            ],
+            "tags": [{"name": "bxf"}, {"name": message_type}],
+        }
 
     return json.dumps(document, indent=2) + "\n"
 

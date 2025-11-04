@@ -1,5 +1,5 @@
 {
-  "asyncapi": "2.6.0",
+  "asyncapi": "3.0.0",
   "id": "urn:uuid:12345678-1234-5678-1234-567812345678",
   "info": {
     "title": "BXF Use Case Library",
@@ -32,44 +32,138 @@
   ],
   "channels": {
     "Information": {
+      "address": "bxf.Information",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveInformation",
-        "message": {
+      "messages": {
+        "BxfInformationMessage": {
           "$ref": "#/components/messages/BxfInformationMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
     },
     "Heartbeat": {
+      "address": "bxf.Heartbeat",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveHeartbeat",
-        "message": {
+      "messages": {
+        "BxfHeartbeatMessage": {
           "$ref": "#/components/messages/BxfHeartbeatMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
     },
     "Request": {
+      "address": "bxf.Request",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveRequest",
-        "message": {
+      "messages": {
+        "BxfRequestMessage": {
           "$ref": "#/components/messages/BxfRequestMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
     },
     "Reply": {
+      "address": "bxf.Reply",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveReply",
-        "message": {
+      "messages": {
+        "BxfReplyMessage": {
           "$ref": "#/components/messages/BxfReplyMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
+    }
+  },
+  "operations": {
+    "receiveInformation": {
+      "action": "receive",
+      "summary": "Receive BXF Information messages",
+      "operationId": "receiveInformation",
+      "channel": {
+        "$ref": "#/channels/Information"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Information/messages/BxfInformationMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Information"
+        }
+      ]
+    },
+    "receiveHeartbeat": {
+      "action": "receive",
+      "summary": "Receive BXF Heartbeat messages",
+      "operationId": "receiveHeartbeat",
+      "channel": {
+        "$ref": "#/channels/Heartbeat"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Heartbeat/messages/BxfHeartbeatMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Heartbeat"
+        }
+      ]
+    },
+    "receiveRequest": {
+      "action": "receive",
+      "summary": "Receive BXF Request messages",
+      "operationId": "receiveRequest",
+      "channel": {
+        "$ref": "#/channels/Request"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Request/messages/BxfRequestMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Request"
+        }
+      ]
+    },
+    "receiveReply": {
+      "action": "receive",
+      "summary": "Receive BXF Reply messages",
+      "operationId": "receiveReply",
+      "channel": {
+        "$ref": "#/channels/Reply"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Reply/messages/BxfReplyMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Reply"
+        }
+      ]
     }
   },
   "components": {
@@ -327,7 +421,7 @@
               },
               "AsRunDetail": {
                 "title": "AsRunDetail",
-                "$ref": "#/$defs/AsRunDetail"
+                "$ref": "#/components/schemas/asrun/$defs/AsRunDetail"
               },
               "PrivateInformation": {
                 "title": "PrivateInformation",
@@ -345,7 +439,7 @@
             "properties": {
               "AsRunDetail": {
                 "title": "AsRunDetail",
-                "$ref": "#/$defs/AsRunDetail"
+                "$ref": "#/components/schemas/asrun/$defs/AsRunDetail"
               }
             },
             "additionalProperties": false,
@@ -502,17 +596,17 @@
             "properties": {
               "AudioMode": {
                 "title": "AudioMode",
-                "$ref": "#/$defs/AudioModeType",
+                "$ref": "#/components/schemas/audio/$defs/AudioModeType",
                 "description": "Indicates whether the audio should go over, under or is a breakaway"
               },
               "TransitionType": {
                 "title": "TransitionType",
-                "$ref": "#/$defs/AudioTransitionEnumType",
+                "$ref": "#/components/schemas/audio/$defs/AudioTransitionEnumType",
                 "description": "Indicates if the transition is a cut or a mix (crossfade)"
               },
               "TransitionRate": {
                 "title": "TransitionRate",
-                "$ref": "#/$defs/AudioRateType",
+                "$ref": "#/components/schemas/audio/$defs/AudioRateType",
                 "description": "The speed of the transition, fast, medium or slow"
               },
               "AudioSwap": {
@@ -583,7 +677,7 @@
                 "properties": {
                   "Ac3Audio": {
                     "title": "Ac3Audio",
-                    "$ref": "#/$defs/Ac3AudioExt"
+                    "$ref": "#/components/schemas/audio/$defs/Ac3AudioExt"
                   }
                 },
                 "additionalProperties": false,
@@ -596,7 +690,7 @@
                 "properties": {
                   "DEAudio": {
                     "title": "DEAudio",
-                    "$ref": "#/$defs/DigitalAudioAttribute"
+                    "$ref": "#/components/schemas/audio/$defs/DigitalAudioAttribute"
                   }
                 },
                 "additionalProperties": false,
@@ -609,7 +703,7 @@
                 "properties": {
                   "MPEGAACAudio": {
                     "title": "MPEGAACAudio",
-                    "$ref": "#/$defs/DigitalAudioAttribute"
+                    "$ref": "#/components/schemas/audio/$defs/DigitalAudioAttribute"
                   }
                 },
                 "additionalProperties": false,
@@ -622,7 +716,7 @@
                 "properties": {
                   "MPEGLayerIIAudio": {
                     "title": "MPEGLayerIIAudio",
-                    "$ref": "#/$defs/DigitalAudioAttribute"
+                    "$ref": "#/components/schemas/audio/$defs/DigitalAudioAttribute"
                   }
                 },
                 "additionalProperties": false,
@@ -657,7 +751,7 @@
                 "properties": {
                   "DED2Audio": {
                     "title": "DED2Audio",
-                    "$ref": "#/$defs/DigitalAudioAttribute",
+                    "$ref": "#/components/schemas/audio/$defs/DigitalAudioAttribute",
                     "description": "(v6.0)"
                   }
                 },
@@ -671,7 +765,7 @@
                 "properties": {
                   "Ac4Audio": {
                     "title": "Ac4Audio",
-                    "$ref": "#/$defs/DigitalAudioAttribute",
+                    "$ref": "#/components/schemas/audio/$defs/DigitalAudioAttribute",
                     "description": "(v6.0)"
                   }
                 },
@@ -685,7 +779,7 @@
                 "properties": {
                   "MPEGHAudio": {
                     "title": "MPEGHAudio",
-                    "$ref": "#/$defs/DigitalAudioAttribute",
+                    "$ref": "#/components/schemas/audio/$defs/DigitalAudioAttribute",
                     "description": "(v6.0)"
                   }
                 },
@@ -820,7 +914,7 @@
                   "type": "object",
                   "allOf": [
                     {
-                      "$ref": "#/$defs/GroupofSoundfieldGroups"
+                      "$ref": "#/components/schemas/audio/$defs/GroupofSoundfieldGroups"
                     }
                   ]
                 },
@@ -832,7 +926,7 @@
                   "type": "object",
                   "allOf": [
                     {
-                      "$ref": "#/$defs/SoundfieldGroup"
+                      "$ref": "#/components/schemas/audio/$defs/SoundfieldGroup"
                     }
                   ]
                 },
@@ -844,7 +938,7 @@
                   "type": "object",
                   "allOf": [
                     {
-                      "$ref": "#/$defs/AudioChannel"
+                      "$ref": "#/components/schemas/audio/$defs/AudioChannel"
                     }
                   ]
                 },
@@ -852,7 +946,7 @@
               },
               "AudioEncoding": {
                 "title": "AudioEncoding",
-                "$ref": "#/$defs/DigitalAudio",
+                "$ref": "#/components/schemas/audio/$defs/DigitalAudio",
                 "description": "The single audio encoding method used within this MCA across all AudioChannels included.  It can be either indicated at this level or alternatively referenced using the encodingReferenceID."
               },
               "PrivateInformation": {
@@ -1013,7 +1107,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/$defs/Loudness"
+                    "$ref": "#/components/schemas/audio/$defs/Loudness"
                   }
                 ],
                 "description": "Indicates the loudness of the SoundfieldGroup as measured in various ways and using various standards. (v6.0)"
@@ -1387,7 +1481,7 @@
                   "AlternateId": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/$defs/BxfAlternateId"
+                      "$ref": "#/components/schemas/bxfcontentid/$defs/BxfAlternateId"
                     },
                     "minItems": 1,
                     "description": "Any proprietary string other than the house number used to identify the material locally or globally"
@@ -1728,31 +1822,31 @@
             "properties": {
               "LocationName": {
                 "title": "LocationName",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "Street1": {
                 "title": "Street1",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "Street2": {
                 "title": "Street2",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "Street3": {
                 "title": "Street3",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "City": {
                 "title": "City",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "StateProv": {
                 "title": "StateProv",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "Country": {
                 "title": "Country",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "PostalCode": {
                 "title": "PostalCode",
@@ -1760,7 +1854,7 @@
               },
               "PrivateInformation": {
                 "title": "PrivateInformation",
-                "$ref": "#/$defs/BxfPrivateInformation"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfPrivateInformation"
               }
             },
             "additionalProperties": false,
@@ -1778,7 +1872,7 @@
             "properties": {
               "CompanyName": {
                 "title": "CompanyName",
-                "$ref": "#/$defs/BxfText",
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText",
                 "description": "The name of the company"
               },
               "CompanyType": {
@@ -1834,13 +1928,13 @@
                   "Locations": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/$defs/BxfAddress"
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfAddress"
                     }
                   },
                   "Contacts": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/$defs/BxfContact"
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfContact"
                     }
                   }
                 },
@@ -1852,7 +1946,7 @@
               },
               "PrivateInformation": {
                 "title": "PrivateInformation",
-                "$ref": "#/$defs/BxfPrivateInformation"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfPrivateInformation"
               }
             },
             "additionalProperties": false,
@@ -1871,11 +1965,11 @@
               },
               "ContactFirstName": {
                 "title": "ContactFirstName",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "ContactLastName": {
                 "title": "ContactLastName",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "ContactSuffix": {
                 "title": "ContactSuffix",
@@ -1883,12 +1977,12 @@
               },
               "ContactJobTitle": {
                 "title": "ContactJobTitle",
-                "$ref": "#/$defs/BxfText"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
               },
               "Locations": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/BxfAddress"
+                  "$ref": "#/components/schemas/bxftypes/$defs/BxfAddress"
                 }
               },
               "Phones": {
@@ -1935,7 +2029,7 @@
                       "additionalProperties": false,
                       "allOf": [
                         {
-                          "$ref": "#/$defs/BxfText"
+                          "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
                         }
                       ],
                       "required": []
@@ -1959,7 +2053,7 @@
               },
               "PrivateInformation": {
                 "title": "PrivateInformation",
-                "$ref": "#/$defs/BxfPrivateInformation"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfPrivateInformation"
               }
             },
             "additionalProperties": false,
@@ -2022,7 +2116,7 @@
                 "properties": {
                   "SmpteDateTime": {
                     "title": "SmpteDateTime",
-                    "$ref": "#/$defs/BxfSmpteDateTime"
+                    "$ref": "#/components/schemas/bxftypes/$defs/BxfSmpteDateTime"
                   }
                 },
                 "additionalProperties": false,
@@ -2035,7 +2129,7 @@
                 "properties": {
                   "UtcDateTime": {
                     "title": "UtcDateTime",
-                    "$ref": "#/$defs/BxfUtcDateTime"
+                    "$ref": "#/components/schemas/bxftypes/$defs/BxfUtcDateTime"
                   }
                 },
                 "additionalProperties": false,
@@ -2055,17 +2149,17 @@
                   "properties": {
                     "DayOfWeek": {
                       "title": "DayOfWeek",
-                      "$ref": "#/$defs/DayPattern",
+                      "$ref": "#/components/schemas/bxftypes/$defs/DayPattern",
                       "description": "A 7 element binary representation of the days of the week in Monday-Sunday order where a 1 includes the day and a 0 excludes the day \n(e.g. 1 1 1 1 1 0 0 = M-F)"
                     },
                     "StartTime": {
                       "title": "StartTime",
-                      "$ref": "#/$defs/BxfSmpteTime",
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfSmpteTime",
                       "description": "The start time of the daypart for all  days specified in the DayofWeek element.  If not specified assume the Start of Broadcast Day."
                     },
                     "EndTime": {
                       "title": "EndTime",
-                      "$ref": "#/$defs/BxfSmpteTime",
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfSmpteTime",
                       "description": "The end time of the daypart for all  days specified in the DayofWeek element.  If not specified assume the End of Broadcast Day."
                     },
                     "@localTimeZoneFlag": {
@@ -2084,7 +2178,7 @@
               },
               "DaypartName": {
                 "title": "DaypartName",
-                "$ref": "#/$defs/BxfText",
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText",
                 "description": "Optional name that can be used to reference this daypart definition."
               },
               "StartDate": {
@@ -2101,12 +2195,12 @@
               },
               "DaypartComment": {
                 "title": "DaypartComment",
-                "$ref": "#/$defs/BxfText",
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText",
                 "description": "Optional comments that can be added to the daypart definition."
               },
               "PrivateInformation": {
                 "title": "PrivateInformation",
-                "$ref": "#/$defs/BxfPrivateInformation"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfPrivateInformation"
               },
               "@excludeFlag": {
                 "type": "boolean"
@@ -2124,7 +2218,7 @@
                 "properties": {
                   "SmpteDuration": {
                     "title": "SmpteDuration",
-                    "$ref": "#/$defs/BxfSmpteTime"
+                    "$ref": "#/components/schemas/bxftypes/$defs/BxfSmpteTime"
                   }
                 },
                 "additionalProperties": false,
@@ -2168,7 +2262,7 @@
                   "additionalProperties": false,
                   "allOf": [
                     {
-                      "$ref": "#/$defs/BxfText"
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
                     }
                   ],
                   "required": [
@@ -2199,7 +2293,7 @@
             "properties": {
               "SmpteTimeCode": {
                 "title": "SmpteTimeCode",
-                "$ref": "#/$defs/Smpte258MTimeCode",
+                "$ref": "#/components/schemas/bxftypes/$defs/Smpte258MTimeCode",
                 "description": "Specifies duration in the format HH:MM:SSpFF where \"p\" can be either a \":\" \";\" \",\" or \".\" to indicate drop frame or non-drop frame.  For details refer to SMPTE 258M, clause 8."
               },
               "@frameRate": {
@@ -2231,7 +2325,7 @@
             "description": "Used for date-time entry in the schema",
             "allOf": [
               {
-                "$ref": "#/$defs/BxfSmpteTime"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfSmpteTime"
               }
             ],
             "required": [
@@ -2248,7 +2342,7 @@
               },
               "StationName": {
                 "title": "StationName",
-                "$ref": "#/$defs/BxfText",
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfText",
                 "description": "Name used to commonly reference the station, network or other entity performing a job."
               },
               "StationCallSign": {
@@ -2304,7 +2398,7 @@
                   "additionalProperties": false,
                   "allOf": [
                     {
-                      "$ref": "#/$defs/BxfCompany"
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfCompany"
                     }
                   ],
                   "required": []
@@ -2314,7 +2408,7 @@
               "Contacts": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/BxfContact"
+                  "$ref": "#/components/schemas/bxftypes/$defs/BxfContact"
                 },
                 "description": "A list of contacts or personnel associated with the Station."
               },
@@ -2326,7 +2420,7 @@
                     "CoverageChildren": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/$defs/BxfCoverage"
+                        "$ref": "#/components/schemas/bxftypes/$defs/BxfCoverage"
                       },
                       "description": "The children of the definition that describe the coverage using a different TypeofCoverage (e.g. Zip code List)"
                     }
@@ -2334,7 +2428,7 @@
                   "additionalProperties": false,
                   "allOf": [
                     {
-                      "$ref": "#/$defs/BxfCoverage"
+                      "$ref": "#/components/schemas/bxftypes/$defs/BxfCoverage"
                     }
                   ],
                   "required": []
@@ -2385,7 +2479,7 @@
               "EventNote": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/BxfText"
+                  "$ref": "#/components/schemas/bxftypes/$defs/BxfText"
                 },
                 "minItems": 1
               }
@@ -2434,14 +2528,14 @@
                 "type": "string"
               },
               {
-                "$ref": "#/$defs/BxfElementaryErrorExt"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfElementaryErrorExt"
               }
             ]
           },
           "BxfError": {
             "type": "array",
             "items": {
-              "$ref": "#/$defs/BxfElementaryError"
+              "$ref": "#/components/schemas/bxftypes/$defs/BxfElementaryError"
             }
           },
           "BxfStatus": {
@@ -2450,7 +2544,7 @@
                 "type": "string"
               },
               {
-                "$ref": "#/$defs/BxfStatusExtType"
+                "$ref": "#/components/schemas/bxftypes/$defs/BxfStatusExtType"
               }
             ]
           },
@@ -3836,7 +3930,7 @@
                     "properties": {
                       "ProRes": {
                         "title": "ProRes",
-                        "$ref": "#/$defs/ProResLibraryMasterApp"
+                        "$ref": "#/components/schemas/contentdelivery/$defs/ProResLibraryMasterApp"
                       }
                     },
                     "additionalProperties": false,
@@ -3849,7 +3943,7 @@
                     "properties": {
                       "J2K": {
                         "title": "J2K",
-                        "$ref": "#/$defs/J2KLibraryMasterApp"
+                        "$ref": "#/components/schemas/contentdelivery/$defs/J2KLibraryMasterApp"
                       }
                     },
                     "additionalProperties": false,
@@ -3869,7 +3963,7 @@
                             "properties": {
                               "IMFapp2": {
                                 "title": "IMFapp2",
-                                "$ref": "#/$defs/IMFLibraryMasterApp2"
+                                "$ref": "#/components/schemas/contentdelivery/$defs/IMFLibraryMasterApp2"
                               }
                             },
                             "additionalProperties": false,
@@ -3882,7 +3976,7 @@
                             "properties": {
                               "IMFapp2E": {
                                 "title": "IMFapp2E",
-                                "$ref": "#/$defs/IMFLibraryMasterApp2e"
+                                "$ref": "#/components/schemas/contentdelivery/$defs/IMFLibraryMasterApp2e"
                               }
                             },
                             "additionalProperties": false,
@@ -4022,7 +4116,7 @@
               },
               "DescriptiveMetadata": {
                 "title": "DescriptiveMetadata",
-                "$ref": "#/$defs/DescriptiveMetadata",
+                "$ref": "#/components/schemas/contentdelivery/$defs/DescriptiveMetadata",
                 "description": "Indicates the presence of various types of descriptive metadata in the Library Master. (v6.0)"
               },
               "AccessServices": {
@@ -4057,7 +4151,7 @@
               },
               "DescriptiveMetadata": {
                 "title": "DescriptiveMetadata",
-                "$ref": "#/$defs/DescriptiveMetadata",
+                "$ref": "#/components/schemas/contentdelivery/$defs/DescriptiveMetadata",
                 "description": "Indicates the presence of various types of desrciptive metadata in the Library Master. (v6.0)"
               },
               "AccessServices": {
@@ -4106,7 +4200,7 @@
               },
               "UsagePolicy": {
                 "title": "UsagePolicy",
-                "$ref": "#/$defs/UsagePolicy",
+                "$ref": "#/components/schemas/contentmetadata/$defs/UsagePolicy",
                 "description": "Business rules expected to be applied when the content is used at this location"
               },
               "Audio": {
@@ -4362,7 +4456,7 @@
               },
               "Media": {
                 "title": "Media",
-                "$ref": "#/$defs/Media",
+                "$ref": "#/components/schemas/contentmetadata/$defs/Media",
                 "description": "If additional media records are associated with the billboard such as audio or video, decribe them in this area and assign separate contentIds."
               },
               "BillBoardComment": {
@@ -4652,19 +4746,19 @@
               },
               "UsagePolicy": {
                 "title": "UsagePolicy",
-                "$ref": "#/$defs/UsagePolicy",
+                "$ref": "#/components/schemas/contentmetadata/$defs/UsagePolicy",
                 "description": "Business rules expected to be applied when the content is used at this location"
               },
               "Media": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Media"
+                  "$ref": "#/components/schemas/contentmetadata/$defs/Media"
                 }
               },
               "BillBoard": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/BillBoard"
+                  "$ref": "#/components/schemas/contentmetadata/$defs/BillBoard"
                 }
               },
               "DataExtensions": {
@@ -4712,7 +4806,7 @@
               },
               "ContentDetails": {
                 "title": "ContentDetails",
-                "$ref": "#/$defs/ContentDetail",
+                "$ref": "#/components/schemas/contentmetadata/$defs/ContentDetail",
                 "description": "Description of people, events, sports results, and word tags to search for things that represent this media (v5.0)."
               },
               "PrivateInformation": {
@@ -4731,14 +4825,14 @@
             "properties": {
               "MediaLocation": {
                 "title": "MediaLocation",
-                "$ref": "#/$defs/MediaLocation"
+                "$ref": "#/components/schemas/contentmetadata/$defs/MediaLocation"
               }
             },
             "additionalProperties": false,
             "description": "Base Media combined with Media Location",
             "allOf": [
               {
-                "$ref": "#/$defs/BaseMedia"
+                "$ref": "#/components/schemas/contentmetadata/$defs/BaseMedia"
               }
             ],
             "required": [
@@ -5006,20 +5100,20 @@
                 "$ref": "#/components/schemas/bxftypes/$defs/Uuid"
               },
               "@transferType": {
-                "$ref": "#/$defs/TransferType"
+                "$ref": "#/components/schemas/contenttransfer/$defs/TransferType"
               },
               "@conditionalSource": {
                 "type": "integer",
                 "minimum": 1
               },
               "@priority": {
-                "$ref": "#/$defs/PriorityType"
+                "$ref": "#/components/schemas/contenttransfer/$defs/PriorityType"
               },
               "@parentTransferId": {
                 "$ref": "#/components/schemas/bxftypes/$defs/Uuid"
               },
               "@status": {
-                "$ref": "#/$defs/TransferStatusType"
+                "$ref": "#/components/schemas/contenttransfer/$defs/TransferStatusType"
               },
               "@statusDescription": {
                 "type": "string"
@@ -5315,7 +5409,7 @@
               "OverlayOpportunity": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/OverlayOpportunityType"
+                  "$ref": "#/components/schemas/element/$defs/OverlayOpportunityType"
                 },
                 "description": "Describes locations in time and space where overlays are either permitted or restricted from use. (v3.0)"
               },
@@ -5331,7 +5425,7 @@
                 "properties": {
                   "ProgramElement": {
                     "title": "ProgramElement",
-                    "$ref": "#/$defs/ProgramElement",
+                    "$ref": "#/components/schemas/element/$defs/ProgramElement",
                     "description": "Description of individual show segments"
                   }
                 },
@@ -5372,7 +5466,7 @@
               "Type": {
                 "title": "Type",
                 "type": "object",
-                "$ref": "#/$defs/ProgramContentType",
+                "$ref": "#/components/schemas/element/$defs/ProgramContentType",
                 "description": "Either a program segment or an interactive element. Textless added as a new otpion. (v6.0) Added Black, Bumper and Slate as new options. (v8.0)"
               },
               "ContentMetaData": {
@@ -5387,7 +5481,7 @@
               },
               "OverlayOpportunity": {
                 "title": "OverlayOpportunity",
-                "$ref": "#/$defs/OverlayOpportunityType",
+                "$ref": "#/components/schemas/element/$defs/OverlayOpportunityType",
                 "description": "Describes locations in time and space where overlays are either permitted or restricted from use. (v3.0)"
               },
               "PrivateInformation": {
@@ -5640,7 +5734,7 @@
             "properties": {
               "EventId": {
                 "title": "EventId",
-                "$ref": "#/$defs/EventExtId",
+                "$ref": "#/components/schemas/eventdata/$defs/EventExtId",
                 "description": "Unique identifier for each event"
               },
               "EventTitle": {
@@ -5841,7 +5935,7 @@
                     "additionalProperties": false,
                     "allOf": [
                       {
-                        "$ref": "#/$defs/SCTE-35DistributionRestrictions"
+                        "$ref": "#/components/schemas/eventdata/$defs/SCTE-35DistributionRestrictions"
                       }
                     ],
                     "required": [],
@@ -5856,7 +5950,7 @@
               "AlternateEvent": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/EventData"
+                  "$ref": "#/components/schemas/eventdata/$defs/EventData"
                 },
                 "description": "Allow the linkage to standby promo content or other content that are backups or alternatives to content that may be missing at airtime."
               },
@@ -5966,7 +6060,7 @@
               },
               "FormatUsage": {
                 "title": "FormatUsage",
-                "$ref": "#/$defs/FormatUsage",
+                "$ref": "#/components/schemas/format/$defs/FormatUsage",
                 "description": "Describes which channels and what dates a format can be used"
               },
               "FormatStructure": {
@@ -6133,7 +6227,7 @@
               },
               "NonPrimaryElements": {
                 "title": "NonPrimaryElements",
-                "$ref": "#/$defs/NonPrimaryElements",
+                "$ref": "#/components/schemas/format/$defs/NonPrimaryElements",
                 "description": "It is possible to add secondary events to a subelement such that one or more events occur at the same time or in overlapping sequence."
               },
               "PrivateInformation": {
@@ -6339,7 +6433,7 @@
               "InstructionDetail": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/InstructionDetail"
+                  "$ref": "#/components/schemas/jobdetail/$defs/InstructionDetail"
                 },
                 "minItems": 1,
                 "description": "Used to provide specific copy instructions for the content"
@@ -6347,7 +6441,7 @@
               "InstructionMap": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/InstructionMap"
+                  "$ref": "#/components/schemas/jobdetail/$defs/InstructionMap"
                 },
                 "minItems": 1,
                 "description": "Maps the job, content, station and instructions allowing many to many relationships to be created.  If only one of each entity, this is still required."
@@ -7329,7 +7423,7 @@
               "GraphicData": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/GraphicData"
+                  "$ref": "#/components/schemas/nonprimaryevent/$defs/GraphicData"
                 },
                 "description": "Use to add in graphics associated data  to a specific secondary event. Used for delineating a graphic collection, keyer number, template name, etc."
               },
@@ -7601,20 +7695,20 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/$defs/Advertiser"
+                    "$ref": "#/components/schemas/nonprogramdetail/$defs/Advertiser"
                   }
                 ],
                 "description": "List of advertisers associated to the spot. (v3.0)"
               },
               "Agency": {
                 "title": "Agency",
-                "$ref": "#/$defs/Agency",
+                "$ref": "#/components/schemas/nonprogramdetail/$defs/Agency",
                 "description": "Agency of record for the spot. (v3.0)"
               },
               "Product": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Product"
+                  "$ref": "#/components/schemas/nonprogramdetail/$defs/Product"
                 },
                 "description": "List of all products and/or brand names and the advertiser campaign associated to the spot to be aired. (v3.0)"
               },
@@ -7829,7 +7923,7 @@
               },
               "Constraints": {
                 "title": "Constraints",
-                "$ref": "#/$defs/Constraint",
+                "$ref": "#/components/schemas/nonprogramevent/$defs/Constraint",
                 "description": "Rules that restrict the movement of the spot to another time."
               },
               "TrafficCautionFlag": {
@@ -8110,7 +8204,7 @@
                 "properties": {
                   "QCProfile": {
                     "title": "QCProfile",
-                    "$ref": "#/$defs/QCProfile",
+                    "$ref": "#/components/schemas/qualitycontrol/$defs/QCProfile",
                     "description": "Used to define a set of test instructions that are generally related and which can be called using just the identifier."
                   }
                 },
@@ -8153,7 +8247,7 @@
                       },
                       "QCProfileScope": {
                         "title": "QCProfileScope",
-                        "$ref": "#/$defs/QCScope",
+                        "$ref": "#/components/schemas/qualitycontrol/$defs/QCScope",
                         "description": "Range of time on the media (using media timecode) that should be tested for all QCProfileCheckItems.  If not defined the entire media will be checked."
                       },
                       "QCReportID": {
@@ -8184,7 +8278,7 @@
                   "QCItem": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/$defs/QCItem"
+                      "$ref": "#/components/schemas/qualitycontrol/$defs/QCItem"
                     },
                     "minItems": 1,
                     "description": "Each check of the media can be part or all of the media and each of its components.  The checks may be done through machine control automatically or manually by a technician using a set of defined rules to pass.  A CheckItem option can be part of a profile or stand alone."
@@ -8201,7 +8295,7 @@
                   "QCReport": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/$defs/QCReports"
+                      "$ref": "#/components/schemas/qualitycontrol/$defs/QCReports"
                     },
                     "minItems": 1,
                     "description": "Used to report back the results of the QC testing for either a single profile, multiple profiles or a single QCCheckItem. (Modified to be unbounded in v6.0)"
@@ -8224,7 +8318,7 @@
               },
               "QCTestPerformer": {
                 "title": "QCTestPerformer",
-                "$ref": "#/$defs/QCTestPerformer",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCTestPerformer",
                 "description": "What person, system or tool was used to perform the QC Test."
               },
               "QCAnnotationDateTime": {
@@ -8297,13 +8391,13 @@
               },
               "QCItemScope": {
                 "title": "QCItemScope",
-                "$ref": "#/$defs/QCScope",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCScope",
                 "description": "Limits the execution of the QCItem to one or more specific time ranges and overrides the QCProfileScope, if any."
               },
               "QCItemInput": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/QCItemInput"
+                  "$ref": "#/components/schemas/qualitycontrol/$defs/QCItemInput"
                 },
                 "description": "Whether machine controlled or manually performed, a set of rules that govern what is being tested and how are described by the parameters."
               },
@@ -8348,7 +8442,7 @@
               },
               "FragmentLocation": {
                 "title": "FragmentLocation",
-                "$ref": "#/$defs/FragmentLocation",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/FragmentLocation",
                 "description": "The time range and spatial location on the video (region of the screen) to be tested."
               },
               "Track": {
@@ -8479,13 +8573,13 @@
               "RelatedQCItemOutput": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/QCItemOutput"
+                  "$ref": "#/components/schemas/qualitycontrol/$defs/QCItemOutput"
                 },
                 "description": "Use this to list multiple outputs related to the same spatiotemporal fragment."
               },
               "FragmentLocation": {
                 "title": "FragmentLocation",
-                "$ref": "#/$defs/FragmentLocation"
+                "$ref": "#/components/schemas/qualitycontrol/$defs/FragmentLocation"
               },
               "Track": {
                 "title": "Track",
@@ -8532,7 +8626,7 @@
               },
               "QCDetailedAnnotations": {
                 "title": "QCDetailedAnnotations",
-                "$ref": "#/$defs/QCDetailedAnnotation",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCDetailedAnnotation",
                 "description": "Additional descriptive details concerning who or what system was deployed to perform the QC test and when it was performed."
               },
               "VerificationMedia": {
@@ -8615,11 +8709,11 @@
               },
               "QCToolInformation": {
                 "title": "QCToolInformation",
-                "$ref": "#/$defs/QCToolInformation"
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCToolInformation"
               },
               "QCDetailAnnotation": {
                 "title": "QCDetailAnnotation",
-                "$ref": "#/$defs/QCDetailedAnnotation"
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCDetailedAnnotation"
               },
               "Relevance": {
                 "title": "Relevance",
@@ -8658,13 +8752,13 @@
               },
               "QCTestPerformer": {
                 "title": "QCTestPerformer",
-                "$ref": "#/$defs/QCTestPerformer",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCTestPerformer",
                 "description": "The user who has done a test manually, e.g. eye-ball check from scratch or a revision of an automatic result"
               },
               "QCItemOutput": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/QCItemOutput"
+                  "$ref": "#/components/schemas/qualitycontrol/$defs/QCItemOutput"
                 },
                 "description": "The specific result of a single QC test."
               },
@@ -8704,13 +8798,13 @@
               },
               "QCProfileScope": {
                 "title": "QCProfileScope",
-                "$ref": "#/$defs/QCScope",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCScope",
                 "description": "Range of time on the media (using media timecode) that should be tested for all QCProfileCheckItems.  If not defined the entire media will be checked."
               },
               "QCProfileItem": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/QCItem"
+                  "$ref": "#/components/schemas/qualitycontrol/$defs/QCItem"
                 },
                 "minItems": 1
               },
@@ -8780,13 +8874,13 @@
               },
               "QCToolInformation": {
                 "title": "QCToolInformation",
-                "$ref": "#/$defs/QCToolInformation",
+                "$ref": "#/components/schemas/qualitycontrol/$defs/QCToolInformation",
                 "description": "Summary of tool information when one is used for all QCCheckItems associated to the Report."
               },
               "QCItemResult": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/QCItemResult"
+                  "$ref": "#/components/schemas/qualitycontrol/$defs/QCItemResult"
                 },
                 "minItems": 1,
                 "description": "The results received as a result of one or more QC test."
@@ -8817,7 +8911,7 @@
                 "properties": {
                   "QCProfile": {
                     "title": "QCProfile",
-                    "$ref": "#/$defs/QCProfile"
+                    "$ref": "#/components/schemas/qualitycontrol/$defs/QCProfile"
                   }
                 },
                 "additionalProperties": false,
@@ -8969,7 +9063,7 @@
               "PlayoutRestrictions": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/PlayoutRestrictions"
+                  "$ref": "#/components/schemas/schedule/$defs/PlayoutRestrictions"
                 },
                 "description": "Used to define what is allowed or restricted to the viewing of content in different venues (locations, devices, etc.) and the provisioning of alternative content when this happens.  Each Venue may have only one replacement option or null. (v4.0)"
               },
@@ -9327,7 +9421,7 @@
               },
               "Series": {
                 "title": "Series",
-                "$ref": "#/$defs/Series"
+                "$ref": "#/components/schemas/scheduledevent/$defs/Series"
               },
               "ParentalRating": {
                 "type": "array",
@@ -9541,7 +9635,7 @@
                     "properties": {
                       "AFDAnnotationIn4-3": {
                         "title": "AFDAnnotationIn4-3",
-                        "$ref": "#/$defs/AFDDetails",
+                        "$ref": "#/components/schemas/video/$defs/AFDDetails",
                         "description": "[0000]=Undefined\n[0001]=Reserved\n[0010]=16:9+Top+Letterbox\n[0011]=14:9+Top+Letterbox\n[0100]=Other+Centered+Letterbox\n[0101]=Reserved\n[0110]=Reserved\n[0111]=Reserved\n[1000]=4:3+Full Frame\n[1001]=4:3+Full Frame\n[1010]=16:9+Centered+Letterbox\n[1011]=14:9+Centered+Letterbox\n[1100]=Reserved\n[1101]=4:3+14:9 Centered+Full Frame\n[1110]=16:9+14:9 Centered+Letterbox\n[1111]=16:9+4:3 Centered+Letterbox"
                       }
                     },
@@ -9555,7 +9649,7 @@
                     "properties": {
                       "AFDAnnotationIn16-9": {
                         "title": "AFDAnnotationIn16-9",
-                        "$ref": "#/$defs/AFDDetails",
+                        "$ref": "#/components/schemas/video/$defs/AFDDetails",
                         "description": "[0000]=Undefined\n[0001]=Reserved\n[0010]=16:9+Full Frame\n[0011]=14:9+Centered+Pillarbox\n[0100]=Other+Centered+Letterbox\n[0101]=Reserved\n[0110]=Reserved\n[0111]=Reserved\n[1000]=16:9+Full Frame\n[1001]=4:3+Centered+Pillarbox\n[1010]=16:9+Full Frame+Protected\n[1011]=14:9+Centered+Pillarbox\n[1100]=Reserved\n[1101]=4:3+14:9 Centered+Pillarbox\n[1110]=16:9+14:9 Centered+Full Frame\n[1111]=16:9+4:3 Centered+Full Frame"
                       }
                     },
@@ -10110,7 +10204,7 @@
               },
               "ChromaSubsampling": {
                 "title": "ChromaSubsampling",
-                "$ref": "#/$defs/ChromaSubsampling",
+                "$ref": "#/components/schemas/video/$defs/ChromaSubsampling",
                 "description": "The practice of encoding images by implementing less resolution for chroma information than for luma information, taking advantage of the human visual system's lower acuity for color differences than for luminance."
               }
             },
@@ -10234,7 +10328,7 @@
                                 "properties": {
                                   "IMFChromaSubsample4-2-2": {
                                     "title": "IMFChromaSubsample4-2-2",
-                                    "$ref": "#/$defs/IMFChromaSubsample4-2-2",
+                                    "$ref": "#/components/schemas/video/$defs/IMFChromaSubsample4-2-2",
                                     "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference."
                                   }
                                 },
@@ -10352,7 +10446,7 @@
                             "properties": {
                               "IMFChromaSubsample4-2-2": {
                                 "title": "IMFChromaSubsample4-2-2",
-                                "$ref": "#/$defs/IMFChromaSubsample4-2-2",
+                                "$ref": "#/components/schemas/video/$defs/IMFChromaSubsample4-2-2",
                                 "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference."
                               }
                             },
@@ -10382,7 +10476,7 @@
               },
               "J2KEncodingProfile-SD": {
                 "title": "J2KEncodingProfile-SD",
-                "$ref": "#/$defs/J2KEncodingProfile-SD",
+                "$ref": "#/components/schemas/video/$defs/J2KEncodingProfile-SD",
                 "description": "Implementations shall support the profile and level combinations utilizing JPEG 2000 Profiles as specified in ISO/IEC 15444-1 Amendment 3."
               }
             },
@@ -10596,7 +10690,7 @@
                     "properties": {
                       "J2K-SD-IMF": {
                         "title": "J2K-SD-IMF",
-                        "$ref": "#/$defs/J2KEncodingProfile-SD",
+                        "$ref": "#/components/schemas/video/$defs/J2KEncodingProfile-SD",
                         "description": "Implementations shall support the profile and level combinations utilizing JPEG 2000 Profiles as specified in ISO/IEC 15444-1 Amendment 3."
                       }
                     },
@@ -11085,7 +11179,7 @@
               },
               "J2KChromaSubsampling": {
                 "title": "J2KChromaSubsampling",
-                "$ref": "#/$defs/J2KChromaSubsampling",
+                "$ref": "#/components/schemas/video/$defs/J2KChromaSubsampling",
                 "description": "The practice of encoding images by implementing less resolution for chroma information than for luma information, taking advantage of the human visual system's lower acuity for color differences than for luminance. (v7.0)"
               }
             },
@@ -11157,7 +11251,7 @@
             "properties": {
               "TransitionInType": {
                 "title": "TransitionInType",
-                "$ref": "#/$defs/VideoTransitionEnumType",
+                "$ref": "#/components/schemas/video/$defs/VideoTransitionEnumType",
                 "description": "The type of transition to perform between the previous event and this event"
               },
               "TransitionPattern": {
@@ -11169,17 +11263,17 @@
               },
               "TransitionInRate": {
                 "title": "TransitionInRate",
-                "$ref": "#/$defs/VideoRateType",
+                "$ref": "#/components/schemas/video/$defs/VideoRateType",
                 "description": "The rate of transition between the previous event and this event"
               },
               "TransitionOutType": {
                 "title": "TransitionOutType",
-                "$ref": "#/$defs/VideoTransitionEnumType",
+                "$ref": "#/components/schemas/video/$defs/VideoTransitionEnumType",
                 "description": "The type of transition to before between this event and the next event"
               },
               "TransitionOutRate": {
                 "title": "TransitionOutRate",
-                "$ref": "#/$defs/VideoRateType",
+                "$ref": "#/components/schemas/video/$defs/VideoRateType",
                 "description": "The rate of transition between this event and the next event"
               },
               "TransitionSom": {

@@ -23,7 +23,7 @@ This repository now includes derived artefacts that help document and explore th
   python tools/xsd_to_jsonschema.py schema schema-json
   ```
 
-* An AsyncAPI catalogue that groups the sample BXF messages by their `messageType` attribute is available at [`asyncapi/bxf-usecases.yaml`](./asyncapi/bxf-usecases.yaml). Rebuild it from the XML use cases with:
+* An AsyncAPI 3.0.0 catalogue that groups the sample BXF messages by their `messageType` attribute is available at [`asyncapi/bxf-usecases.yaml`](./asyncapi/bxf-usecases.yaml). Rebuild it from the XML use cases with:
 
   ```bash
   python tools/build_asyncapi.py usecases schema-json asyncapi/bxf-usecases.yaml
@@ -35,7 +35,7 @@ This repository now includes derived artefacts that help document and explore th
   python tools/build_asyncapi.py usecases schema-json asyncapi/bxf-usecases-inline.yaml --inline
   ```
 
-  The inline document embeds the converted JSON Schemas under `components.schemas`, allowing the message DTOs to be inspected independently from the XML examples bundled with each use case.
+  The inline document embeds the converted JSON Schemas under `components.schemas`, allowing the message DTOs to be inspected independently from the XML examples bundled with each use case. Schema references in the embedded catalogue are rewritten to fully qualified pointers such as `#/components/schemas/audio/$defs/AudioRateType` so that tools like AsyncAPI Studio can validate the document without additional files.
 
 * A lightweight documentation site that renders the AsyncAPI document is published in [`docs/`](./docs). Open [`docs/index.html`](./docs/index.html) in a browser to view a Swagger-like experience backed by the [`@asyncapi/web-component`](https://github.com/asyncapi/web-component).
 

@@ -1,5 +1,5 @@
 {
-  "asyncapi": "2.6.0",
+  "asyncapi": "3.0.0",
   "id": "urn:uuid:12345678-1234-5678-1234-567812345678",
   "info": {
     "title": "BXF Use Case Library",
@@ -32,44 +32,138 @@
   ],
   "channels": {
     "Information": {
+      "address": "bxf.Information",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveInformation",
-        "message": {
+      "messages": {
+        "BxfInformationMessage": {
           "$ref": "#/components/messages/BxfInformationMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
     },
     "Heartbeat": {
+      "address": "bxf.Heartbeat",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveHeartbeat",
-        "message": {
+      "messages": {
+        "BxfHeartbeatMessage": {
           "$ref": "#/components/messages/BxfHeartbeatMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
     },
     "Request": {
+      "address": "bxf.Request",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveRequest",
-        "message": {
+      "messages": {
+        "BxfRequestMessage": {
           "$ref": "#/components/messages/BxfRequestMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
     },
     "Reply": {
+      "address": "bxf.Reply",
       "description": "BXF channel grouped by messageType",
-      "subscribe": {
-        "summary": "Receive BXF messages of this type",
-        "operationId": "receiveReply",
-        "message": {
+      "messages": {
+        "BxfReplyMessage": {
           "$ref": "#/components/messages/BxfReplyMessage"
         }
-      }
+      },
+      "servers": [
+        "sandbox"
+      ]
+    }
+  },
+  "operations": {
+    "receiveInformation": {
+      "action": "receive",
+      "summary": "Receive BXF Information messages",
+      "operationId": "receiveInformation",
+      "channel": {
+        "$ref": "#/channels/Information"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Information/messages/BxfInformationMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Information"
+        }
+      ]
+    },
+    "receiveHeartbeat": {
+      "action": "receive",
+      "summary": "Receive BXF Heartbeat messages",
+      "operationId": "receiveHeartbeat",
+      "channel": {
+        "$ref": "#/channels/Heartbeat"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Heartbeat/messages/BxfHeartbeatMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Heartbeat"
+        }
+      ]
+    },
+    "receiveRequest": {
+      "action": "receive",
+      "summary": "Receive BXF Request messages",
+      "operationId": "receiveRequest",
+      "channel": {
+        "$ref": "#/channels/Request"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Request/messages/BxfRequestMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Request"
+        }
+      ]
+    },
+    "receiveReply": {
+      "action": "receive",
+      "summary": "Receive BXF Reply messages",
+      "operationId": "receiveReply",
+      "channel": {
+        "$ref": "#/channels/Reply"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/Reply/messages/BxfReplyMessage"
+        }
+      ],
+      "tags": [
+        {
+          "name": "bxf"
+        },
+        {
+          "name": "Reply"
+        }
+      ]
     }
   },
   "components": {
