@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, List
 import xml.etree.ElementTree as ET
 
-ASYNCAPI_VERSION = "3.0.0"
+ASYNCAPI_VERSION = "2.6.0"
 
 
 def parse_usecases(directory: Path) -> Dict[str, List[Path]]:
@@ -32,10 +32,10 @@ def load_xml(path: Path) -> str:
     return "\n".join([header, indented])
 
 
-def build_document(usecase_dir: Path, schema_dir: Path) -> str:
+def build_document(usecase_dir: Path, schema_dir: Path, *, inline_payload: bool) -> str:
     mapping = parse_usecases(usecase_dir)
     lines = [
-        "asyncapi: 3.0.0",
+        f"asyncapi: {ASYNCAPI_VERSION}",
         "info:",
         "  title: BXF Use Case Library",
         "  version: 1.0.0",
@@ -61,11 +61,9 @@ def build_document(usecase_dir: Path, schema_dir: Path) -> str:
         lines.extend(
             [
                 f"  {channel_name}:",
-                f"    address: bxf/{message_type}",
-                "    messages:",
-                f"      {message_name}:",
-                f"        $ref: '#/components/messages/{message_name}'",
+                "    description: BXF channel grouped by messageType",
                 "    subscribe:",
+                "      summary: Receive BXF messages of this type",
                 "      message:",
                 f"        $ref: '#/components/messages/{message_name}'",
             ]
@@ -83,12 +81,27 @@ def build_document(usecase_dir: Path, schema_dir: Path) -> str:
                 f"    {message_name}:",
                 f"      name: {message_type}",
                 f"      summary: BXF {message_type} message",
-                "      schemaFormat: application/schema+json;version=draft-2020-12",
-                "      payload:",
-                f"        $ref: '{payload_ref}'",
-                "      examples:",
             ]
         )
+        if inline_payload:
+            components.extend(
+                [
+                    "      payload:",
+                    "        type: string",
+                    "        description: |",
+                    "          Raw XML payload defined by the SMPTE ST 2021-4 BXF schema.",
+                    "          See the message examples below for representative documents.",
+                ]
+            )
+        else:
+            components.extend(
+                [
+                    "      schemaFormat: application/schema+json;version=draft-2020-12",
+                    "      payload:",
+                    f"        $ref: '{payload_ref}'",
+                ]
+            )
+        components.append("      examples:")
         components.extend(example_lines or ["      []"])
 
     return "\n".join(lines + components) + "\n"
@@ -99,8 +112,13 @@ def main() -> int:
     parser.add_argument("usecases", type=Path)
     parser.add_argument("schema_dir", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument(
+        "--inline",
+        action="store_true",
+        help="Embed a descriptive payload instead of referencing the JSON Schema file.",
+    )
     args = parser.parse_args()
-    document = build_document(args.usecases, args.schema_dir)
+    document = build_document(args.usecases, args.schema_dir, inline_payload=args.inline)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(document, encoding="utf-8")
     print(f"Wrote {args.output}")

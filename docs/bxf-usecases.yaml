@@ -1,4 +1,4 @@
-asyncapi: 3.0.0
+asyncapi: 2.6.0
 info:
   title: BXF Use Case Library
   version: 1.0.0
@@ -13,35 +13,27 @@ servers:
     protocol: ws
 channels:
   Information:
-    address: bxf/Information
-    messages:
-      BxfInformationMessage:
-        $ref: '#/components/messages/BxfInformationMessage'
+    description: BXF channel grouped by messageType
     subscribe:
+      summary: Receive BXF messages of this type
       message:
         $ref: '#/components/messages/BxfInformationMessage'
   Heartbeat:
-    address: bxf/Heartbeat
-    messages:
-      BxfHeartbeatMessage:
-        $ref: '#/components/messages/BxfHeartbeatMessage'
+    description: BXF channel grouped by messageType
     subscribe:
+      summary: Receive BXF messages of this type
       message:
         $ref: '#/components/messages/BxfHeartbeatMessage'
   Request:
-    address: bxf/Request
-    messages:
-      BxfRequestMessage:
-        $ref: '#/components/messages/BxfRequestMessage'
+    description: BXF channel grouped by messageType
     subscribe:
+      summary: Receive BXF messages of this type
       message:
         $ref: '#/components/messages/BxfRequestMessage'
   Reply:
-    address: bxf/Reply
-    messages:
-      BxfReplyMessage:
-        $ref: '#/components/messages/BxfReplyMessage'
+    description: BXF channel grouped by messageType
     subscribe:
+      summary: Receive BXF messages of this type
       message:
         $ref: '#/components/messages/BxfReplyMessage'
 components:

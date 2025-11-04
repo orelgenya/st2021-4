@@ -41,9 +41,11 @@ components:
     BxfInformationMessage:
       name: Information
       summary: BXF Information message
-      schemaFormat: application/schema+json;version=draft-2020-12
       payload:
-        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+        type: string
+        description: |
+          Raw XML payload defined by the SMPTE ST 2021-4 BXF schema.
+          See the message examples below for representative documents.
       examples:
       - name: Acquisition Failure Use Case
         summary: Acquisition Failure Use Case
@@ -2323,9 +2325,11 @@ components:
     BxfHeartbeatMessage:
       name: Heartbeat
       summary: BXF Heartbeat message
-      schemaFormat: application/schema+json;version=draft-2020-12
       payload:
-        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+        type: string
+        description: |
+          Raw XML payload defined by the SMPTE ST 2021-4 BXF schema.
+          See the message examples below for representative documents.
       examples:
       - name: Heartbeat Use Case
         summary: Heartbeat Use Case
@@ -2336,9 +2340,11 @@ components:
     BxfRequestMessage:
       name: Request
       summary: BXF Request message
-      schemaFormat: application/schema+json;version=draft-2020-12
       payload:
-        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+        type: string
+        description: |
+          Raw XML payload defined by the SMPTE ST 2021-4 BXF schema.
+          See the message examples below for representative documents.
       examples:
       - name: Invoke Schedule Use Case
         summary: Invoke Schedule Use Case
@@ -2426,9 +2432,11 @@ components:
     BxfReplyMessage:
       name: Reply
       summary: BXF Reply message
-      schemaFormat: application/schema+json;version=draft-2020-12
       payload:
-        $ref: 'schema-json/bxfschema.schema.json#/$defs/BxfMessage'
+        type: string
+        description: |
+          Raw XML payload defined by the SMPTE ST 2021-4 BXF schema.
+          See the message examples below for representative documents.
       examples:
       - name: Query Request 1b Use Case
         summary: Query Request 1b Use Case

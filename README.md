@@ -29,5 +29,11 @@ This repository now includes derived artefacts that help document and explore th
   python tools/build_asyncapi.py usecases schema-json asyncapi/bxf-usecases.yaml
   ```
 
+  To generate a self-contained variant with inline payload documentation that can be pasted into tools such as Confluence, pass the `--inline` flag and choose an alternate output path, for example:
+
+  ```bash
+  python tools/build_asyncapi.py usecases schema-json asyncapi/bxf-usecases-inline.yaml --inline
+  ```
+
 * A lightweight documentation site that renders the AsyncAPI document is published in [`docs/`](./docs). Open [`docs/index.html`](./docs/index.html) in a browser to view a Swagger-like experience backed by the [`@asyncapi/web-component`](https://github.com/asyncapi/web-component).
 
