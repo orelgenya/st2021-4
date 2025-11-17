@@ -1,0 +1,856 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/qualitycontrol.schema.json",
+  "title": "qualitycontrol",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "FragmentLocation": {
+      "type": "object",
+      "properties": {
+        "StartTime": {
+          "title": "StartTime",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "Start time on the video"
+        },
+        "EndTime": {
+          "title": "EndTime",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "End time on the video"
+        },
+        "SpatialLocation": {
+          "title": "SpatialLocation",
+          "type": "string",
+          "description": "A string representing a rectangular spatial region of the video track according to the String pattern defined in W3C Media Fragments - 4.2.2 Spatial Dimension [3]"
+        }
+      },
+      "additionalProperties": false,
+      "description": "The time range and a spatial location that defines a unique part of the video essence. (v5.0)"
+    },
+    "QualityControl": {
+      "type": "object",
+      "properties": {
+        "ContentId": {
+          "title": "ContentId",
+          "$ref": "./bxfcontentid.schema.json#/$defs/BxfContentId",
+          "description": "Used to identify a specific media to apply the QC process to."
+        },
+        "@dueDateTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Media often must be checked for its quality each time it is copied or moved to another location.  Multiple checks are typical to confirm that the audio, video and other attributes meet the standards of the intended usage. (v5.0)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "QCProfile": {
+              "title": "QCProfile",
+              "$ref": "#/$defs/QCProfile",
+              "description": "Used to define a set of test instructions that are generally related and which can be called using just the identifier."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "QCProfile"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "QCProfileList": {
+              "title": "QCProfileList",
+              "type": "object",
+              "properties": {
+                "QCProfileID": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "properties": {
+                      "@ResultsRule": {
+                        "type": "string",
+                        "enum": [
+                          "AND",
+                          "OR",
+                          "MinimumRelevance"
+                        ]
+                      },
+                      "@RelevanceLevel": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 10
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": []
+                  },
+                  "minItems": 1,
+                  "description": "Unique identifier (usually UUID) to identify the saved profile, but may be a simple text string that is unique within the environment used."
+                },
+                "QCProfileScope": {
+                  "title": "QCProfileScope",
+                  "$ref": "#/$defs/QCScope",
+                  "description": "Range of time on the media (using media timecode) that should be tested for all QCProfileCheckItems.  If not defined the entire media will be checked."
+                },
+                "QCReportID": {
+                  "title": "QCReportID",
+                  "type": "string",
+                  "description": "Normally a UUID to be assured of a globally unique identifier."
+                },
+                "PrivateInformation": {
+                  "title": "PrivateInformation",
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "QCProfileID"
+              ],
+              "description": "List of previously defined QCProfiles to run against selected media."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "QCProfileList"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "QCItem": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/QCItem"
+              },
+              "minItems": 1,
+              "description": "Each check of the media can be part or all of the media and each of its components.  The checks may be done through machine control automatically or manually by a technician using a set of defined rules to pass.  A CheckItem option can be part of a profile or stand alone."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "QCItem"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "QCReport": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/QCReports"
+              },
+              "minItems": 1,
+              "description": "Used to report back the results of the QC testing for either a single profile, multiple profiles or a single QCCheckItem. (Modified to be unbounded in v6.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "QCReport"
+          ]
+        }
+      ]
+    },
+    "QCDetailedAnnotation": {
+      "type": "object",
+      "properties": {
+        "DetailedDescription": {
+          "title": "DetailedDescription",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Detailed description of QC Test performed."
+        },
+        "QCTestPerformer": {
+          "title": "QCTestPerformer",
+          "$ref": "#/$defs/QCTestPerformer",
+          "description": "What person, system or tool was used to perform the QC Test."
+        },
+        "QCAnnotationDateTime": {
+          "title": "QCAnnotationDateTime",
+          "type": "string",
+          "format": "date-time",
+          "description": "When the Annotation was created."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Additional descriptive details concerning who or what system was deployed to perform the QC test and when it was performed.",
+      "required": [
+        "DetailedDescription"
+      ]
+    },
+    "QCItem": {
+      "type": "object",
+      "properties": {
+        "QCItemID": {
+          "title": "QCItemID",
+          "type": "string",
+          "description": "Unique identifier for the item to be tested.  Note - EBU has defined specific values for each QC Test ID (eg-0010B is a test for Loudness on baseband)"
+        },
+        "QCItemName": {
+          "title": "QCItemName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Brief name of the QC Test to be performed. (eg Aspect Ratio)"
+        },
+        "Layer": {
+          "title": "Layer",
+          "type": "string",
+          "enum": [
+            "baseband",
+            "bitstream",
+            "x-check",
+            "wrapper"
+          ],
+          "description": "Equvialent to the EBU-QC Test Layer Field"
+        },
+        "Category": {
+          "title": "Category",
+          "type": "string",
+          "enum": [
+            "absolute",
+            "objective",
+            "regulatory",
+            "subjective"
+          ],
+          "description": "Equivalent to the EBU-QC Test Category Field"
+        },
+        "Relevance": {
+          "title": "Relevance",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Used in conjunction with the QCProfile's relevanceLevel and checkResultRule values to determine how important this check is relative to the other checks in the profile and to determine the overall report checkresult."
+        },
+        "EssenceType": {
+          "title": "EssenceType",
+          "type": "string",
+          "enum": [
+            "Video",
+            "Audio",
+            "Subtitle",
+            "Captioning",
+            "Metadata",
+            "Other"
+          ],
+          "description": "Indicates the content type that the QCItem focuses on."
+        },
+        "QCItemScope": {
+          "title": "QCItemScope",
+          "$ref": "#/$defs/QCScope",
+          "description": "Limits the execution of the QCItem to one or more specific time ranges and overrides the QCProfileScope, if any."
+        },
+        "QCItemInput": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QCItemInput"
+          },
+          "description": "Whether machine controlled or manually performed, a set of rules that govern what is being tested and how are described by the parameters."
+        },
+        "QCReportID": {
+          "title": "QCReportID",
+          "type": "string",
+          "description": "Used to identify the QCReport that will supply the results of the QCTest requested.  Normally a UUID to be assured of a globally unique identifier."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@parameterType": {
+          "type": "string",
+          "enum": [
+            "check",
+            "measure",
+            "readout",
+            "x-check"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "description": "Each check of the media can be part or all of the media and each of its components.  The checks may be done through machine control automatically or manually by a technician using a set of defined rules to pass.  A CheckItem option can be part of a profile or stand alone.",
+      "required": [
+        "QCItemID",
+        "QCItemName"
+      ]
+    },
+    "QCItemInput": {
+      "type": "object",
+      "properties": {
+        "KeyWord": {
+          "title": "KeyWord",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Unique name of the test input within the scope of QCItem and as accepted within the scope of the organization.  (Note EBU supports a specific defined list of names - eg. VideoAspectRatio)."
+        },
+        "Description": {
+          "title": "Description",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Brief description related to the type of test to be performed."
+        },
+        "FragmentLocation": {
+          "title": "FragmentLocation",
+          "$ref": "#/$defs/FragmentLocation",
+          "description": "The time range and spatial location on the video (region of the screen) to be tested."
+        },
+        "Track": {
+          "title": "Track",
+          "type": "string",
+          "description": "The unique identification of the media track the input refers to (eg- a number such as Track 1 or a specific UUID)"
+        },
+        "WrapperLocation": {
+          "title": "WrapperLocation",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "MXFWrapperLocation": {
+                  "title": "MXFWrapperLocation",
+                  "type": "string",
+                  "enum": [
+                    "header",
+                    "footer",
+                    "body"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "MXFWrapperLocation"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "OtherWrapperLocation": {
+                  "title": "OtherWrapperLocation",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "OtherWrapperLocation"
+              ]
+            }
+          ],
+          "description": "Applicable only for QCCheckItems working at wrapper level.\nThe identification of the portion of the file wrapper to be checked/utilized by the QCCheckItem. If not specified, it is assumed to use all the locations and also check for their consistency.\nWhen the wrapping is MXF, the wrapper location is actually the MXF partition with possible values header, footer, body."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Whether machine controlled or manually performed, a set of rules that govern how to do the testing.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ParameterValue": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "properties": {
+                  "@rangeFlag": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": []
+              },
+              "minItems": 1,
+              "description": "Test parameter value used as either a single value or a range of values (rangeFlag=True) or a list of values (rangeFlag=False)."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ParameterValue"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ExpectedValue": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "properties": {
+                  "@rangeFlag": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": []
+              },
+              "minItems": 1,
+              "description": "The expected return value or range or list of values the sets the tolerance for the QC test to be considered a pass."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ExpectedValue"
+          ]
+        }
+      ],
+      "required": [
+        "KeyWord"
+      ]
+    },
+    "QCItemOutput": {
+      "type": "object",
+      "properties": {
+        "KeyWord": {
+          "title": "KeyWord",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Unique name of the test performed within the scope of QCItem and as accepted within the scope of the organization.  (Note EBU supports a specific defined list of names - eg. VideoAspectRatio)."
+        },
+        "Description": {
+          "title": "Description",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Brief description related to the type of test performed."
+        },
+        "TestValue": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "Value or values returned by the QC Test performed."
+        },
+        "RelatedQCItemOutput": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QCItemOutput"
+          },
+          "description": "Use this to list multiple outputs related to the same spatiotemporal fragment."
+        },
+        "FragmentLocation": {
+          "title": "FragmentLocation",
+          "$ref": "#/$defs/FragmentLocation"
+        },
+        "Track": {
+          "title": "Track",
+          "type": "string",
+          "description": "The unique identification of the media track the result refers to (eg- a number such as Track 1 or a specific UUID)"
+        },
+        "WrapperLocation": {
+          "title": "WrapperLocation",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "MXFWrapperLocation": {
+                  "title": "MXFWrapperLocation",
+                  "type": "string",
+                  "enum": [
+                    "header",
+                    "footer",
+                    "body"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "MXFWrapperLocation"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "OtherWrapperLocation": {
+                  "title": "OtherWrapperLocation",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "OtherWrapperLocation"
+              ]
+            }
+          ],
+          "description": "Applicable only for QCItems working at wrapper level.\nThe identification of the portion of the file wrapper tested by the QCItem."
+        },
+        "QCDetailedAnnotations": {
+          "title": "QCDetailedAnnotations",
+          "$ref": "#/$defs/QCDetailedAnnotation",
+          "description": "Additional descriptive details concerning who or what system was deployed to perform the QC test and when it was performed."
+        },
+        "VerificationMedia": {
+          "title": "VerificationMedia",
+          "type": "string",
+          "format": "uri",
+          "description": "Link to external binary data generated by a tool during the QC test, the use of which is for easy verification of the results of the QC process."
+        },
+        "ConfidenceLevel": {
+          "title": "ConfidenceLevel",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "The confidence level with which a tool has found a defect (global or fragment) reported as a real number from 0.00 to 1.00."
+        },
+        "Severity": {
+          "title": "Severity",
+          "type": "integer",
+          "minimum": 0,
+          "description": "A positive integer indicating the strength of the defect. \nSeverity shall be useful to provide at least a ranking of defects relevance when discovered by the same tool."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@parameterType": {
+          "type": "string",
+          "enum": [
+            "check",
+            "measure",
+            "readout",
+            "x-check"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "description": "The specific result of a single QC test.",
+      "required": [
+        "KeyWord",
+        "TestValue"
+      ]
+    },
+    "QCItemResult": {
+      "type": "object",
+      "properties": {
+        "QCItemID": {
+          "title": "QCItemID",
+          "type": "string",
+          "description": "Unique identifier for the item to be checked.  Note - EBU has defined specific values for each QC Test ID (eg-0010B is a test for Loudness on baseband)"
+        },
+        "QCItemName": {
+          "title": "QCItemName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Brief name of the QCItem performed. (eg Aspect Ratio)"
+        },
+        "QCReportStatus": {
+          "title": "QCReportStatus",
+          "type": "string",
+          "enum": [
+            "Completed",
+            "Error",
+            "Submitted"
+          ],
+          "description": "The overall status of all the QCReportItems that are part of the complete report.  The valid options are Completed, Error, and Submitted."
+        },
+        "ErrorDescription": {
+          "title": "ErrorDescription",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Error description for a QCItem that returns an error or is outside of the expected values."
+        },
+        "CheckResult": {
+          "title": "CheckResult",
+          "type": "boolean",
+          "description": "If one or more QCItems include a parameterType of \"Check\" the resulting default \"AND\" logic or the designated logic is evaluated and placed here to indicate a complete \"true\" or valid state of the logic or a false or fail state."
+        },
+        "ResultDescription": {
+          "title": "ResultDescription",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "A short description of the result that could be used for both checks and measurement,"
+        },
+        "QCToolInformation": {
+          "title": "QCToolInformation",
+          "$ref": "#/$defs/QCToolInformation"
+        },
+        "QCDetailAnnotation": {
+          "title": "QCDetailAnnotation",
+          "$ref": "#/$defs/QCDetailedAnnotation"
+        },
+        "Relevance": {
+          "title": "Relevance",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Used in conjunction with the QCProfile's relevanceLevel and checkResultRule values to determine how important this check is relative to the other checks in the profile and to determine the overall report checkresult."
+        },
+        "MaxSeverity": {
+          "title": "MaxSeverity",
+          "type": "integer",
+          "minimum": 0,
+          "description": "Sets the upper bound of the scale for severity for all QCCheckItemOutputs within  this QCCheckItemResult"
+        },
+        "VerificationMedia": {
+          "title": "VerificationMedia",
+          "type": "string",
+          "format": "uri",
+          "description": "Link to external binary data generated by a tool during analysis, the use of which is for easy checking of the results of the QC analyses."
+        },
+        "DetectionMethod": {
+          "title": "DetectionMethod",
+          "type": "string",
+          "enum": [
+            "Assisted",
+            "Automatic",
+            "Human"
+          ],
+          "description": "Flags the method of how the item was processed.\nAutomatic means that the result was obtained with an automatic QC tool.\nHuman means that the result was created by a human operator from scratch.\nAssisted means that the result is a revision by a human operator, based on another previous automatic result."
+        },
+        "Revision": {
+          "title": "Revision",
+          "type": "integer",
+          "minimum": 0,
+          "description": "Marks the version of a QCItemResult. Unless otherwise noted, it is assumed that revision N derives from revision N-1 (e.g. revision 1 automatic and revision 2 assisted means that rev2 is a human review of rev1)"
+        },
+        "QCTestPerformer": {
+          "title": "QCTestPerformer",
+          "$ref": "#/$defs/QCTestPerformer",
+          "description": "The user who has done a test manually, e.g. eye-ball check from scratch or a revision of an automatic result"
+        },
+        "QCItemOutput": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QCItemOutput"
+          },
+          "description": "The specific result of a single QC test."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@creationDateTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "The results received as a result of one or more QC test.",
+      "required": [
+        "QCItemID",
+        "QCReportStatus"
+      ]
+    },
+    "QCProfile": {
+      "type": "object",
+      "properties": {
+        "QCProfileID": {
+          "title": "QCProfileID",
+          "type": "string",
+          "description": "Unique identifier (usually UUID) to identify the profile."
+        },
+        "QCProfileName": {
+          "title": "QCProfileName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "The name of the profile."
+        },
+        "QCProfileDescription": {
+          "title": "QCProfileDescription",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "A brief description of what the profile is defined to test and the type of media to use it against."
+        },
+        "QCProfileScope": {
+          "title": "QCProfileScope",
+          "$ref": "#/$defs/QCScope",
+          "description": "Range of time on the media (using media timecode) that should be tested for all QCProfileCheckItems.  If not defined the entire media will be checked."
+        },
+        "QCProfileItem": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QCItem"
+          },
+          "minItems": 1
+        },
+        "QCReportID": {
+          "title": "QCReportID",
+          "type": "string",
+          "description": "Normally a UUID to be assured of a globally unique identifier."
+        },
+        "@ResultsRule": {
+          "type": "string",
+          "enum": [
+            "AND",
+            "OR",
+            "MinimumRelevance"
+          ]
+        },
+        "@RelevanceLevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to define a set of test instructions that are generally related and which can be called using just the identifier.",
+      "required": [
+        "QCProfileID",
+        "QCProfileItem"
+      ]
+    },
+    "QCReports": {
+      "type": "object",
+      "properties": {
+        "QCReportID": {
+          "title": "QCReportID",
+          "type": "string",
+          "description": "Normally a UUID to be assured of a globally unique identifier."
+        },
+        "QCReportGroupID": {
+          "title": "QCReportGroupID",
+          "type": "string",
+          "description": "Optional grouping identifier"
+        },
+        "QCReportStatus": {
+          "title": "QCReportStatus",
+          "type": "string",
+          "enum": [
+            "Completed",
+            "Error",
+            "Submitted"
+          ],
+          "description": "The overall status of all the QCReportItems that are part of the complete report.  The valid options are Completed, Error, and Submitted."
+        },
+        "ErrorDescription": {
+          "title": "ErrorDescription",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "A summary of the QCItems that return an error or are outside of the expected values."
+        },
+        "CheckResult": {
+          "title": "CheckResult",
+          "type": "boolean",
+          "description": "If one or more QCCheckItems include a parameterType of \"Check\" the resulting default \"AND\" logic or the designated logic is evaluated and placed here to indicate a complete \"true\" or valid state of the logic or a false or fail state."
+        },
+        "QCReportDuration": {
+          "title": "QCReportDuration",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDuration",
+          "description": "Length of time it took to process all QCItems associated with the report based on the initial start time of first QCItem and the maximum end time of the last QCItem."
+        },
+        "QCToolInformation": {
+          "title": "QCToolInformation",
+          "$ref": "#/$defs/QCToolInformation",
+          "description": "Summary of tool information when one is used for all QCCheckItems associated to the Report."
+        },
+        "QCItemResult": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QCItemResult"
+          },
+          "minItems": 1,
+          "description": "The results received as a result of one or more QC test."
+        },
+        "@lastModified": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to report back the results of the QC testing for either a single profile, multiple profiles or a single QCCheckItem.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "QCProfileID": {
+              "title": "QCProfileID",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "QCProfileID"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "QCProfile": {
+              "title": "QCProfile",
+              "$ref": "#/$defs/QCProfile"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "QCProfile"
+          ]
+        }
+      ],
+      "required": [
+        "QCReportID",
+        "QCReportStatus",
+        "QCItemResult",
+        "@lastModified"
+      ]
+    },
+    "QCToolInformation": {
+      "type": "object",
+      "properties": {
+        "QCToolID": {
+          "title": "QCToolID",
+          "type": "string",
+          "description": "A unique identifier for the tool used to perform the QC test.  This can be a unique identifier or a specific URL that uniquely identifies the tool."
+        },
+        "QCToolName": {
+          "title": "QCToolName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Name of the tool used to perform the QC test."
+        },
+        "VendorName": {
+          "title": "VendorName",
+          "type": "string",
+          "description": "Name of the vendor that makes or supports the tool."
+        },
+        "QCToolVersion": {
+          "title": "QCToolVersion",
+          "type": "string",
+          "description": "The version of the tool being used to perform the QC test."
+        },
+        "ToolURL": {
+          "title": "ToolURL",
+          "type": "string",
+          "description": "The endpoint of the tool's software actually used for the test in a QC environment or server farm."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Summary of tool information when one is used for all QCCheckItems associated to the Report.",
+      "required": [
+        "QCToolID",
+        "QCToolName"
+      ]
+    },
+    "QCScope": {
+      "type": "object",
+      "properties": {
+        "StartTime": {
+          "title": "StartTime",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+        },
+        "EndTime": {
+          "title": "EndTime",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime"
+        }
+      },
+      "additionalProperties": false,
+      "description": "A brief description of what the profile is defined to test and the type of media to use it against.",
+      "required": [
+        "StartTime",
+        "EndTime"
+      ]
+    },
+    "QCTestPerformer": {
+      "type": "object",
+      "properties": {
+        "QCPerformerName": {
+          "title": "QCPerformerName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Person, system or tool name who performed the QC Test"
+        },
+        "QCPerformerID": {
+          "title": "QCPerformerID",
+          "type": "string",
+          "description": "Optional identifier for that person, system or tool."
+        },
+        "QCPerformerRole": {
+          "title": "QCPerformerRole",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "The role of the operator, tool or system in the QC environment."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Who or what system performed the QC test",
+      "required": [
+        "QCPerformerName"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

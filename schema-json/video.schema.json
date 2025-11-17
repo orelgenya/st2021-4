@@ -1,0 +1,1757 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/video.schema.json",
+  "title": "video",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "AFDData": {
+      "type": "object",
+      "properties": {
+        "AFDCode": {
+          "title": "AFDCode",
+          "type": "integer",
+          "minimum": 1,
+          "pattern": "[0|1][0|1][0|1][0|1]",
+          "description": "Four bits that indicate the code for the Active Format Description as referenced by SMPTE ST2016-1:2009."
+        },
+        "AFDAnnotation": {
+          "title": "AFDAnnotation",
+          "type": "object",
+          "properties": {
+            "@CodedFrameType": {
+              "type": "string",
+              "enum": [
+                "4:3",
+                "16:9"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "AFDAnnotationIn4-3": {
+                  "title": "AFDAnnotationIn4-3",
+                  "$ref": "#/$defs/AFDDetails",
+                  "description": "[0000]=Undefined\n[0001]=Reserved\n[0010]=16:9+Top+Letterbox\n[0011]=14:9+Top+Letterbox\n[0100]=Other+Centered+Letterbox\n[0101]=Reserved\n[0110]=Reserved\n[0111]=Reserved\n[1000]=4:3+Full Frame\n[1001]=4:3+Full Frame\n[1010]=16:9+Centered+Letterbox\n[1011]=14:9+Centered+Letterbox\n[1100]=Reserved\n[1101]=4:3+14:9 Centered+Full Frame\n[1110]=16:9+14:9 Centered+Letterbox\n[1111]=16:9+4:3 Centered+Letterbox"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "AFDAnnotationIn4-3"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "AFDAnnotationIn16-9": {
+                  "title": "AFDAnnotationIn16-9",
+                  "$ref": "#/$defs/AFDDetails",
+                  "description": "[0000]=Undefined\n[0001]=Reserved\n[0010]=16:9+Full Frame\n[0011]=14:9+Centered+Pillarbox\n[0100]=Other+Centered+Letterbox\n[0101]=Reserved\n[0110]=Reserved\n[0111]=Reserved\n[1000]=16:9+Full Frame\n[1001]=4:3+Centered+Pillarbox\n[1010]=16:9+Full Frame+Protected\n[1011]=14:9+Centered+Pillarbox\n[1100]=Reserved\n[1101]=4:3+14:9 Centered+Pillarbox\n[1110]=16:9+14:9 Centered+Full Frame\n[1111]=16:9+4:3 Centered+Full Frame"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "AFDAnnotationIn16-9"
+              ]
+            }
+          ],
+          "required": [
+            "@CodedFrameType"
+          ],
+          "description": "Describes the AFD Code in textual form and indicates which coded frame type is being used as referenced by SMPTE ST2016-1:2009."
+        },
+        "BarData": {
+          "title": "BarData",
+          "type": "object",
+          "properties": {
+            "@topBarFlag": {
+              "type": "boolean"
+            },
+            "@bottomBarFlag": {
+              "type": "boolean"
+            },
+            "@leftBarFlag": {
+              "type": "boolean"
+            },
+            "@rightBarFlag": {
+              "type": "boolean"
+            },
+            "@lineNumberEndOfTopBar": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16383
+            },
+            "@lineNumberStartOfBottomBar": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16383
+            },
+            "@pixelNumberEndOfLeftBar": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16383
+            },
+            "@pixelNumberStartOfRightBar": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16383
+            }
+          },
+          "additionalProperties": false,
+          "description": "Used to define the structure of bar data in a video source as referenced by SMPTE ST2016-1:2009."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to describe both Active Format Description Codes, Shorthand Text Descriptions and Bar Data options. (v3.0)",
+      "required": [
+        "AFDCode"
+      ]
+    },
+    "AFDDetails": {
+      "type": "object",
+      "properties": {
+        "OriginalFrameType": {
+          "title": "OriginalFrameType",
+          "type": "string",
+          "enum": [
+            "4:3",
+            "14:9",
+            "16:9",
+            "Other"
+          ]
+        },
+        "AFDPosition": {
+          "title": "AFDPosition",
+          "type": "string",
+          "enum": [
+            "Centered",
+            "Full Frame",
+            "Reserved",
+            "Top",
+            "Undefined"
+          ]
+        },
+        "AFDStyle": {
+          "title": "AFDStyle",
+          "type": "string",
+          "enum": [
+            "Full Frame",
+            "Letterbox",
+            "Pillarbox",
+            "Protected",
+            "Reserved",
+            "Undefined"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "OriginalFrameType",
+        "AFDPosition",
+        "AFDStyle"
+      ]
+    },
+    "ChromaSubsampling": {
+      "type": "object",
+      "description": "The practice of encoding images by implementing less resolution for chroma information than for luma information, taking advantage of the human visual system's lower acuity for color differences than for luminance. (v6.0)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ChromaSubsample4-2-0": {
+              "title": "ChromaSubsample4-2-0",
+              "type": "object",
+              "properties": {
+                "Quantization4-2-0": {
+                  "title": "Quantization4-2-0",
+                  "type": "string",
+                  "enum": [
+                    "QE.1"
+                  ],
+                  "description": "Only QE.1 allowed"
+                },
+                "ColorComponents4-2-0": {
+                  "title": "ColorComponents4-2-0",
+                  "type": "string",
+                  "enum": [
+                    "Y'C'bC'r"
+                  ],
+                  "description": "Y'C'bC'r"
+                },
+                "Colorimetry4-2-0": {
+                  "title": "Colorimetry4-2-0",
+                  "type": "string",
+                  "enum": [
+                    "COLOR.3",
+                    "COLOR.5",
+                    "COLOR.7",
+                    "COLOR.8"
+                  ],
+                  "description": "Note: COLOR.3 only applies to ITU-R BT.709 delivered material and COLOR.8 [DPP] corresponds to the HLG system specified in Recommendation ITU-R BT.2100"
+                },
+                "PixelBitDepth4-2-0": {
+                  "title": "PixelBitDepth4-2-0",
+                  "type": "integer",
+                  "enum": [
+                    "10"
+                  ],
+                  "description": "Only 10 allowed"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Quantization4-2-0",
+                "ColorComponents4-2-0",
+                "Colorimetry4-2-0",
+                "PixelBitDepth4-2-0"
+              ],
+              "description": "C'b and C'r are each subsampled at a factor of 2 both horizontally and vertically."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ChromaSubsample4-2-0"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ChromaSubsample4-2-2": {
+              "title": "ChromaSubsample4-2-2",
+              "type": "object",
+              "properties": {
+                "Quantization4-2-2": {
+                  "title": "Quantization4-2-2",
+                  "type": "string",
+                  "enum": [
+                    "QE.1"
+                  ],
+                  "description": "Only QE.1 allowed"
+                },
+                "ColorComponents4-2-2": {
+                  "title": "ColorComponents4-2-2",
+                  "type": "string",
+                  "enum": [
+                    "Y'C'bC'r"
+                  ],
+                  "description": "Y'C'bC'r"
+                },
+                "Colorimetry4-2-2": {
+                  "title": "Colorimetry4-2-2",
+                  "type": "string",
+                  "enum": [
+                    "COLOR.3",
+                    "COLOR.5",
+                    "COLOR.7",
+                    "COLOR.8"
+                  ],
+                  "description": "Note: COLOR.3 only applies to ITU-R BT.709 delivered material and COLOR.8 corresponds to the HLG system specified in Recommendation ITU-R BT.2100"
+                },
+                "PixelBitDepth4-2-2": {
+                  "title": "PixelBitDepth4-2-2",
+                  "type": "integer",
+                  "enum": [
+                    "10"
+                  ],
+                  "description": "Only 10 allowed"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Quantization4-2-2",
+                "ColorComponents4-2-2",
+                "Colorimetry4-2-2",
+                "PixelBitDepth4-2-2"
+              ],
+              "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ChromaSubsample4-2-2"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ChromaSubsample4-4-4": {
+              "title": "ChromaSubsample4-4-4",
+              "type": "object",
+              "properties": {
+                "Quantization4-4-4": {
+                  "title": "Quantization4-4-4",
+                  "type": "string",
+                  "enum": [
+                    "QE.1",
+                    "QE.2"
+                  ],
+                  "description": "Either QE.1 or QE.2"
+                },
+                "ColorComponents4-4-4": {
+                  "title": "ColorComponents4-4-4",
+                  "type": "string",
+                  "enum": [
+                    "R'G'B'"
+                  ],
+                  "description": "R'G'B'"
+                },
+                "Colorimetry4-4-4": {
+                  "title": "Colorimetry4-4-4",
+                  "type": "string",
+                  "enum": [
+                    "COLOR.5",
+                    "COLOR.7",
+                    "COLOR.8"
+                  ],
+                  "description": "Note: COLOR.8 corresponds to the HLG system specified in Recommendation ITU-R BT.2100"
+                },
+                "PixelBitDepth4-4-4": {
+                  "title": "PixelBitDepth4-4-4",
+                  "type": "integer",
+                  "enum": [
+                    "12"
+                  ],
+                  "description": "Only 12 allowed"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Quantization4-4-4",
+                "ColorComponents4-4-4",
+                "Colorimetry4-4-4",
+                "PixelBitDepth4-4-4"
+              ],
+              "description": "Each of the three Y'C'bC'r components have the same sample rate, thus there is no chroma subsampling."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ChromaSubsample4-4-4"
+          ]
+        }
+      ]
+    },
+    "DynamicRange": {
+      "type": "object",
+      "description": "Used to indicate whether the video content has either a standard dynamic range (SDR) or a high dynamic range (HDR). (v7.0)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "SDR": {
+              "title": "SDR",
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "BT.601": {
+                      "title": "BT.601",
+                      "type": "boolean",
+                      "description": "Standard Definition Television with standard dynamic range"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "BT.601"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "BT.709": {
+                      "title": "BT.709",
+                      "type": "boolean",
+                      "description": "High Definition Television with standard dynamic range"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "BT.709"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "BT.2020": {
+                      "title": "BT.2020",
+                      "type": "boolean",
+                      "description": "Ultra High Definition Television with standard dynamic range"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "BT.2020"
+                  ]
+                }
+              ],
+              "description": "Standard Dynamic Range"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "SDR"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "HDR": {
+              "title": "HDR",
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "PQ": {
+                      "title": "PQ",
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "StaticMetadata": {
+                              "title": "StaticMetadata",
+                              "type": "object",
+                              "properties": {
+                                "ST-2086": {
+                                  "title": "ST-2086",
+                                  "type": "object",
+                                  "properties": {
+                                    "DisplayPrimaries": {
+                                      "title": "DisplayPrimaries",
+                                      "type": "integer"
+                                    },
+                                    "ChromaticityWhitePoint": {
+                                      "title": "ChromaticityWhitePoint",
+                                      "type": "integer"
+                                    },
+                                    "MaxDispMasteringLuminance": {
+                                      "title": "MaxDispMasteringLuminance",
+                                      "type": "integer"
+                                    },
+                                    "MinDispMasteringLuminance": {
+                                      "title": "MinDispMasteringLuminance",
+                                      "type": "number"
+                                    }
+                                  },
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "DisplayPrimaries",
+                                    "ChromaticityWhitePoint",
+                                    "MaxDispMasteringLuminance",
+                                    "MinDispMasteringLuminance"
+                                  ],
+                                  "description": "Mastering Display Color Volume, ST-2086"
+                                },
+                                "MAXCLL": {
+                                  "title": "MAXCLL",
+                                  "type": "number",
+                                  "description": "Maximum Content Light Level - the luma of the brightest pixel."
+                                },
+                                "MAXFALL": {
+                                  "title": "MAXFALL",
+                                  "type": "number",
+                                  "description": "Maximum Frame Average Light Level - the highest frame average brightness within the content."
+                                },
+                                "PrivateInformation": {
+                                  "title": "PrivateInformation",
+                                  "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "StaticMetadata"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "DynamicMetadata": {
+                              "title": "DynamicMetadata",
+                              "type": "object",
+                              "properties": {
+                                "ST-2094-10": {
+                                  "title": "ST-2094-10",
+                                  "type": "boolean"
+                                },
+                                "ST-2094-40": {
+                                  "title": "ST-2094-40",
+                                  "type": "boolean"
+                                },
+                                "PrivateInformation": {
+                                  "title": "PrivateInformation",
+                                  "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                                },
+                                "@sdiDynamicMetadataType": {
+                                  "type": "integer",
+                                  "enum": [
+                                    "1",
+                                    "5"
+                                  ]
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "DynamicMetadata"
+                          ]
+                        }
+                      ],
+                      "description": "Perceptual Quantizer per ITU-R BT.2100"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "PQ"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "HLG": {
+                      "title": "HLG",
+                      "type": "boolean",
+                      "description": "Hybrid Log-Gamma per ITU-R BT.2100"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "HLG"
+                  ]
+                }
+              ],
+              "description": "High Dynamic Range used with Ultra High Definition Television and 1080p"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "HDR"
+          ]
+        }
+      ]
+    },
+    "ImageEssence": {
+      "type": "object",
+      "properties": {
+        "ImageFrameWidth": {
+          "title": "ImageFrameWidth",
+          "type": "integer",
+          "enum": [
+            "1920",
+            "3840",
+            "7680"
+          ],
+          "description": "Three options allowed: 1920, 3840, and 7680 pixels"
+        },
+        "ImageFrameHeight": {
+          "title": "ImageFrameHeight",
+          "type": "integer",
+          "enum": [
+            "1080",
+            "2160",
+            "4320"
+          ],
+          "description": "Three options allowed: 1080, 2160 and 4320 pixels"
+        },
+        "FrameStructure": {
+          "title": "FrameStructure",
+          "type": "string",
+          "enum": [
+            "Progressive"
+          ],
+          "description": "Progressive only"
+        },
+        "Stereoscopy": {
+          "title": "Stereoscopy",
+          "type": "string",
+          "enum": [
+            "Monoscopic",
+            "Stereoscopic"
+          ],
+          "description": "Supports either monoscopic or stereoscopic formats"
+        },
+        "FrameRate": {
+          "title": "FrameRate",
+          "type": "string",
+          "enum": [
+            "24",
+            "24000/1001",
+            "25",
+            "30",
+            "30000/1001",
+            "50",
+            "60",
+            "60000/1001",
+            "100",
+            "120",
+            "120000/1001"
+          ],
+          "description": "Multiple frame rate speeds are supported."
+        },
+        "ChromaSubsampling": {
+          "title": "ChromaSubsampling",
+          "$ref": "#/$defs/ChromaSubsampling",
+          "description": "The practice of encoding images by implementing less resolution for chroma information than for luma information, taking advantage of the human visual system's lower acuity for color differences than for luminance."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Description of the video image essence for ProRes, J2K and others. (v6.0)",
+      "required": [
+        "ImageFrameWidth",
+        "ImageFrameHeight",
+        "FrameStructure",
+        "Stereoscopy",
+        "FrameRate",
+        "ChromaSubsampling"
+      ]
+    },
+    "IMFChromaSubsample4-2-2": {
+      "type": "object",
+      "properties": {
+        "Quantization4-2-2": {
+          "title": "Quantization4-2-2",
+          "type": "string",
+          "enum": [
+            "QE.1"
+          ],
+          "description": "Only QE.1 allowed"
+        },
+        "ColorComponents4-2-2": {
+          "title": "ColorComponents4-2-2",
+          "type": "string",
+          "enum": [
+            "Y'C'bC'r"
+          ],
+          "description": "Y'C'bC'r"
+        },
+        "Colorimetry4-2-2": {
+          "title": "Colorimetry4-2-2",
+          "type": "string",
+          "enum": [
+            "COLOR.1",
+            "COLOR.2",
+            "COLOR.3"
+          ],
+          "description": "Thre options allowed: COLOR.1, .2 and .3"
+        },
+        "PixelBitDepth": {
+          "title": "PixelBitDepth",
+          "type": "integer",
+          "enum": [
+            "8",
+            "10"
+          ],
+          "description": "Pixel Bit Depth must be either set as a value of 8 or 10."
+        }
+      },
+      "additionalProperties": false,
+      "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference. (v6.0)",
+      "required": [
+        "Quantization4-2-2",
+        "ColorComponents4-2-2",
+        "Colorimetry4-2-2",
+        "PixelBitDepth"
+      ]
+    },
+    "IMFImageEssenceApp2": {
+      "type": "object",
+      "properties": {
+        "ImageFrameWidth": {
+          "title": "ImageFrameWidth",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1920,
+          "description": "The width of the frame is defined as the number of horizontal pixel elements and must be an integer no greater than 1920."
+        },
+        "ImageFrameHeight": {
+          "title": "ImageFrameHeight",
+          "type": "integer",
+          "maximum": 1080,
+          "minimum": 1,
+          "description": "The height of the frame is defined as the number of vertical pixel elements and must be an integer.  If interlaced, the number must be even and can be no greater than 1080."
+        },
+        "FrameStructure": {
+          "title": "FrameStructure",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "Progressive": {
+                  "title": "Progressive",
+                  "type": "object",
+                  "properties": {
+                    "Stereoscopy-P": {
+                      "title": "Stereoscopy-P",
+                      "type": "string",
+                      "enum": [
+                        "Monoscopic",
+                        "Stereoscopic"
+                      ],
+                      "description": "Can be either stereoscopic or monscopic."
+                    },
+                    "FrameRate-P": {
+                      "title": "FrameRate-P",
+                      "type": "string",
+                      "enum": [
+                        "24",
+                        "24000/1001",
+                        "25",
+                        "30",
+                        "30000/1001",
+                        "50",
+                        "60",
+                        "60000/1001"
+                      ],
+                      "description": "Multiple frame rate speeds are supported under progressive structure,"
+                    },
+                    "IMFChromaSubsampling-P": {
+                      "title": "IMFChromaSubsampling-P",
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "IMFChromaSubsample4-2-2": {
+                              "title": "IMFChromaSubsample4-2-2",
+                              "$ref": "#/$defs/IMFChromaSubsample4-2-2",
+                              "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference."
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "IMFChromaSubsample4-2-2"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "IMFChromaSubsample4-4-4": {
+                              "title": "IMFChromaSubsample4-4-4",
+                              "type": "object",
+                              "properties": {
+                                "Quantization4-4-4": {
+                                  "title": "Quantization4-4-4",
+                                  "type": "string",
+                                  "enum": [
+                                    "QE.1",
+                                    "QE.2"
+                                  ],
+                                  "description": "If set to QE.2, other componenst are restricted."
+                                },
+                                "ColorComponents4-4-4": {
+                                  "title": "ColorComponents4-4-4",
+                                  "type": "string",
+                                  "enum": [
+                                    "R'G'B",
+                                    "Y'C'bC'r"
+                                  ],
+                                  "description": "If Quantization = QE.2 then this must be R'G'B'."
+                                },
+                                "Colorimetry4-4-4": {
+                                  "title": "Colorimetry4-4-4",
+                                  "type": "string",
+                                  "enum": [
+                                    "COLOR.1",
+                                    "COLOR.2",
+                                    "COLOR.3"
+                                  ],
+                                  "description": "If Quantization = QE.2 then this must be COLOR.3."
+                                },
+                                "PixelBitDepth": {
+                                  "title": "PixelBitDepth",
+                                  "type": "integer",
+                                  "enum": [
+                                    "8",
+                                    "10"
+                                  ],
+                                  "description": "Pixel Bit Depth must be either set as a value of 8 or 10."
+                                }
+                              },
+                              "additionalProperties": false,
+                              "required": [
+                                "Quantization4-4-4",
+                                "ColorComponents4-4-4",
+                                "Colorimetry4-4-4",
+                                "PixelBitDepth"
+                              ],
+                              "description": "Each of the three Y'CbCr components have the same sample rate, thus there is no chroma subsampling."
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "IMFChromaSubsample4-4-4"
+                          ]
+                        }
+                      ],
+                      "description": "COLOR.1\nMapped as specified for 625-line systems in Section 2.6 of Recommendation ITU-R BT.601\nCOLOR.2\nMapped as specified for 525-line systems in Section 2.6 of Recommendation ITU-R BT.601\nCOLOR.3\nMapped as specified in Section 1 of Part 2 of Recommendation ITU-R BT.709"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Stereoscopy-P",
+                    "FrameRate-P",
+                    "IMFChromaSubsampling-P"
+                  ],
+                  "description": "An image frame with progressive structure shall consist of a complete image frame, scanned progressively left to right and from top to bottom."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Progressive"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "Interlaced": {
+                  "title": "Interlaced",
+                  "type": "object",
+                  "properties": {
+                    "Stereoscopy-I": {
+                      "title": "Stereoscopy-I",
+                      "type": "string",
+                      "enum": [
+                        "Monoscopic"
+                      ],
+                      "description": "Restricted to only allow monoscopic as an option."
+                    },
+                    "FrameRate-I": {
+                      "title": "FrameRate-I",
+                      "type": "string",
+                      "enum": [
+                        "25",
+                        "30",
+                        "30000/1001"
+                      ],
+                      "description": "When interlaced frame structure is used, the field rate, i.e. the number of image fields per second, shall be twice the frame rate."
+                    },
+                    "IMFChromaSubsampling-I": {
+                      "title": "IMFChromaSubsampling-I",
+                      "type": "object",
+                      "properties": {
+                        "IMFChromaSubsample4-2-2": {
+                          "title": "IMFChromaSubsample4-2-2",
+                          "$ref": "#/$defs/IMFChromaSubsample4-2-2",
+                          "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "IMFChromaSubsample4-2-2"
+                      ],
+                      "description": "COLOR.1\nMapped as specified for 625-line systems in Section 2.6 of Recommendation ITU-R BT.601\nCOLOR.2\nMapped as specified for 525-line systems in Section 2.6 of Recommendation ITU-R BT.601\nCOLOR.3\nMapped as specified in Section 1 of Part 2 of Recommendation ITU-R BT.709"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Stereoscopy-I",
+                    "FrameRate-I",
+                    "IMFChromaSubsampling-I"
+                  ],
+                  "description": "An image frame with interlaced structure shall consist of a pair of fields, a first field then a second field. The lines of each field shall have twice the vertical spatial sampling pitch of the frame. Lines in the second field shall be displaced vertically by the vertical sampling pitch and the line timing shall be delayed temporally by half the frame time from the lines in the first field. Image frames with an interlaced image structure shall have an even number of vertical pixels."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Interlaced"
+              ]
+            }
+          ],
+          "description": "Under IMF there is the option of Progressive or Interlaced frame structures."
+        },
+        "J2KEncodingProfile-SD": {
+          "title": "J2KEncodingProfile-SD",
+          "$ref": "#/$defs/J2KEncodingProfile-SD",
+          "description": "Implementations shall support the profile and level combinations utilizing JPEG 2000 Profiles as specified in ISO/IEC 15444-1 Amendment 3."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Description of the video image essence for IMF Applications as a specialization of the IMF Framework. (v6.0)",
+      "required": [
+        "ImageFrameWidth",
+        "ImageFrameHeight",
+        "FrameStructure",
+        "J2KEncodingProfile-SD"
+      ]
+    },
+    "IMFImageEssenceApp2e": {
+      "type": "object",
+      "properties": {
+        "ImageFrameWidth": {
+          "title": "ImageFrameWidth",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096,
+          "description": "The width of the frame is defined as the number of horizontal pixel elements and must be an integer. Note that for Widths>3840, COLOR.4 is not supported and sampling must be 4:4:4 and R'G'B'."
+        },
+        "ImageFrameHeight": {
+          "title": "ImageFrameHeight",
+          "type": "integer",
+          "maximum": 3112,
+          "minimum": 1,
+          "description": "The height of the frame is defined as the number of vertical pixel elements and must be an integer. Note that for Heights greater than 2160, COLOR.4 is not supported and sampling must be 4:4:4 and R'G'B'."
+        },
+        "FrameStructure": {
+          "title": "FrameStructure",
+          "type": "object",
+          "properties": {
+            "Progressive": {
+              "title": "Progressive",
+              "type": "object",
+              "properties": {
+                "Stereoscopy-P": {
+                  "title": "Stereoscopy-P",
+                  "type": "string",
+                  "enum": [
+                    "Monoscopic",
+                    "Stereoscopic"
+                  ],
+                  "description": "Can be either stereoscopic or monscopic."
+                },
+                "FrameRate-P": {
+                  "title": "FrameRate-P",
+                  "type": "string",
+                  "enum": [
+                    "24",
+                    "24000/1001",
+                    "25",
+                    "30",
+                    "30000/1001",
+                    "50",
+                    "60",
+                    "60000/1001",
+                    "120"
+                  ],
+                  "description": "Note that 120 fps is only available with FrameWidth>3840 and FrameHeight>2160."
+                },
+                "IMFApp2eChromaSubsampling-P": {
+                  "title": "IMFApp2eChromaSubsampling-P",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "IMFApp2eChromaSubsample4-2-2": {
+                          "title": "IMFApp2eChromaSubsample4-2-2",
+                          "type": "object",
+                          "properties": {
+                            "Quantization4-2-2": {
+                              "title": "Quantization4-2-2",
+                              "type": "string",
+                              "enum": [
+                                "QE.1"
+                              ]
+                            },
+                            "ColorComponents4-2-2": {
+                              "title": "ColorComponents4-2-2",
+                              "type": "string",
+                              "enum": [
+                                "Y'C'bC'r"
+                              ]
+                            },
+                            "Colorimetry4-2-2": {
+                              "title": "Colorimetry4-2-2",
+                              "type": "string",
+                              "enum": [
+                                "COLOR.3",
+                                "COLOR.4",
+                                "COLOR.5",
+                                "COLOR.7"
+                              ]
+                            },
+                            "PixelBitDepth": {
+                              "title": "PixelBitDepth",
+                              "type": "integer",
+                              "enum": [
+                                "8",
+                                "10",
+                                "12",
+                                "16"
+                              ],
+                              "description": "Under IMF-App2e, Pixel Bit Depth can be 8,10,12,16, but values are further restricted based on the Colorimetry used.  COLOR.3 and COLOR.4 allows 8 and 10, COLOR.5 allows 10 and 12 and COLOR.7 allows 10, 12, or 16."
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "Quantization4-2-2",
+                            "ColorComponents4-2-2",
+                            "Colorimetry4-2-2",
+                            "PixelBitDepth"
+                          ],
+                          "description": "In 4:2:2 Y’C’bC’r sampling, the Y’ component shall be sampled at each pixel, but the C’r and C’b components shall be horizontally subsampled by a factor of two with respect to the Y' component, co-sited with even-numbered Y’ samples (See Section 5.1.3.9 in SMPTE ST 2067-20:2016)."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "IMFApp2eChromaSubsample4-2-2"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "IMFApp2eChromaSubsample4-4-4": {
+                          "title": "IMFApp2eChromaSubsample4-4-4",
+                          "type": "object",
+                          "properties": {
+                            "Quantization4-4-4": {
+                              "title": "Quantization4-4-4",
+                              "type": "string",
+                              "enum": [
+                                "QE.1",
+                                "QE.2"
+                              ]
+                            },
+                            "ColorComponents4-4-4": {
+                              "title": "ColorComponents4-4-4",
+                              "type": "string",
+                              "enum": [
+                                "R'G'B'"
+                              ],
+                              "description": "If Quantization = QE.2 then this must be R'G'B'."
+                            },
+                            "Colorimetry4-4-4": {
+                              "title": "Colorimetry4-4-4",
+                              "type": "string",
+                              "enum": [
+                                "COLOR.3",
+                                "COLOR.5",
+                                "COLOR.6",
+                                "COLOR.7"
+                              ],
+                              "description": "If Quantization = QE.2 then this must be COLOR.3 (Section 5.2 Table 4)."
+                            },
+                            "PixelBitDepth": {
+                              "title": "PixelBitDepth",
+                              "type": "integer",
+                              "enum": [
+                                "8",
+                                "10",
+                                "12",
+                                "16"
+                              ],
+                              "description": "Under IMF-App2e, Pixel Bit Depth can be 8,10,12,16, but values are further restricted based on the Colorimetry used.  COLOR.3 allows 8 and 10, COLOR.5 allows 10 and 12 and COLOR.6 and COLOR.7 allows 10, 12, or 16."
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "Quantization4-4-4",
+                            "ColorComponents4-4-4",
+                            "Colorimetry4-4-4",
+                            "PixelBitDepth"
+                          ],
+                          "description": "In 4:4:4 sampling, each component shall be sampled once at each image frame pixel  (See Section 5.1.3.9 in SMPTE ST 2067-20:2016)."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "IMFApp2eChromaSubsample4-4-4"
+                      ]
+                    }
+                  ],
+                  "description": "See section 5.2 under SMPTE ST 2067-21 for further details."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Stereoscopy-P",
+                "FrameRate-P",
+                "IMFApp2eChromaSubsampling-P"
+              ],
+              "description": "An image frame with progressive structure shall consist of a complete image frame, scanned progressively left to right and from top to bottom."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Progressive"
+          ],
+          "description": "Under IMFApp2e only Progressive is allowed."
+        },
+        "J2KEncodingProfile-IMF": {
+          "title": "J2KEncodingProfile-IMF",
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "J2K-SD-IMF": {
+                  "title": "J2K-SD-IMF",
+                  "$ref": "#/$defs/J2KEncodingProfile-SD",
+                  "description": "Implementations shall support the profile and level combinations utilizing JPEG 2000 Profiles as specified in ISO/IEC 15444-1 Amendment 3."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2K-SD-IMF"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "J2K-2K-IMF": {
+                  "title": "J2K-2K-IMF",
+                  "type": "object",
+                  "properties": {
+                    "J2KProfile": {
+                      "title": "J2KProfile",
+                      "type": "string",
+                      "enum": [
+                        "Lossy",
+                        "Reversible"
+                      ]
+                    },
+                    "J2KOperatingLevel": {
+                      "title": "J2KOperatingLevel",
+                      "type": "string",
+                      "enum": [
+                        "Level-1",
+                        "Level-2",
+                        "Level-3",
+                        "Level-4",
+                        "Level-5",
+                        "Level-6"
+                      ]
+                    },
+                    "J2KSub-level": {
+                      "title": "J2KSub-level",
+                      "type": "string",
+                      "enum": [
+                        "Level 0 Only",
+                        "All Except Level 0"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "J2KProfile",
+                    "J2KOperatingLevel",
+                    "J2KSub-level"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2K-2K-IMF"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "J2K-4K-IMF": {
+                  "title": "J2K-4K-IMF",
+                  "type": "object",
+                  "properties": {
+                    "J2KProfile": {
+                      "title": "J2KProfile",
+                      "type": "string",
+                      "enum": [
+                        "Lossy",
+                        "Reversible"
+                      ]
+                    },
+                    "J2KOperatingLevel": {
+                      "title": "J2KOperatingLevel",
+                      "type": "string",
+                      "enum": [
+                        "Level-1",
+                        "Level-2",
+                        "Level-3",
+                        "Level-4",
+                        "Level-5",
+                        "Level-6",
+                        "Level-7",
+                        "Level-8"
+                      ]
+                    },
+                    "J2KSub-level": {
+                      "title": "J2KSub-level",
+                      "type": "string",
+                      "enum": [
+                        "Sublevel 0 Only",
+                        "All Allowed except Sublevel 0"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "J2KProfile",
+                    "J2KOperatingLevel",
+                    "J2KSub-level"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2K-4K-IMF"
+              ]
+            }
+          ],
+          "description": "Implementations shall support the combinations of JPEG 2000 profiles (as specified in ISO/IEC 15444-1 Amd.7) and image frame dimensions listed in Table 5, which replaces Table 5 in ST 2067-20."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Description of the video image essence for IMF Applications as a specialization of the IMF Framework.  All references are taken from SMPTE ST 2067-21:2016 Clause 5.1 and reference Table 3. (v6.0).",
+      "required": [
+        "ImageFrameWidth",
+        "ImageFrameHeight",
+        "FrameStructure",
+        "J2KEncodingProfile-IMF"
+      ]
+    },
+    "J2KChromaSubsampling": {
+      "type": "object",
+      "description": "The practice of encoding images by implementing less resolution for chroma information than for luma information, taking advantage of the human visual system's lower acuity for color differences than for luminance. (v7.0)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ChromaSubsample4-2-2": {
+              "title": "ChromaSubsample4-2-2",
+              "type": "object",
+              "properties": {
+                "Quantization4-2-2": {
+                  "title": "Quantization4-2-2",
+                  "type": "string",
+                  "enum": [
+                    "QE.1"
+                  ],
+                  "description": "Only QE.1 allowed"
+                },
+                "ColorComponents4-2-2": {
+                  "title": "ColorComponents4-2-2",
+                  "type": "string",
+                  "enum": [
+                    "Y'C'bC'r"
+                  ],
+                  "description": "Y'C'bC'r"
+                },
+                "Colorimetry4-2-2": {
+                  "title": "Colorimetry4-2-2",
+                  "type": "string",
+                  "enum": [
+                    "COLOR.3",
+                    "COLOR.5",
+                    "COLOR.7",
+                    "COLOR.8"
+                  ],
+                  "description": "Note: COLOR.3 only applies to ITU-R BT.709 delivered material and COLOR.8 corresponds to the HLG system specified in Recommendation ITU-R BT.2100"
+                },
+                "PixelBitDepth4-2-2": {
+                  "title": "PixelBitDepth4-2-2",
+                  "type": "integer",
+                  "enum": [
+                    "8",
+                    "10"
+                  ],
+                  "description": "8 or 10 allowed with COLOR.3, otherwise only 10."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Quantization4-2-2",
+                "ColorComponents4-2-2",
+                "Colorimetry4-2-2",
+                "PixelBitDepth4-2-2"
+              ],
+              "description": "The two chroma components are sampled at half the sample rate of luma: the horizontal chroma resolution is halved. This reduces the bandwidth of an uncompressed video signal by one-third with little to no visual difference."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ChromaSubsample4-2-2"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ChromaSubsample4-4-4": {
+              "title": "ChromaSubsample4-4-4",
+              "type": "object",
+              "properties": {
+                "Quantization4-4-4": {
+                  "title": "Quantization4-4-4",
+                  "type": "string",
+                  "enum": [
+                    "QE.1",
+                    "QE.2"
+                  ],
+                  "description": "Either QE.1 or QE.2"
+                },
+                "ColorComponents4-4-4": {
+                  "title": "ColorComponents4-4-4",
+                  "type": "string",
+                  "enum": [
+                    "R'G'B'"
+                  ],
+                  "description": "R'G'B'"
+                },
+                "Colorimetry4-4-4": {
+                  "title": "Colorimetry4-4-4",
+                  "type": "string",
+                  "enum": [
+                    "COLOR.5",
+                    "COLOR.7",
+                    "COLOR.8"
+                  ],
+                  "description": "Note: COLOR.8 corresponds to the HLG system specified in Recommendation ITU-R BT.2100"
+                },
+                "PixelBitDepth4-4-4": {
+                  "title": "PixelBitDepth4-4-4",
+                  "type": "integer",
+                  "enum": [
+                    "12"
+                  ],
+                  "description": "Only 12 allowed"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Quantization4-4-4",
+                "ColorComponents4-4-4",
+                "Colorimetry4-4-4",
+                "PixelBitDepth4-4-4"
+              ],
+              "description": "Each of the three Y'C'bC'r components have the same sample rate, thus there is no chroma subsampling."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ChromaSubsample4-4-4"
+          ]
+        }
+      ]
+    },
+    "J2KEncodingProfile": {
+      "type": "object",
+      "description": "JPEG-2000 Encoding Options (v6.0)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "JPEG-2000-2K": {
+              "title": "JPEG-2000-2K",
+              "type": "object",
+              "properties": {
+                "J2KProfile": {
+                  "title": "J2KProfile",
+                  "type": "string",
+                  "enum": [
+                    "Lossy",
+                    "Reversible"
+                  ],
+                  "description": "Two options: Lossy or Reversible"
+                },
+                "J2KOperatingLevel": {
+                  "title": "J2KOperatingLevel",
+                  "type": "string",
+                  "enum": [
+                    "Level-5",
+                    "Level-6"
+                  ],
+                  "description": "Level-5 or Level-6 only"
+                },
+                "J2KSub-Level": {
+                  "title": "J2KSub-Level",
+                  "type": "string",
+                  "enum": [
+                    "Level 0 Only",
+                    "All Except Level 0"
+                  ],
+                  "description": "Either Level 0 Only or allow all except Level 0"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2KProfile",
+                "J2KOperatingLevel",
+                "J2KSub-Level"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "JPEG-2000-2K"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "JPEG-2000-4K": {
+              "title": "JPEG-2000-4K",
+              "type": "object",
+              "properties": {
+                "J2KProfile": {
+                  "title": "J2KProfile",
+                  "type": "string",
+                  "enum": [
+                    "Lossy",
+                    "Reversible"
+                  ],
+                  "description": "Two options: Lossy or Reversible"
+                },
+                "J2KOperatingLevel": {
+                  "title": "J2KOperatingLevel",
+                  "type": "string",
+                  "enum": [
+                    "Level-6",
+                    "Level-7",
+                    "Level-8",
+                    "Level-9"
+                  ],
+                  "description": "Levels 6 through 9"
+                },
+                "J2KSub-Level": {
+                  "title": "J2KSub-Level",
+                  "type": "string",
+                  "enum": [
+                    "Level 0 Only",
+                    "All Except Level 0"
+                  ],
+                  "description": "Either Level 0 Only or allow all except Level 0"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2KProfile",
+                "J2KOperatingLevel",
+                "J2KSub-Level"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "JPEG-2000-4K"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "JPEG-2000-8K": {
+              "title": "JPEG-2000-8K",
+              "type": "object",
+              "properties": {
+                "J2KProfile": {
+                  "title": "J2KProfile",
+                  "type": "string",
+                  "enum": [
+                    "Lossy",
+                    "Reversible"
+                  ],
+                  "description": "Two options: Lossy or Reversible"
+                },
+                "J2KOperatingLevel": {
+                  "title": "J2KOperatingLevel",
+                  "type": "string",
+                  "enum": [
+                    "Level-7",
+                    "Level-8",
+                    "Level-9",
+                    "Level-10",
+                    "Lelvel-11"
+                  ],
+                  "description": "Levels 7 through 11"
+                },
+                "J2KSub-Level": {
+                  "title": "J2KSub-Level",
+                  "type": "string",
+                  "enum": [
+                    "Level 0 Only",
+                    "All Except Level 0"
+                  ],
+                  "description": "Either Level 0 Only or allow all except Level 0"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "J2KProfile",
+                "J2KOperatingLevel",
+                "J2KSub-Level"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "JPEG-2000-8K"
+          ]
+        }
+      ]
+    },
+    "J2KEncodingProfile-SD": {
+      "type": "object",
+      "properties": {
+        "J2KProfile-IMF": {
+          "title": "J2KProfile-IMF",
+          "type": "string",
+          "enum": [
+            "Single Tile",
+            "Multi-tile Reversible"
+          ],
+          "description": "Broadcast Contribution values single or multi-tile.  Effects valid operating level settings."
+        },
+        "J2KOperatingLevel-IMF": {
+          "title": "J2KOperatingLevel-IMF",
+          "type": "string",
+          "enum": [
+            "Level-1",
+            "Level-2",
+            "Level-3",
+            "Level-4",
+            "Level-5",
+            "Level-6",
+            "Level-7"
+          ],
+          "description": "Note that the J2K Profile setting of single tile option is valid for Level's 1-5 only and multi-tile is valid for Level 6 and 7 only."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Implementations shall support the profile and level combinations utilizing JPEG 2000 Profiles as specified in ISO/IEC 15444-1 Amendment 3. (v6.0)",
+      "required": [
+        "J2KProfile-IMF",
+        "J2KOperatingLevel-IMF"
+      ]
+    },
+    "J2KImageEssence": {
+      "type": "object",
+      "properties": {
+        "ImageFrameWidth": {
+          "title": "ImageFrameWidth",
+          "type": "integer",
+          "enum": [
+            "1920",
+            "3840"
+          ],
+          "description": "Two options allowed: 1920 or 3840 pixels"
+        },
+        "ImageFrameHeight": {
+          "title": "ImageFrameHeight",
+          "type": "integer",
+          "enum": [
+            "1080",
+            "2160"
+          ],
+          "description": "Two options allowed: 1080 or 2160"
+        },
+        "FrameStructure": {
+          "title": "FrameStructure",
+          "type": "string",
+          "enum": [
+            "Progressive"
+          ],
+          "description": "Progressive only"
+        },
+        "Stereoscopy": {
+          "title": "Stereoscopy",
+          "type": "string",
+          "enum": [
+            "Monoscopic",
+            "Stereoscopic"
+          ],
+          "description": "Supports either monoscopic or stereoscopic formats"
+        },
+        "FrameRate": {
+          "title": "FrameRate",
+          "type": "string",
+          "enum": [
+            "24",
+            "24000/1001",
+            "25",
+            "30",
+            "30000/1001",
+            "50",
+            "60",
+            "60000/1001"
+          ],
+          "description": "Multiple frame rate speeds are supported up to 60 fps."
+        },
+        "J2KChromaSubsampling": {
+          "title": "J2KChromaSubsampling",
+          "$ref": "#/$defs/J2KChromaSubsampling",
+          "description": "The practice of encoding images by implementing less resolution for chroma information than for luma information, taking advantage of the human visual system's lower acuity for color differences than for luminance. (v7.0)"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Description of the video image essence for ProRes, J2K and others. (v7.0)",
+      "required": [
+        "ImageFrameWidth",
+        "ImageFrameHeight",
+        "FrameStructure",
+        "Stereoscopy",
+        "FrameRate",
+        "J2KChromaSubsampling"
+      ]
+    },
+    "TSVideo": {
+      "type": "object",
+      "description": "Enumerates the various values relating to the presentation of video in a transport stream",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Null": {
+              "title": "Null",
+              "type": "object",
+              "description": "No Information provided for Video"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Null"
+          ]
+        }
+      ]
+    },
+    "Video": {
+      "type": "object",
+      "properties": {
+        "@centerCutProtected": {
+          "type": "boolean"
+        },
+        "@nativeFrameRate": {
+          "type": "string"
+        },
+        "@includesSlate": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Enumerates the various values relating to the presentation of video",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "Null": {
+              "title": "Null",
+              "type": "object",
+              "description": "No Information provided for Video"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Null"
+          ]
+        }
+      ]
+    },
+    "VideoTransition": {
+      "type": "object",
+      "properties": {
+        "TransitionInType": {
+          "title": "TransitionInType",
+          "$ref": "#/$defs/VideoTransitionEnumType",
+          "description": "The type of transition to perform between the previous event and this event"
+        },
+        "TransitionPattern": {
+          "title": "TransitionPattern",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "description": "If the transition is a wipe the pattern to be used for the wipe. (See Configuration Section in BXF Protocol Documentation)"
+        },
+        "TransitionInRate": {
+          "title": "TransitionInRate",
+          "$ref": "#/$defs/VideoRateType",
+          "description": "The rate of transition between the previous event and this event"
+        },
+        "TransitionOutType": {
+          "title": "TransitionOutType",
+          "$ref": "#/$defs/VideoTransitionEnumType",
+          "description": "The type of transition to before between this event and the next event"
+        },
+        "TransitionOutRate": {
+          "title": "TransitionOutRate",
+          "$ref": "#/$defs/VideoRateType",
+          "description": "The rate of transition between this event and the next event"
+        },
+        "TransitionSom": {
+          "title": "TransitionSom",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "Used to designate a specific start point for the transition relative to the active content"
+        },
+        "TransitionEom": {
+          "title": "TransitionEom",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "Used to designate a specific end point for the transition relative to the active content"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Allows the user to specify specific actions to be used by the automation system to transition the video from one event to another"
+    },
+    "AspectRatioType": {
+      "type": "string",
+      "enum": [
+        "16:9",
+        "4:3"
+      ]
+    },
+    "TSVideoEncodingType": {
+      "type": "string",
+      "enum": [
+        "MPEG-2",
+        "MPEG-4 AVC",
+        "SMPTE VC-1"
+      ]
+    },
+    "VideoEncodingType": {
+      "type": "string",
+      "enum": [
+        "Uncompressed",
+        "DNxHD",
+        "DNxHR",
+        "HEVC",
+        "MPEG-2",
+        "MPEG-4 AVC",
+        "ProRes",
+        "SMPTE VC-1"
+      ]
+    },
+    "VideoFormatType": {
+      "type": "string",
+      "enum": [
+        "1080p",
+        "1080i",
+        "720p",
+        "576i",
+        "480p",
+        "480i",
+        "2160p"
+      ]
+    },
+    "VideoRateType": {
+      "type": "string",
+      "enum": [
+        "Fast",
+        "Medium",
+        "Slow"
+      ]
+    },
+    "VideoTransitionEnumType": {
+      "type": "string",
+      "enum": [
+        "Cut",
+        "Fade-Cut",
+        "Cut-Fade",
+        "CrossFade",
+        "Mix",
+        "Wipe"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

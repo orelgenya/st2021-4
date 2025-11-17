@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/asrun.schema.json",
+  "title": "asrun",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "AsRunDetail": {
+      "type": "object",
+      "properties": {
+        "Status": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/AsRunStatusType"
+          },
+          "minItems": 1,
+          "description": "How the event was processed by the automation system"
+        },
+        "Type": {
+          "title": "Type",
+          "$ref": "./bxftypes.schema.json#/$defs/ScheduleEventType",
+          "description": "Enumerates the various types of asrun events."
+        },
+        "StartDateTime": {
+          "title": "StartDateTime",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDateTime",
+          "description": "The actual time the event started."
+        },
+        "Duration": {
+          "title": "Duration",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDuration",
+          "description": "The actual duration of the event as aired."
+        },
+        "EventNotes": {
+          "title": "EventNotes",
+          "$ref": "./bxftypes.schema.json#/$defs/EventNotes",
+          "description": "Used by the operator to indicate what may have happened to an event."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "Status",
+        "Type",
+        "StartDateTime",
+        "Duration"
+      ]
+    },
+    "BasicAsRun": {
+      "type": "object",
+      "properties": {
+        "AsRunEventId": {
+          "title": "AsRunEventId",
+          "$ref": "./eventdata.schema.json#/$defs/EventExtId",
+          "description": "References the scheduled event ID unless the event was added manually in which case this the Null value should be used."
+        },
+        "Content": {
+          "title": "Content",
+          "$ref": "./contentmetadata.schema.json#/$defs/ContentMetaData",
+          "description": "Option specific reference to the content that aired used specifically when operator inserts content not originally scheduled."
+        },
+        "AsRunDetail": {
+          "title": "AsRunDetail",
+          "$ref": "#/$defs/AsRunDetail"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "AsRunEventId",
+        "AsRunDetail"
+      ]
+    },
+    "CompleteAsRun": {
+      "type": "object",
+      "properties": {
+        "AsRunDetail": {
+          "title": "AsRunDetail",
+          "$ref": "#/$defs/AsRunDetail"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "AsRunDetail"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

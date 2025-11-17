@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/contenttransfer.schema.json",
+  "title": "contenttransfer",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "ContentTransfer": {
+      "type": "object",
+      "properties": {
+        "Content": {
+          "title": "Content",
+          "$ref": "./content.schema.json#/$defs/Content",
+          "description": "The meta-data associated with each transfer event"
+        },
+        "Source": {
+          "title": "Source",
+          "type": "object",
+          "properties": {
+            "Media": {
+              "title": "Media",
+              "$ref": "./contentmetadata.schema.json#/$defs/Media",
+              "description": "Describes the essence and the location of the content"
+            },
+            "UsagePolicy": {
+              "title": "UsagePolicy",
+              "$ref": "./contentmetadata.schema.json#/$defs/UsagePolicy",
+              "description": "Business rules expected to be applied when the content is used at this location"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Media"
+          ],
+          "description": "A description of the location and essence and any rules associated with its use"
+        },
+        "Destination": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Media": {
+                "title": "Media",
+                "$ref": "./contentmetadata.schema.json#/$defs/Media",
+                "description": "Describes the essence and the new location of the content once transfered"
+              },
+              "UsagePolicy": {
+                "title": "UsagePolicy",
+                "$ref": "./contentmetadata.schema.json#/$defs/UsagePolicy",
+                "description": "Business rules expected to be applied when the content is used at this location"
+              },
+              "DestinationContentId": {
+                "title": "DestinationContentId",
+                "$ref": "./bxfcontentid.schema.json#/$defs/BxfContentId",
+                "description": "If know, the system can specific the new contentId for the transfered content at the new location"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "Media"
+            ]
+          },
+          "description": "A description of the location to be transfered to and optionally the transcoding of the content at this new location.  Note that new policies may be applied"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@transferId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@transferType": {
+          "$ref": "#/$defs/TransferType"
+        },
+        "@conditionalSource": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@priority": {
+          "$ref": "#/$defs/PriorityType"
+        },
+        "@parentTransferId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@status": {
+          "$ref": "#/$defs/TransferStatusType"
+        },
+        "@statusDescription": {
+          "type": "string"
+        },
+        "@percentComplete": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "@recordEventStart": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "@recordEventEnd": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "@dayPattern": {
+          "$ref": "./bxftypes.schema.json#/$defs/DayPattern"
+        },
+        "@jobId": {}
+      },
+      "additionalProperties": false,
+      "description": "Transfer content from a source to a destination",
+      "required": [
+        "Content",
+        "@transferId",
+        "@transferType"
+      ]
+    },
+    "TransferType": {
+      "type": "string",
+      "enum": [
+        "Recording",
+        "Duplication",
+        "File transfer",
+        "Purge"
+      ]
+    },
+    "PriorityType": {
+      "type": "string",
+      "enum": [
+        "Deferred",
+        "Urgent",
+        "High",
+        "Normal",
+        "Low"
+      ]
+    },
+    "TransferStatusType": {
+      "type": "string",
+      "enum": [
+        "Unknown",
+        "Failed",
+        "Completed",
+        "Inprogress",
+        "Pending"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/nonprimaryevent.schema.json",
+  "title": "nonprimaryevent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "NonPrimaryEvent": {
+      "type": "object",
+      "properties": {
+        "NonPrimaryEventName": {
+          "title": "NonPrimaryEventName",
+          "type": "string",
+          "description": "Used to define the type of event (eg. Key, GPI, Tone, Audio or Video Effects) (See Configuration Section in BXF Protocol Documentation)"
+        },
+        "OptionalFlag": {
+          "title": "OptionalFlag",
+          "type": "boolean",
+          "description": "Optional event, will not air unless triggered"
+        },
+        "PrimaryEventId": {
+          "title": "PrimaryEventId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "Linkage to the primary event id.  Not required for auxillary events.  Required to be a UUID."
+        },
+        "NonPrimaryElementId": {
+          "title": "NonPrimaryElementId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "A UUID that is used to link to the format structure's non-primary element definition"
+        },
+        "Offset": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "OffsetTime": {
+                "title": "OffsetTime",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+                "description": "The amount of time to offset the nonprimary event from the start or end of a primary event based on the values of the attribute settings."
+              },
+              "@offsetFrom": {
+                "type": "string",
+                "enum": [
+                  "BeginningofEvent",
+                  "EndofEvent"
+                ]
+              },
+              "@offsetType": {
+                "type": "string",
+                "enum": [
+                  "Start",
+                  "End"
+                ]
+              },
+              "@direction": {
+                "type": "string",
+                "enum": [
+                  "Positive",
+                  "Negative"
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "maxItems": 2,
+          "description": "The definition of how a non-primary event should run relative to the primary event either using the start or end points of either event."
+        },
+        "Macros": {
+          "type": "array",
+          "items": {
+            "$ref": "./macro.schema.json#/$defs/Macro"
+          }
+        },
+        "AudioOverPercent": {
+          "title": "AudioOverPercent",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Used to set an adjustment to the audio levels for voice over audio"
+        },
+        "GraphicData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GraphicData"
+          },
+          "description": "Use to add in graphics associated data  to a specific secondary event. Used for delineating a graphic collection, keyer number, template name, etc."
+        },
+        "OverlayPlacement": {
+          "type": "array",
+          "items": {
+            "$ref": "./element.schema.json#/$defs/OverlayOpportunityType"
+          },
+          "description": "Describes locations in time and space where overlays are either permitted or restricted from use."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@auxillary": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "NonProgramEvents": {
+              "title": "NonProgramEvents",
+              "$ref": "./nonprogramevent.schema.json#/$defs/NonProgramEvent",
+              "description": "Used to specify non-primary events that use speciific interstitial content"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "NonProgramEvents"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ProgramEvent": {
+              "title": "ProgramEvent",
+              "$ref": "./programevent.schema.json#/$defs/ProgramEvent",
+              "description": "Used to specify non-primary events that use specific program content"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ProgramEvent"
+          ]
+        }
+      ],
+      "required": [
+        "NonPrimaryEventName"
+      ]
+    },
+    "GraphicData": {
+      "type": "object",
+      "properties": {
+        "GraphicCollectionName": {
+          "title": "GraphicCollectionName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "The collection in which the template can be found"
+        },
+        "GraphicTemplate": {
+          "title": "GraphicTemplate",
+          "type": "string",
+          "description": "Name of template used for graphics overlay"
+        },
+        "GraphicKeyer": {
+          "title": "GraphicKeyer",
+          "type": "string",
+          "description": "Name or number of the keyer being used"
+        },
+        "GraphicKeyValuePairs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Key": {
+                "title": "Key",
+                "type": "string"
+              },
+              "Value": {
+                "title": "Value",
+                "type": "string"
+              },
+              "@itemSequence": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "Key",
+              "Value"
+            ]
+          },
+          "description": "Pair of Key values associated with Graphic details (v6.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Use to add in graphics associated data  to a specific secondary event. Used for delineating a graphic collection, keyer number, template name, etc."
+    }
+  },
+  "additionalProperties": false
+}

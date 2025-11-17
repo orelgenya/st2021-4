@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/macro.schema.json",
+  "title": "macro",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Macro": {
+      "type": "object",
+      "properties": {
+        "MacroName": {
+          "title": "MacroName",
+          "type": "string",
+          "description": "(See Configuration Section in BXF Protocol Documentation)"
+        },
+        "MacroParameterString": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A string containing the macro"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "MacroName"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

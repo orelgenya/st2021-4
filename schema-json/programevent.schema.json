@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/programevent.schema.json",
+  "title": "programevent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "ProgramEvent": {
+      "type": "object",
+      "properties": {
+        "SegmentNumber": {
+          "title": "SegmentNumber",
+          "type": "integer",
+          "description": "The ordering of the segments within the show"
+        },
+        "ProgramName": {
+          "title": "ProgramName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "The name of the show"
+        },
+        "Constraints": {
+          "title": "Constraints",
+          "$ref": "./nonprogramevent.schema.json#/$defs/Constraint",
+          "description": "Rules that constrain the scheduling of a program in order to validate a show move."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ProgramContract": {
+              "title": "ProgramContract",
+              "$ref": "./contract.schema.json#/$defs/ProgramContract",
+              "description": "Reference to the originating program rights contract and the date window that the content can be aired in."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ProgramContract"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "PaidProgramContract": {
+              "title": "PaidProgramContract",
+              "$ref": "./contract.schema.json#/$defs/SalesContract",
+              "description": "Reference to sales contract for paid programming content (v3.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "PaidProgramContract"
+          ]
+        }
+      ],
+      "required": [
+        "SegmentNumber"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

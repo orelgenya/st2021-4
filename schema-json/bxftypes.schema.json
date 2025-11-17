@@ -1,0 +1,1118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/bxftypes.schema.json",
+  "title": "bxftypes",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "BxfAddress": {
+      "type": "object",
+      "properties": {
+        "LocationName": {
+          "title": "LocationName",
+          "$ref": "#/$defs/BxfText"
+        },
+        "Street1": {
+          "title": "Street1",
+          "$ref": "#/$defs/BxfText"
+        },
+        "Street2": {
+          "title": "Street2",
+          "$ref": "#/$defs/BxfText"
+        },
+        "Street3": {
+          "title": "Street3",
+          "$ref": "#/$defs/BxfText"
+        },
+        "City": {
+          "title": "City",
+          "$ref": "#/$defs/BxfText"
+        },
+        "StateProv": {
+          "title": "StateProv",
+          "$ref": "#/$defs/BxfText"
+        },
+        "Country": {
+          "title": "Country",
+          "$ref": "#/$defs/BxfText"
+        },
+        "PostalCode": {
+          "title": "PostalCode",
+          "type": "string"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Address details",
+      "required": [
+        "LocationName",
+        "Street1",
+        "City",
+        "StateProv",
+        "PostalCode"
+      ]
+    },
+    "BxfCompany": {
+      "type": "object",
+      "properties": {
+        "CompanyName": {
+          "title": "CompanyName",
+          "$ref": "#/$defs/BxfText",
+          "description": "The name of the company"
+        },
+        "CompanyType": {
+          "title": "CompanyType",
+          "type": "string",
+          "enum": [
+            "Advertiser",
+            "Agency",
+            "Cable Network",
+            "Interconnect Content Distributor",
+            "Local Cable System",
+            "Producer",
+            "Program Distributor",
+            "Radio Network",
+            "Radio Station",
+            "MSO",
+            "MVPD",
+            "Satellite Service",
+            "TV Network",
+            "TV Station",
+            "Other"
+          ],
+          "description": "Used to designate the type of company such as an agency, advertiser, third party processor, station, network, producer (see enumerations)."
+        },
+        "CompanyDetails": {
+          "title": "CompanyDetails",
+          "type": "object",
+          "properties": {
+            "Identifiers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Identifier": {
+                    "title": "Identifier",
+                    "type": "string",
+                    "description": "Actual identifier for the company"
+                  },
+                  "AuthoritativeIdSource": {
+                    "title": "AuthoritativeIdSource",
+                    "type": "string",
+                    "description": "The industry standards body or other source for the identification value listed for the company (e.g. 4A's ID, FCC Call Sign, IRS EIN#, etc.) (See Configuration Section in BXF Protocol Documentation)"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "Identifier",
+                  "AuthoritativeIdSource"
+                ]
+              },
+              "minItems": 1
+            },
+            "Locations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/BxfAddress"
+              }
+            },
+            "Contacts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/BxfContact"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Identifiers"
+          ],
+          "description": "Used to identify the company using specific identifiers and provide details about addresses and contacts associated with the company"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Defines all the attributes required for a company",
+      "required": [
+        "CompanyName",
+        "CompanyDetails"
+      ]
+    },
+    "BxfContact": {
+      "type": "object",
+      "properties": {
+        "ContactSalutation": {
+          "title": "ContactSalutation",
+          "type": "object"
+        },
+        "ContactFirstName": {
+          "title": "ContactFirstName",
+          "$ref": "#/$defs/BxfText"
+        },
+        "ContactLastName": {
+          "title": "ContactLastName",
+          "$ref": "#/$defs/BxfText"
+        },
+        "ContactSuffix": {
+          "title": "ContactSuffix",
+          "type": "object"
+        },
+        "ContactJobTitle": {
+          "title": "ContactJobTitle",
+          "$ref": "#/$defs/BxfText"
+        },
+        "Locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BxfAddress"
+          }
+        },
+        "Phones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "PhoneNumber": {
+                "title": "PhoneNumber",
+                "type": "string"
+              },
+              "PhoneType": {
+                "title": "PhoneType",
+                "type": "string",
+                "enum": [
+                  "Business",
+                  "Home",
+                  "Mobile",
+                  "Alternate",
+                  "Fax",
+                  "Other"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "PhoneNumber"
+            ]
+          }
+        },
+        "EMails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Email": {
+                "title": "Email",
+                "type": "object",
+                "properties": {
+                  "@primaryFlag": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/BxfText"
+                  }
+                ],
+                "required": []
+              },
+              "EmailType": {
+                "title": "EmailType",
+                "type": "string",
+                "enum": [
+                  "Alternate",
+                  "Home",
+                  "Office",
+                  "Other"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "Email"
+            ]
+          }
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "A contact is a person that is being referenced including phone, email and address details",
+      "required": [
+        "ContactFirstName",
+        "ContactLastName"
+      ]
+    },
+    "BxfCoverage": {
+      "type": "object",
+      "properties": {
+        "CoverageName": {
+          "title": "CoverageName",
+          "type": "string",
+          "description": "ZIPCODE 10022"
+        },
+        "TypeofCoverage": {
+          "title": "TypeofCoverage",
+          "type": "string",
+          "enum": [
+            "City",
+            "Country",
+            "Market",
+            "DMA",
+            "Zipcode"
+          ],
+          "description": "Specifies the type of units used to define the coverage using a specific enumeration. (e.g. Zip code)"
+        },
+        "CoverageId": {
+          "title": "CoverageId",
+          "type": "string",
+          "description": "The identifier within the type of units (e.g. 10022)"
+        },
+        "IncludeRestrictFlag": {
+          "title": "IncludeRestrictFlag",
+          "type": "string",
+          "enum": [
+            "Include",
+            "Restrict"
+          ],
+          "description": "Indicates if this is included or excluded from the definition of the coverage for the Station. (e.g. Include)"
+        }
+      },
+      "additionalProperties": false,
+      "description": "An area of physical locations that represent the coverage for a broadcast station or the areas of distribution for a distributor of media content.",
+      "required": [
+        "CoverageName",
+        "TypeofCoverage",
+        "CoverageId",
+        "IncludeRestrictFlag"
+      ]
+    },
+    "BxfDateTime": {
+      "type": "object",
+      "description": "Allows either SMPTE or UTC based date-time notation",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "SmpteDateTime": {
+              "title": "SmpteDateTime",
+              "$ref": "#/$defs/BxfSmpteDateTime"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "SmpteDateTime"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "UtcDateTime": {
+              "title": "UtcDateTime",
+              "$ref": "#/$defs/BxfUtcDateTime"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "UtcDateTime"
+          ]
+        }
+      ]
+    },
+    "BxfDaypart": {
+      "type": "object",
+      "properties": {
+        "DaypartDetail": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "DayOfWeek": {
+                "title": "DayOfWeek",
+                "$ref": "#/$defs/DayPattern",
+                "description": "A 7 element binary representation of the days of the week in Monday-Sunday order where a 1 includes the day and a 0 excludes the day \n(e.g. 1 1 1 1 1 0 0 = M-F)"
+              },
+              "StartTime": {
+                "title": "StartTime",
+                "$ref": "#/$defs/BxfSmpteTime",
+                "description": "The start time of the daypart for all  days specified in the DayofWeek element.  If not specified assume the Start of Broadcast Day."
+              },
+              "EndTime": {
+                "title": "EndTime",
+                "$ref": "#/$defs/BxfSmpteTime",
+                "description": "The end time of the daypart for all  days specified in the DayofWeek element.  If not specified assume the End of Broadcast Day."
+              },
+              "@localTimeZoneFlag": {
+                "type": "boolean"
+              },
+              "@audienceDeficiencyUnit": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "DayOfWeek",
+              "@localTimeZoneFlag"
+            ]
+          }
+        },
+        "DaypartName": {
+          "title": "DaypartName",
+          "$ref": "#/$defs/BxfText",
+          "description": "Optional name that can be used to reference this daypart definition."
+        },
+        "StartDate": {
+          "title": "StartDate",
+          "type": "string",
+          "format": "date",
+          "description": "The start date that the daypart is valid or can be used for the specified content."
+        },
+        "EndDate": {
+          "title": "EndDate",
+          "type": "string",
+          "format": "date",
+          "description": "The end date that the daypart is valid or can be used for the specified content.  If not specified it remains valid until further notice."
+        },
+        "DaypartComment": {
+          "title": "DaypartComment",
+          "$ref": "#/$defs/BxfText",
+          "description": "Optional comments that can be added to the daypart definition."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "#/$defs/BxfPrivateInformation"
+        },
+        "@excludeFlag": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "description": "A defined range of days, for one or more time period ranges and optionally dates that can be used to include or exclude for scheduling of content.  Note that it is possible to create illogical periods of time when potentially crossing the start of the broadcast day or crossing midnight depending on the system ingesting the definition."
+    },
+    "BxfDuration": {
+      "type": "object",
+      "description": "Duration can be expressed using either SMPTE time code or xs:duration",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "SmpteDuration": {
+              "title": "SmpteDuration",
+              "$ref": "#/$defs/BxfSmpteTime"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "SmpteDuration"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "UtcDuration": {
+              "title": "UtcDuration",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "UtcDuration"
+          ]
+        }
+      ]
+    },
+    "BxfExtensions": {
+      "type": "object",
+      "properties": {
+        "ItemValue": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@itemName": {
+                "type": "string"
+              },
+              "@itemType": {
+                "type": "string"
+              },
+              "@dataType": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "$ref": "#/$defs/BxfText"
+              }
+            ],
+            "required": [
+              "@itemName",
+              "@itemType"
+            ]
+          },
+          "minItems": 1,
+          "description": "A value for the metadata type (e.g. 2011 Oscar for Best Actor)"
+        },
+        "@extensionType": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to describe customized metadata using data pairs and optionally a validation data type. (v3.0)",
+      "required": [
+        "ItemValue",
+        "@extensionType"
+      ]
+    },
+    "BxfPrivateInformation": {
+      "type": "object",
+      "description": "Any sequence of well-formed private XML elements"
+    },
+    "BxfSmpteTime": {
+      "type": "object",
+      "properties": {
+        "SmpteTimeCode": {
+          "title": "SmpteTimeCode",
+          "$ref": "#/$defs/Smpte258MTimeCode",
+          "description": "Specifies duration in the format HH:MM:SSpFF where \"p\" can be either a \":\" \";\" \",\" or \".\" to indicate drop frame or non-drop frame.  For details refer to SMPTE 258M, clause 8."
+        },
+        "@frameRate": {
+          "type": "number"
+        },
+        "@framecount": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used for time duration or offset (V5.0 added support for 60 fps)",
+      "required": [
+        "SmpteTimeCode"
+      ]
+    },
+    "BxfSmpteDateTime": {
+      "type": "object",
+      "properties": {
+        "@broadcastDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "@utcStartofBroadcastDay": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used for date-time entry in the schema",
+      "allOf": [
+        {
+          "$ref": "#/$defs/BxfSmpteTime"
+        }
+      ],
+      "required": [
+        "@broadcastDate"
+      ]
+    },
+    "BxfStation": {
+      "type": "object",
+      "properties": {
+        "StationId": {
+          "title": "StationId",
+          "type": "string",
+          "description": "A unique identifier within the context of this message to be used in conjunction with the InstructionMap element."
+        },
+        "StationName": {
+          "title": "StationName",
+          "$ref": "#/$defs/BxfText",
+          "description": "Name used to commonly reference the station, network or other entity performing a job."
+        },
+        "StationCallSign": {
+          "title": "StationCallSign",
+          "type": "string",
+          "maxLength": 4,
+          "minLength": 3,
+          "description": "Optional federal designation for an over the air broadcast station consisting of 3 to 4 characters. (e.g. WHN or KABC or CJON)"
+        },
+        "StationType": {
+          "title": "StationType",
+          "type": "string",
+          "enum": [
+            "Cable MSO",
+            "Content Distributor",
+            "Internet Distributor",
+            "Radio Broadcast",
+            "Radio Network",
+            "Satellite Network",
+            "Telco Distributor",
+            "TV Broadcast",
+            "TV Network",
+            "Other"
+          ],
+          "description": "List of enumerated types of JobPerformers that accept video and/or audio based advertising content."
+        },
+        "DistributionPlatform": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AM",
+              "FM",
+              "Internet",
+              "Mobile",
+              "TV",
+              "Other"
+            ]
+          },
+          "description": "Methods of distribution used by the Station."
+        },
+        "Ownership": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@percentOwnership": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "$ref": "#/$defs/BxfCompany"
+              }
+            ],
+            "required": []
+          },
+          "description": "The company or companies that own the Station."
+        },
+        "Contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BxfContact"
+          },
+          "description": "A list of contacts or personnel associated with the Station."
+        },
+        "Coverage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "CoverageChildren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/BxfCoverage"
+                },
+                "description": "The children of the definition that describe the coverage using a different TypeofCoverage (e.g. Zip code List)"
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "$ref": "#/$defs/BxfCoverage"
+              }
+            ],
+            "required": []
+          },
+          "description": "The definition using legally defined areas (e.g. Zip codes, DMA's, etc.) of the coverage provided by the station for a specific signal or distribution of their content."
+        }
+      },
+      "additionalProperties": false,
+      "description": "A transmitter or distributer of media content either over the air or by other means",
+      "required": [
+        "StationId",
+        "StationName"
+      ]
+    },
+    "BxfText": {
+      "type": "string",
+      "properties": {
+        "@lang": {
+          "type": "string"
+        },
+        "@size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used for all free text entry elements in the schema",
+      "required": []
+    },
+    "BxfUtcDateTime": {
+      "type": "string",
+      "properties": {
+        "@localTimeZone": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Standard UTC Date-Time",
+      "format": "date-time",
+      "required": []
+    },
+    "EventNotes": {
+      "type": "object",
+      "properties": {
+        "EventNote": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BxfText"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "description": "Operator notes used to annotate the event with reference to the person that created the note.",
+      "required": [
+        "EventNote"
+      ]
+    },
+    "AsRunStatusType": {
+      "type": "string",
+      "enum": [
+        "Aired Without Discrepancy",
+        "Technical Difficulty",
+        "Did not air",
+        "Aired with Duration Discrepancy",
+        "Aired with Content Discrepancy",
+        "Preempted",
+        "Joined in Progress",
+        "Inserted by Operator",
+        "Unknown",
+        "Missing Content"
+      ]
+    },
+    "ActionType": {
+      "type": "string",
+      "enum": [
+        "add",
+        "read",
+        "remove",
+        "unchanged",
+        "update"
+      ]
+    },
+    "BxfShortName": {
+      "type": "string"
+    },
+    "BxfElementaryErrorExt": {
+      "type": "string",
+      "pattern": "(system_unavailable|not_supported|duplicate_message|processing_exception)(:.*)?"
+    },
+    "BxfElementaryError": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/BxfElementaryErrorExt"
+        }
+      ]
+    },
+    "BxfError": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BxfElementaryError"
+      }
+    },
+    "BxfStatus": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/BxfStatusExtType"
+        }
+      ]
+    },
+    "BxfStatusExtType": {
+      "type": "string",
+      "enum": [
+        "warning"
+      ]
+    },
+    "BxfUri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "DayPattern": {
+      "type": "string",
+      "pattern": "[0,1]{7}"
+    },
+    "DestinationType": {
+      "type": "string"
+    },
+    "EiCode": {
+      "type": "string",
+      "minLength": 7,
+      "maxLength": 9,
+      "pattern": "E-I [0-9]{0,1}[0-9]-[0-9]{0,1}[0-9]"
+    },
+    "EndModeType": {
+      "type": "string",
+      "enum": [
+        "Duration",
+        "Manual",
+        "External"
+      ]
+    },
+    "LMTLanguageType": {
+      "type": "string",
+      "enum": [
+        "ab",
+        "af",
+        "ak",
+        "tw",
+        "sq",
+        "arp",
+        "am",
+        "ar",
+        "arq",
+        "ar-BH",
+        "ar-KM",
+        "ar-DJ",
+        "ar-ER",
+        "ar-IQ",
+        "ar-IL",
+        "ar-JO",
+        "ar-KW",
+        "apc",
+        "ar-LY",
+        "ar-MR",
+        "ary",
+        "ar-OM",
+        "ar-PS",
+        "ar-QA",
+        "ar-SA",
+        "ar-SD",
+        "ar-SY",
+        "ar-AE",
+        "aeb",
+        "ar-EH",
+        "ar-YE",
+        "arz",
+        "arb",
+        "hy",
+        "hyw",
+        "as",
+        "ay",
+        "az-Latn",
+        "bgq",
+        "bm",
+        "bnt",
+        "hz",
+        "ki",
+        "tog",
+        "toi",
+        "eu",
+        "be",
+        "bn",
+        "ber",
+        "bho",
+        "bi",
+        "bs",
+        "bg",
+        "my",
+        "ca",
+        "ca-FR",
+        "ca-ES",
+        "chr",
+        "zh-Hans",
+        "zh-Hans",
+        "zh-Hant",
+        "zh-Hant-HK",
+        "zh-Hant",
+        "co",
+        "cs",
+        "da",
+        "nl",
+        "nl-NL",
+        "vls",
+        "dz",
+        "en",
+        "en-AU",
+        "en-CA",
+        "en-HK",
+        "en-IE",
+        "en-MY",
+        "en-MS",
+        "en-NZ",
+        "en-CN",
+        "en-SG",
+        "en-ZA",
+        "en-PH",
+        "en-GB",
+        "en-US",
+        "en-001",
+        "eo",
+        "ekk",
+        "fo",
+        "fj",
+        "fil",
+        "fi",
+        "fr",
+        "fr-BE",
+        "fr-CA",
+        "fr-FR",
+        "fr-CH",
+        "fr-001",
+        "frs",
+        "frr",
+        "fy",
+        "gd",
+        "gl",
+        "lg",
+        "ka",
+        "de",
+        "de-AT",
+        "de-DE",
+        "de-CH",
+        "gsw",
+        "grc",
+        "el-CY",
+        "el",
+        "gn",
+        "gu",
+        "saz",
+        "ha",
+        "haw",
+        "hwc",
+        "he",
+        "hi",
+        "awa",
+        "bra",
+        "bns",
+        "bgc",
+        "hif",
+        "hu",
+        "is",
+        "ig",
+        "id",
+        "iu",
+        "ik",
+        "ga",
+        "it",
+        "nap",
+        "it-CH",
+        "jam",
+        "ja",
+        "ja-Jpan-JP",
+        "ja-Hira-JP",
+        "ja-Kata-JP",
+        "kl",
+        "kn",
+        "kfa",
+        "kr",
+        "kk",
+        "rw",
+        "ky-Cyrl",
+        "tlh",
+        "ko",
+        "ku",
+        "lbj",
+        "lad-Latn",
+        "lo",
+        "la",
+        "lv",
+        "lt",
+        "lb",
+        "mk",
+        "mg",
+        "ms",
+        "ml",
+        "pcg",
+        "mt",
+        "mi",
+        "mr",
+        "ahr",
+        "moh",
+        "myn",
+        "km",
+        "mn-Cyrl",
+        "khk-Cyrl",
+        "mos",
+        "meu",
+        "na",
+        "nv",
+        "ne",
+        "nso",
+        "no",
+        "nn",
+        "nb",
+        "ny",
+        "or",
+        "dso",
+        "pau",
+        "ps",
+        "fa",
+        "prs",
+        "pih",
+        "pl",
+        "pt",
+        "pt-BR",
+        "pt-PT",
+        "pa",
+        "ro",
+        "rm",
+        "rn",
+        "ru",
+        "sm",
+        "sa",
+        "sh-Latn",
+        "hr",
+        "cnr-Latn",
+        "sr-Latn",
+        "crs",
+        "ase",
+        "asf",
+        "bzs",
+        "sgn-bfi",
+        "fsl",
+        "ins",
+        "rsl",
+        "si",
+        "sk",
+        "sl",
+        "so",
+        "st",
+        "es",
+        "es-ES",
+        "es-001",
+        "es-AR",
+        "es-BO",
+        "es-CL",
+        "es-CO",
+        "es-CR",
+        "es-CU",
+        "es-EC",
+        "es-SV",
+        "es-HN",
+        "es-419",
+        "es-MX",
+        "es-NI",
+        "es-PA",
+        "es-PY",
+        "es-PE",
+        "es-PR",
+        "es-US",
+        "es-UY",
+        "zxx",
+        "und",
+        "srn",
+        "sw",
+        "ss",
+        "sv",
+        "tl",
+        "ty",
+        "tg-Cyrl",
+        "ta",
+        "bfq",
+        "iru",
+        "te",
+        "th",
+        "tts",
+        "bo",
+        "ti",
+        "tpi",
+        "to",
+        "ts",
+        "tn",
+        "tcy",
+        "tr",
+        "tk",
+        "tvl",
+        "uk",
+        "ur",
+        "com",
+        "uz",
+        "vi",
+        "cy",
+        "wo",
+        "xh",
+        "yi",
+        "yo",
+        "zu"
+      ]
+    },
+    "MessageType": {
+      "type": "string",
+      "enum": [
+        "Acknowledgement",
+        "Heartbeat",
+        "Information",
+        "Message Status Request",
+        "Request",
+        "Reply"
+      ]
+    },
+    "OperationalModeType": {
+      "type": "string",
+      "enum": [
+        "Normal",
+        "JIP",
+        "Expendable"
+      ]
+    },
+    "OriginType": {
+      "type": "string"
+    },
+    "QueryStringIdentifier": {
+      "type": "string",
+      "pattern": "[A-Z][a-zA-Z0-9]*(/[A-Z][a-zA-Z0-9]*)*(/\\*){0,1}"
+    },
+    "QueryString": {
+      "type": "string",
+      "pattern": "\\*"
+    },
+    "ScheduleEventType": {
+      "type": "string",
+      "enum": [
+        "Primary",
+        "NonPrimary",
+        "Auxiliary",
+        "Comment",
+        "ProgramHeader",
+        "BreakHeader",
+        "Macro",
+        "Data"
+      ]
+    },
+    "ScheduleType": {
+      "type": "string",
+      "enum": [
+        "Primary",
+        "Alternate"
+      ]
+    },
+    "Smpte258MTimeCode": {
+      "type": "string",
+      "pattern": "(([0-1][0-9])|([2][0-3])):[0-5][0-9]:[0-5][0-9](([.,])|([:;]))[0-5][0-9]"
+    },
+    "StartModeType": {
+      "type": "string",
+      "enum": [
+        "Follow",
+        "Fixed",
+        "Manual",
+        "External"
+      ]
+    },
+    "Uuid": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "urn:uuid:[a-fA-F0-9]{8}(\\-[a-fA-F0-9]{4}){3}\\-[a-fA-F0-9]{12}"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/nonprogramdetail.schema.json",
+  "title": "nonprogramdetail",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "Advertiser": {
+      "type": "object",
+      "properties": {
+        "AdvertiserName": {
+          "title": "AdvertiserName",
+          "type": "object",
+          "properties": {
+            "@AdvertiserCode": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+            }
+          ],
+          "required": []
+        },
+        "ParentCompany": {
+          "title": "ParentCompany",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfCompany"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "AdvertiserName"
+      ]
+    },
+    "Agency": {
+      "type": "object",
+      "properties": {
+        "AgencyName": {
+          "title": "AgencyName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Name of advertising agency (buying agency)"
+        },
+        "EstimateNumber": {
+          "title": "EstimateNumber",
+          "type": "string",
+          "description": "Refers to the contract identifier in the agency system"
+        },
+        "AgencyCode": {
+          "title": "AgencyCode",
+          "type": "string",
+          "description": "Recommended to use TVB EDI Value or see Configuration Section in BXF Protocol Documentation"
+        },
+        "AlternateAgencyName": {
+          "title": "AlternateAgencyName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Optional entry for an alternate name for the Agency of Record. (v3.0)"
+        },
+        "EstimateName": {
+          "title": "EstimateName",
+          "type": "string",
+          "description": "Paired with the EstimateNumber to identify the contract in the agency system. (v3.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "AgencyName"
+      ]
+    },
+    "NonProgramDetail": {
+      "type": "object",
+      "properties": {
+        "AdType": {
+          "title": "AdType",
+          "type": "string",
+          "enum": [
+            "Commercial",
+            "Direct Response",
+            "Double Barter",
+            "Fee Spot",
+            "General",
+            "Paid Program",
+            "Promo",
+            "PSA",
+            "Optional Barter",
+            "Trade/Barter",
+            "Other"
+          ],
+          "description": "Used to describe the type of advertisement being placed (e.g. Commercial, General, Promo, PSA, etc.).  Note: added “Commercial” as an additional enumeration to be explicit from the General option. (v6.0) Added Fee Spot, Double Barter and Optional Barter (v8.0)"
+        },
+        "SpotType": {
+          "title": "SpotType",
+          "type": "string",
+          "enum": [
+            "BillBoard",
+            "Bookend",
+            "Paid Program",
+            "Piggyback",
+            "Standard",
+            "Other"
+          ],
+          "description": "Used to describe the type of spot or other interstitial (e.g. Standard, BillBoard, Bookend, etc.)  Default is Standard. (v5.0)"
+        },
+        "Advertiser": {
+          "title": "Advertiser",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Advertiser"
+            }
+          ],
+          "description": "List of advertisers associated to the spot. (v3.0)"
+        },
+        "Agency": {
+          "title": "Agency",
+          "$ref": "#/$defs/Agency",
+          "description": "Agency of record for the spot. (v3.0)"
+        },
+        "Product": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Product"
+          },
+          "description": "List of all products and/or brand names and the advertiser campaign associated to the spot to be aired. (v3.0)"
+        },
+        "MakeGoodFlag": {
+          "title": "MakeGoodFlag",
+          "type": "boolean",
+          "description": "Used to indicate the spot is being used as a make good for a previous ordered spot that did not air properly.  Default is 0."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "AdType",
+        "SpotType"
+      ]
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "title": "Name",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Product name for commercial spot content"
+        },
+        "ProductCode": {
+          "title": "ProductCode",
+          "type": "string",
+          "properties": {
+            "@industryGroup": {
+              "type": "string"
+            },
+            "@majorCategory": {
+              "type": "string"
+            },
+            "@subCategory": {
+              "type": "string"
+            },
+            "@productCategory": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [],
+          "description": "Recommend use of TVB EDI Value that indicates the category of product (e.g. \"Alcoholic Beverages\") or see Configuration Section in BXF Protocol Documentation"
+        },
+        "BrandName": {
+          "title": "BrandName",
+          "type": "object",
+          "properties": {
+            "@brandCode": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+            }
+          ],
+          "required": [],
+          "description": "Brand name associated to the advertiser campaign. (v3.0)"
+        },
+        "AdvertiserCampaign": {
+          "title": "AdvertiserCampaign",
+          "type": "object",
+          "properties": {
+            "@advertiserCampaignCode": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+            }
+          ],
+          "required": [],
+          "description": "Campaign name associated to the spot purchase. (v3.0)"
+        },
+        "DirectResponse": {
+          "title": "DirectResponse",
+          "type": "object",
+          "properties": {
+            "DRPhoneNumber": {
+              "title": "DRPhoneNumber",
+              "type": "string"
+            },
+            "DRCode": {
+              "title": "DRCode",
+              "type": "string"
+            },
+            "DR_URL": {
+              "title": "DR_URL",
+              "type": "string",
+              "format": "uri"
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Direct Response information (v6.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "Name"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

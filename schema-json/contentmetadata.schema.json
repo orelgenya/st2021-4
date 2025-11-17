@@ -1,0 +1,862 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/contentmetadata.schema.json",
+  "title": "contentmetadata",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "AlternateAudioContent": {
+      "type": "object",
+      "properties": {
+        "ContentId": {
+          "title": "ContentId",
+          "$ref": "./bxfcontentid.schema.json#/$defs/BxfContentId"
+        },
+        "Name": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "Genre": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "Description": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "UsagePolicy": {
+          "title": "UsagePolicy",
+          "$ref": "#/$defs/UsagePolicy",
+          "description": "Business rules expected to be applied when the content is used at this location"
+        },
+        "Audio": {
+          "title": "Audio",
+          "$ref": "./audio.schema.json#/$defs/Audio"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to provide alternate audio only media information",
+      "required": [
+        "ContentId"
+      ]
+    },
+    "BaseMedia": {
+      "type": "object",
+      "properties": {
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Enumerates the way content is stored or the method used to transmit",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "BaseBand": {
+              "title": "BaseBand",
+              "type": "object",
+              "properties": {
+                "Audio": {
+                  "title": "Audio",
+                  "$ref": "./audio.schema.json#/$defs/Audio"
+                },
+                "Video": {
+                  "title": "Video",
+                  "$ref": "./video.schema.json#/$defs/Video"
+                },
+                "Captions": {
+                  "title": "Captions",
+                  "$ref": "./bxfcaptions.schema.json#/$defs/BxfCaptions"
+                },
+                "VerticalIntervalData": {
+                  "title": "VerticalIntervalData",
+                  "$ref": "./datacontent.schema.json#/$defs/VerticalIntervalData"
+                },
+                "AccessServices": {
+                  "title": "AccessServices",
+                  "$ref": "./bxfcaptions.schema.json#/$defs/AccessServices",
+                  "description": "Expands Captioning options and other access services. (v6.0)"
+                },
+                "AcceptedQCIssues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                      }
+                    ]
+                  },
+                  "description": "Used to describe QC issues that will be present on the content, but have been approved or accepted previously. (v7.0)"
+                },
+                "@compressionBitRate": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Used to describe the attributes of media that is still in the process of production prior to transmission or release for final viewing.  (Added Access Services in v6.0) (Added AcceptedQCIssues in v7.0)"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "BaseBand"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "PrecompressedTS": {
+              "title": "PrecompressedTS",
+              "type": "object",
+              "properties": {
+                "TSAudio": {
+                  "title": "TSAudio",
+                  "$ref": "./audio.schema.json#/$defs/TSAudio"
+                },
+                "TSVideo": {
+                  "title": "TSVideo",
+                  "$ref": "./video.schema.json#/$defs/TSVideo"
+                },
+                "TSCaptioning": {
+                  "title": "TSCaptioning",
+                  "type": "boolean",
+                  "description": "If true indicates that CEA-708-C captioning is present."
+                },
+                "TSData": {
+                  "title": "TSData",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "Null": {
+                          "title": "Null",
+                          "type": "object"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "Null"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "SeparatePID": {
+                          "title": "SeparatePID",
+                          "type": "object",
+                          "properties": {
+                            "DataPIDValue": {
+                              "title": "DataPIDValue",
+                              "type": "integer"
+                            },
+                            "DataEncapsulation": {
+                              "title": "DataEncapsulation",
+                              "type": "string",
+                              "enum": [
+                                "ETSIpamsampling",
+                                "ETSIteletext",
+                                "ETSIvps",
+                                "ETSIwss",
+                                "SCTEamol",
+                                "SCTEtvguide",
+                                "SCTEvitc"
+                              ]
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "DataPIDValue",
+                            "DataEncapsulation"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "SeparatePID"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "DataContent": {
+                          "title": "DataContent",
+                          "$ref": "./datacontent.schema.json#/$defs/DataContent"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "DataContent"
+                      ]
+                    }
+                  ]
+                },
+                "@compressionBitRate": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Used to describe the attributes of the media that is to be transmitted or delivered for viewing as a complete package."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "PrecompressedTS"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ProfileMacro": {
+              "title": "ProfileMacro",
+              "$ref": "./macro.schema.json#/$defs/Macro",
+              "description": "Used to describe a macro event in place of normal audio/video."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ProfileMacro"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ContentDelivery": {
+              "title": "ContentDelivery",
+              "$ref": "./contentdelivery.schema.json#/$defs/ContentDelivery",
+              "description": "Used to specify the method by which media content should be created and formatted for downstream use by a designated media company. AirReadyMaster added (v5.0) and LibraryMaster added (v6.0) and minor modifications made (v7.0)."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ContentDelivery"
+          ]
+        }
+      ]
+    },
+    "BillBoard": {
+      "type": "object",
+      "properties": {
+        "ContentId": {
+          "title": "ContentId",
+          "$ref": "./bxfcontentid.schema.json#/$defs/BxfContentId",
+          "description": "Use only if multiple billboard elements.  If only one then repeat Id from previous level."
+        },
+        "BillBoardName": {
+          "title": "BillBoardName",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Name of BillBoard element"
+        },
+        "Copy": {
+          "title": "Copy",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "If just short copy, include in this element , otherwise, link full script in ScriptFile"
+        },
+        "ScriptFile": {
+          "title": "ScriptFile",
+          "type": "object",
+          "properties": {
+            "@fileName": {}
+          },
+          "additionalProperties": false,
+          "required": [],
+          "description": "Use to place a text file containing the full script for the billboard."
+        },
+        "LogoGraphicFile": {
+          "title": "LogoGraphicFile",
+          "type": "object",
+          "properties": {
+            "@fileName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [],
+          "description": "Use to place a graphic file that contains the BillBoard to be displayed on air."
+        },
+        "Media": {
+          "title": "Media",
+          "$ref": "#/$defs/Media",
+          "description": "If additional media records are associated with the billboard such as audio or video, decribe them in this area and assign separate contentIds."
+        },
+        "BillBoardComment": {
+          "title": "BillBoardComment",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Additional instructions for handling the billboard"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to describe the different attributes of one or more BillBoards",
+      "required": [
+        "ContentId",
+        "BillBoardName"
+      ]
+    },
+    "ContentDetail": {
+      "type": "object",
+      "properties": {
+        "ContentTags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "KeywordTag": {
+                "type": "array",
+                "items": {
+                  "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                },
+                "minItems": 1,
+                "description": "Actual item, person, event, or other occurance that is found in the media that can be tagged with a specific searchable word."
+              },
+              "Category": {
+                "title": "Category",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                "description": "User defined organizational tool to categorize the specific tagged area."
+              },
+              "Description": {
+                "title": "Description",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                "description": "Additional descriptive text of the tagged event or section of the media."
+              },
+              "LocationOnMedia": {
+                "title": "LocationOnMedia",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfDuration",
+                "description": "The specific start location and length of time that the tag refers to on the media."
+              },
+              "EventDateTime": {
+                "title": "EventDateTime",
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "./bxftypes.schema.json#/$defs/BxfDateTime"
+                  }
+                ],
+                "description": "Used to describe the date and time of the tagged event.  Particularly useful where a media contains multiple events, as in a compilation."
+              },
+              "SportsDetail": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "EventType": {
+                      "title": "EventType",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                      "description": "What sport or activity that is represented during the tagged period.  (eg football, tennis, golf, etc.)"
+                    },
+                    "EventName": {
+                      "title": "EventName",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                      "description": "The specific name of the event or part of an event that is tagged. (eg. World Cup Finals)"
+                    },
+                    "EventParticipants": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "Name": {
+                            "title": "Name",
+                            "$ref": "./bxftypes.schema.json#/$defs/BxfContact",
+                            "description": "The name of the person associated with the credit, though additional information is available through full use of full contact details."
+                          },
+                          "Role": {
+                            "title": "Role",
+                            "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                            "description": "The position or role performed for the tagged media in the sporting event."
+                          },
+                          "Grouping": {
+                            "title": "Grouping",
+                            "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                            "description": "If part of a team or other group that is competing, the name of that group."
+                          },
+                          "History": {
+                            "title": "History",
+                            "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                            "description": "Historical details associated with the particular event that is tagged."
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "Name",
+                          "Role"
+                        ]
+                      },
+                      "minItems": 1,
+                      "description": "The individuals or teams associated with the tagged sports event."
+                    },
+                    "Results": {
+                      "title": "Results",
+                      "type": "object",
+                      "properties": {
+                        "EventResult": {
+                          "title": "EventResult",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                        },
+                        "Ranking": {
+                          "title": "Ranking",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                        },
+                        "RankName": {
+                          "title": "RankName",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                        },
+                        "StatReference": {
+                          "title": "StatReference",
+                          "type": "object",
+                          "properties": {
+                            "Stat": {
+                              "title": "Stat",
+                              "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "EventResultsDescription": {
+                          "title": "EventResultsDescription",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                        },
+                        "LocationOnMedia": {
+                          "title": "LocationOnMedia",
+                          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteDateTime"
+                        },
+                        "ResultTags": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                          }
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "EventResult"
+                      ],
+                      "description": "Details concerning the results of the competition such as score, finish position (ranking), time or other statistics, extended description and additional results tagging."
+                    },
+                    "PrivateInformation": {
+                      "title": "PrivateInformation",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "EventType",
+                    "EventParticipants"
+                  ]
+                },
+                "description": "When tagged events happen to also be sports related, this allows the additional details associated with most sporting events,"
+              },
+              "Credits": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Name": {
+                      "title": "Name",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfContact",
+                      "description": "The name of the person associated with the credit, though additional information is available through full use of full contact details."
+                    },
+                    "Role": {
+                      "title": "Role",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                      "description": "The role played for the tagged media"
+                    },
+                    "Accreditation": {
+                      "title": "Accreditation",
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+                      "description": "If appropriate, the accreditation of the named player in the tagged media."
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "Name",
+                    "Role"
+                  ]
+                },
+                "description": "Credits associated with the media or specific tagged location."
+              },
+              "LocationDetails": {
+                "title": "LocationDetails",
+                "type": "object",
+                "properties": {
+                  "Location": {
+                    "title": "Location",
+                    "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                  },
+                  "GPSData": {
+                    "title": "GPSData",
+                    "type": "object",
+                    "properties": {
+                      "Latitude": {
+                        "title": "Latitude",
+                        "type": "number"
+                      },
+                      "Longitude": {
+                        "title": "Longitude",
+                        "type": "number"
+                      },
+                      "Elevation": {
+                        "title": "Elevation",
+                        "type": "number"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "Latitude",
+                      "Longitude"
+                    ],
+                    "description": "Needs to be defined based on camera capture details"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "For each tag, a speciific location in space using generic textual description of specific GPS coordinates.  This data is often captured as part of the filming from camera data."
+              },
+              "PrivateInformation": {
+                "title": "PrivateInformation",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "KeywordTag",
+              "PrivateInformation"
+            ]
+          },
+          "description": "Associated descriptive metadata concerning the specific action or event captured on the media for a designated period of time, and optionally its location."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Description of people, events, sports results, and word tags to search for things that represent this media (v5.0)."
+    },
+    "ContentMetaData": {
+      "type": "object",
+      "properties": {
+        "ContentId": {
+          "title": "ContentId",
+          "$ref": "./bxfcontentid.schema.json#/$defs/BxfContentId"
+        },
+        "Name": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "DefaultLength": {
+          "title": "DefaultLength",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfDuration",
+          "description": "Used to indicate the default length of the content"
+        },
+        "Genre": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "Description": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          }
+        },
+        "UsagePolicy": {
+          "title": "UsagePolicy",
+          "$ref": "#/$defs/UsagePolicy",
+          "description": "Business rules expected to be applied when the content is used at this location"
+        },
+        "Media": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Media"
+          }
+        },
+        "BillBoard": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BillBoard"
+          }
+        },
+        "DataExtensions": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfExtensions"
+          },
+          "description": "Used to add an unlimited amount of descriptive metadata for the content. (v3.0)"
+        },
+        "Synopses": {
+          "title": "Synopses",
+          "type": "object",
+          "properties": {
+            "Synopsis": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "@synopsisName": {
+                    "type": "string"
+                  },
+                  "@synopsisMaxLength": {
+                    "type": "integer"
+                  },
+                  "@synopsisPurpose": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                  }
+                ],
+                "required": []
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Synopsis"
+          ],
+          "description": "Allow the addition of one or more synopses of various lengths and for different purposes in multiple languages (v5.0)"
+        },
+        "ContentDetails": {
+          "title": "ContentDetails",
+          "$ref": "#/$defs/ContentDetail",
+          "description": "Description of people, events, sports results, and word tags to search for things that represent this media (v5.0)."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to describe all the metadata for a single instance of content. (Note that this element name might be expected to be “ContentMetadata”, but was left unchanged from previous versions in order to preserve backward compatibility.  This is a documented exception as of v3.0)",
+      "required": [
+        "ContentId"
+      ]
+    },
+    "Media": {
+      "type": "object",
+      "properties": {
+        "MediaLocation": {
+          "title": "MediaLocation",
+          "$ref": "#/$defs/MediaLocation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Base Media combined with Media Location",
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseMedia"
+        }
+      ],
+      "required": [
+        "MediaLocation"
+      ]
+    },
+    "MediaLocation": {
+      "type": "object",
+      "properties": {
+        "Location": {
+          "title": "Location",
+          "$ref": "./location.schema.json#/$defs/Location",
+          "description": "Identification of where the media is stored. Used by systems to notify locations of essence instance"
+        },
+        "SOM": {
+          "title": "SOM",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "The start of message location of the content on the media it is stored."
+        },
+        "Duration": {
+          "title": "Duration",
+          "type": "object",
+          "properties": {
+            "@useEOM": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfDuration"
+            }
+          ],
+          "required": [],
+          "description": "The length of the content specified."
+        },
+        "EOM": {
+          "title": "EOM",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfSmpteTime",
+          "description": "The end of message location of the content on the media it is stored."
+        },
+        "ArchiveGroup": {
+          "title": "ArchiveGroup",
+          "type": "object",
+          "properties": {
+            "ArchiveName": {
+              "title": "ArchiveName",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+              "description": "Name of the archive"
+            },
+            "PhysicalLocation": {
+              "title": "PhysicalLocation",
+              "type": "object",
+              "properties": {
+                "Dimension": {
+                  "type": "array",
+                  "items": {},
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "Dimension"
+              ],
+              "description": "Location of the archive"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ArchiveName"
+          ],
+          "description": "An identifier to allow assignment to a specific archive group or repository"
+        },
+        "QualityControl": {
+          "title": "QualityControl",
+          "$ref": "./qualitycontrol.schema.json#/$defs/QualityControl",
+          "description": "Media often must be checked for its quality each time it is copied or moved to another location.  Multiple checks are typical to confirm that the audio, video and other attributes meet the standards of the intended usage. (v5.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@sourceType": {
+          "type": "string",
+          "enum": [
+            "Primary",
+            "Backup",
+            "Preview",
+            "Proxy",
+            "Other"
+          ]
+        },
+        "@qualifier": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to designate the physical location of a media essence and its quality",
+      "required": [
+        "Location",
+        "SOM",
+        "Duration"
+      ]
+    },
+    "UsagePolicy": {
+      "type": "object",
+      "properties": {
+        "AssignedChannels": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfShortName"
+          },
+          "description": "List of Channels on which this content can be aired"
+        },
+        "EmbargoDate": {
+          "title": "EmbargoDate",
+          "type": "string",
+          "format": "date-time",
+          "description": "The first date the content may be used"
+        },
+        "FirstAirDate": {
+          "title": "FirstAirDate",
+          "type": "string",
+          "properties": {
+            "@dayOfWeek": {
+              "$ref": "./bxftypes.schema.json#/$defs/DayPattern"
+            }
+          },
+          "additionalProperties": false,
+          "format": "date-time",
+          "required": [],
+          "description": "First planned schedule date for this content"
+        },
+        "ExpirationDate": {
+          "title": "ExpirationDate",
+          "type": "string",
+          "format": "date-time",
+          "description": "Date after which content should not be aired"
+        },
+        "PurgeDate": {
+          "title": "PurgeDate",
+          "type": "string",
+          "format": "date-time",
+          "description": "Date after which content can be purged"
+        },
+        "HiatusDateRange": {
+          "title": "HiatusDateRange",
+          "type": "object",
+          "properties": {
+            "HiatusStartDate": {
+              "title": "HiatusStartDate",
+              "type": "string",
+              "format": "date-time"
+            },
+            "HiatusEndDate": {
+              "title": "HiatusEndDate",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "HiatusStartDate"
+          ],
+          "description": "Used to indicate a date range when the content should not be shown."
+        },
+        "Exclusions": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfExtensions"
+          },
+          "description": "Allows unlimited defined values to be excluded as part of the UsagePolicy. (v3.0)"
+        },
+        "EmbeddedRights": {
+          "title": "EmbeddedRights",
+          "type": "object",
+          "description": "Used to describe the rights held within a piece of content that differ from the rest of the content's rights.  For example, music embedded in a program, or a special event shown as part of an anthology program."
+        },
+        "PlatformType": {
+          "type": "array",
+          "items": {
+            "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+          },
+          "description": "Used to indicate the platform the content playout is on (eg. Linear, VOD, etc.). (v7.0)"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

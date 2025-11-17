@@ -1,0 +1,625 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/jobdetail.schema.json",
+  "title": "jobdetail",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "InstructionMap": {
+      "type": "object",
+      "properties": {
+        "@jobInstructionId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@contentMapId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@stationId": {
+          "type": "string"
+        },
+        "@instructionId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to map stations, content and traffic instructions in a many to many relationship. (v3.0)",
+      "required": [
+        "@jobInstructionId",
+        "@contentMapId",
+        "@stationId",
+        "@instructionId"
+      ]
+    },
+    "TrafficInstructions": {
+      "type": "object",
+      "properties": {
+        "Content": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@contentMapId": {
+                "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+              },
+              "@contentVideoFormat": {
+                "type": "string",
+                "enum": [
+                  "SD",
+                  "HD",
+                  "3D",
+                  "2K",
+                  "4K",
+                  "Other"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "$ref": "./content.schema.json#/$defs/Content"
+              }
+            ],
+            "required": [
+              "@contentMapId"
+            ]
+          },
+          "minItems": 1,
+          "description": "Used to describe the content at a specific location"
+        },
+        "InstructionDetail": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InstructionDetail"
+          },
+          "minItems": 1,
+          "description": "Used to provide specific copy instructions for the content"
+        },
+        "InstructionMap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InstructionMap"
+          },
+          "minItems": 1,
+          "description": "Maps the job, content, station and instructions allowing many to many relationships to be created.  If only one of each entity, this is still required."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used to describe traffic instructions to a single or multiple stations for multiple content.  Requires stations to be defined under a Job. (v3.0)",
+      "required": [
+        "Content",
+        "InstructionDetail",
+        "InstructionMap"
+      ]
+    },
+    "InstructionDetail": {
+      "type": "object",
+      "properties": {
+        "PlacementMethod": {
+          "title": "PlacementMethod",
+          "type": "object",
+          "properties": {
+            "NPCSchedule": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "@contentMapId": {},
+                  "@comments": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "Dayparts": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "Programs": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "@excludeFlag": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "allOf": [
+                                  {
+                                    "$ref": "./bxftypes.schema.json#/$defs/BxfText"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "description": "Option to list programs that would normally be excluded or included wuthin the description of the dayparts. (E.g. run in Primetime, but not in a specific news programs)."
+                            }
+                          },
+                          "additionalProperties": false,
+                          "allOf": [
+                            {
+                              "$ref": "./bxftypes.schema.json#/$defs/BxfDaypart"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "minItems": 1,
+                        "description": "Time periods defined by days of the week and start and end times that either include or exclude the placement of the spot"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "Dayparts"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "NamedRule": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "description": "Used to pass a defined named rule for placement of content that is agreed to by both parties.  For example, a predefined rule like \"ROS\" to indicate run of schedule on the station."
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "NamedRule"
+                    ]
+                  }
+                ]
+              },
+              "description": "NonProgramContent placement rules that either specify or restrict where a spot can be placed by time periods or specifically named programs"
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Rules concerning the placement of NPC onto a linear schedule at a specific distribution location, station, network, or other operator"
+        },
+        "ContentRotation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Frequency": {
+                "title": "Frequency",
+                "type": "integer",
+                "description": "Number of times the NPC can be aired in the flight period"
+              },
+              "RotationPercentage": {
+                "title": "RotationPercentage",
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "If multiple NPC records, use this to designate the rotation percentage"
+              },
+              "RotationPattern": {
+                "title": "RotationPattern",
+                "type": "string",
+                "description": "String of numbers (11223) or letters (ABBC) (with commas optionally) indicating content order of placement by traffic system. (Annotaion Only v8.0)"
+              },
+              "RotationSequence": {
+                "title": "RotationSequence",
+                "type": "integer",
+                "description": "If multiple NPC records, use this to designate the rotation sequence"
+              },
+              "RotationGroup": {
+                "title": "RotationGroup",
+                "type": "integer",
+                "description": "Used to group Bookends and Piggybacks. (v8.0)"
+              },
+              "@contentMapId": {}
+            },
+            "additionalProperties": false
+          }
+        },
+        "DRCallToAction": {
+          "title": "DRCallToAction",
+          "type": "object",
+          "properties": {
+            "DRCallToActionType": {
+              "title": "DRCallToActionType",
+              "type": "string",
+              "enum": [
+                "Phone Number",
+                "URL",
+                "SMS",
+                "Address",
+                "Other"
+              ],
+              "description": "Select a type from valid enumerations such Phone Number, URL, SMS, etc."
+            },
+            "DRCallToActionValue": {
+              "title": "DRCallToActionValue",
+              "type": "string",
+              "description": "Place actual value as a string in this field."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "DRCallToActionType",
+            "DRCallToActionValue"
+          ],
+          "description": "Direct Response Information"
+        },
+        "Disposal": {
+          "title": "Disposal",
+          "type": "string",
+          "description": "Instructions on the disposal of the NPC media once the contract period has ended"
+        },
+        "InstructionComments": {
+          "title": "InstructionComments",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Specific comments concerning the instructions for the placement or use of the NPC on a schedule"
+        },
+        "AgencyDisclaimer": {
+          "title": "AgencyDisclaimer",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfText",
+          "description": "Legal disclaimer provided by the buying agency that notifies the entity executing this contract of various limitations or other issues concerning the airing of the NPC material."
+        },
+        "BuyingSystemDetails": {
+          "title": "BuyingSystemDetails",
+          "type": "object",
+          "properties": {
+            "TargetDayparts": {
+              "type": "array",
+              "items": {
+                "$ref": "./bxftypes.schema.json#/$defs/BxfDaypart"
+              },
+              "description": "Dayparts that are targeted for the purposes of this buy, but are not specifically purchased as part of the contract."
+            },
+            "TargetPrograms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Programs targeted for the purpose of this buy, but are not specifically purchased as part of the contract."
+            },
+            "TargetCost": {
+              "title": "TargetCost",
+              "type": "number",
+              "description": "An estimate of the average cost expected for the buy."
+            },
+            "DistributionDate": {
+              "title": "DistributionDate",
+              "type": "string",
+              "format": "date",
+              "description": "The date that the NPC media is expected to have been received by the entity airing the copy for this buy."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Specific items that are referenced in the buying system, but are not part of the traffic instructions."
+        },
+        "InstructionFiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@fileName": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": []
+          },
+          "description": "Location to embed actual data files that would typically consist of the documentation for the traffic department to execute these instructions.  Can also be used to distribute small media files such as graphics and audio files, but not to be used for video."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@actionType": {
+          "type": "string",
+          "enum": [
+            "Add",
+            "Delete",
+            "Revision",
+            "Unchanged"
+          ]
+        },
+        "@instructionId": {
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+        },
+        "@stationId": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Rules limiting where the NonProgramContent (NPC) can be used on a schedule. (v3.0)",
+      "required": [
+        "@actionType",
+        "@instructionId"
+      ]
+    },
+    "JobDetail": {
+      "type": "object",
+      "properties": {
+        "JobType": {
+          "title": "JobType",
+          "type": "string",
+          "description": "Type of job to be performed.  This is a specific list that the receiver of the message understands and can act on and would normally also be delineated in Configuration."
+        },
+        "JobRequester": {
+          "title": "JobRequester",
+          "type": "object",
+          "properties": {
+            "AdditionalCompany": {
+              "type": "array",
+              "items": {
+                "$ref": "./bxftypes.schema.json#/$defs/BxfCompany"
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "$ref": "./bxftypes.schema.json#/$defs/BxfCompany"
+            }
+          ],
+          "required": [
+            "AdditionalCompany"
+          ],
+          "description": "Company or person requesting the job to be performed"
+        },
+        "JobManager": {
+          "title": "JobManager",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfCompany",
+          "description": "Company or person managing, commissioning or coordinating the work across multiple companies."
+        },
+        "JobPerformers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Station": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "./bxftypes.schema.json#/$defs/BxfStation"
+                    }
+                  ]
+                },
+                "minItems": 1,
+                "description": "The entities that will perform the job"
+              },
+              "JobResults": {
+                "title": "JobResults",
+                "type": "object",
+                "properties": {
+                  "Accepted": {
+                    "title": "Accepted",
+                    "type": "boolean",
+                    "description": "A flag to indicate that the job sent to the Performer has been accepted and either has been worked on or will be worked on.  If the flag is negated it indicates the job was rejected and will not be performed."
+                  },
+                  "UserName": {
+                    "title": "UserName",
+                    "type": "string",
+                    "description": "The user that was associated with the decision to accept or reject a job at the Performer company.  Usually linked to a specific user in the Performer's system."
+                  },
+                  "UserComment": {
+                    "title": "UserComment",
+                    "type": "string",
+                    "description": "An optional comment to indicate what was done with a job."
+                  },
+                  "PrivateInformation": {
+                    "title": "PrivateInformation",
+                    "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "Accepted",
+                  "UserName"
+                ],
+                "description": "Once the Performer works on a submitted job the results of that work would be available to indicate to the JobRequester and JobManager the status of the specific job, either accepted and performed or rejected."
+              },
+              "@stationCount": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "$ref": "./bxftypes.schema.json#/$defs/BxfCompany"
+              }
+            ],
+            "required": [
+              "Station"
+            ]
+          },
+          "description": "The company that actually performs the work"
+        },
+        "JobInstruction": {
+          "title": "JobInstruction",
+          "type": "object",
+          "properties": {
+            "JobReference": {
+              "title": "JobReference",
+              "type": "object",
+              "properties": {
+                "ReferenceType": {
+                  "title": "ReferenceType",
+                  "type": "string",
+                  "description": "The type of reference being provided which can be designated in Configuration."
+                },
+                "ReferenceName": {
+                  "title": "ReferenceName",
+                  "type": "string"
+                },
+                "ReferenceCode": {
+                  "title": "ReferenceCode",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "ReferenceType",
+                "ReferenceName"
+              ],
+              "description": "Used to provide JobPerformer with additional information to lookup a specific job related to a separate ordering process (e.g. Advertiser Name/Estimate Number could be provided to help look up a specific order in a traffic system)."
+            },
+            "Disclaimer": {
+              "title": "Disclaimer",
+              "type": "object",
+              "description": "Disclaimer that applies to all instuctions associated to the job.  For example, if the job is for a single agency, but has multiple Traffic Instructions this can be used to inert the Agency's Disclaimer once rather than having to repeat it at the lower level."
+            },
+            "InstructionComment": {
+              "title": "InstructionComment",
+              "type": "string",
+              "description": "Comments for the full instructions"
+            },
+            "PrivateInformation": {
+              "title": "PrivateInformation",
+              "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+            },
+            "@jobInstructionId": {
+              "$ref": "./bxftypes.schema.json#/$defs/Uuid"
+            },
+            "@instructionType": {
+              "type": "string"
+            },
+            "@instructionStartDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "@instructionEndDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "@revisionNumber": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "@revisionDateTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "@revisionReferenceId": {
+              "type": "string"
+            },
+            "@revisionReason": {
+              "type": "string"
+            },
+            "@acceptRejectFlag": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "@jobInstructionId",
+            "@instructionType",
+            "@instructionStartDate"
+          ],
+          "description": "Instruction reference identifiers, codes and comments as well as start and end dates"
+        },
+        "JobDescription": {
+          "title": "JobDescription",
+          "type": "string",
+          "description": "Text description of the job to be performed"
+        },
+        "JobBilling": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "BillingReference": {
+                "title": "BillingReference",
+                "type": "string",
+                "description": "The billing reference identifier."
+              },
+              "PONumber": {
+                "title": "PONumber",
+                "type": "string",
+                "description": "A purchase order number related to the job request."
+              },
+              "LineNumber": {
+                "title": "LineNumber",
+                "type": "integer",
+                "description": "A line reference value on the  purchase order or contract order that relates to the work for this specific job."
+              },
+              "Quantity": {
+                "title": "Quantity",
+                "type": "integer",
+                "description": "The quantity of the item to be billed (units, hours, etc.)"
+              },
+              "Description": {
+                "title": "Description",
+                "type": "string",
+                "description": "A textual description of the job completed, its purpose and status."
+              },
+              "Cost": {
+                "title": "Cost",
+                "type": "number",
+                "description": "The value to be billed for the specific job."
+              },
+              "PrivateInformation": {
+                "title": "PrivateInformation",
+                "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "BillingReference",
+              "Quantity",
+              "PrivateInformation"
+            ]
+          },
+          "description": "Optional details concerning the way the job be billed or invoiced for the work performed."
+        },
+        "JobRelease": {
+          "title": "JobRelease",
+          "type": "string",
+          "format": "date-time",
+          "description": "Date-Time when the job is expected to be completed and released, assuming it is held until this point in time.  Typically not used by the JobPerformer."
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        },
+        "@jobId": {
+          "type": "string"
+        },
+        "@subJobId": {
+          "type": "string"
+        },
+        "@jobDependency": {
+          "type": "string"
+        },
+        "@orderId": {
+          "type": "string"
+        },
+        "@serviceLevel": {
+          "type": "string"
+        },
+        "@performerCount": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false,
+      "description": "Allows the message to assign job information.  If more than one company or process is required for a job, enter multiple records and link using the jobId.  If one job is dependent on the completion of another, link the jobs using jobID and jobDependency. (v3.0)",
+      "required": [
+        "JobType",
+        "JobRequester",
+        "@jobId"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

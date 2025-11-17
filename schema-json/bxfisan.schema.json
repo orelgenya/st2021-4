@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/bxfisan.schema.json",
+  "title": "bxfisan",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "BxfIsan": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smpte-ra.org/schemas/2021/2023/BXF/primaryevent.schema.json",
+  "title": "primaryevent",
+  "type": "object",
+  "properties": {},
+  "$defs": {
+    "PrimaryEvent": {
+      "type": "object",
+      "properties": {
+        "PrimaryElementId": {
+          "title": "PrimaryElementId",
+          "$ref": "./bxftypes.schema.json#/$defs/Uuid",
+          "description": "Uses a UUID to link to the format structure element"
+        },
+        "PrivateInformation": {
+          "title": "PrivateInformation",
+          "$ref": "./bxftypes.schema.json#/$defs/BxfPrivateInformation"
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "ProgramEvent": {
+              "title": "ProgramEvent",
+              "$ref": "./programevent.schema.json#/$defs/ProgramEvent"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ProgramEvent"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "NonProgramEvent": {
+              "title": "NonProgramEvent",
+              "$ref": "./nonprogramevent.schema.json#/$defs/NonProgramEvent"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "NonProgramEvent"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
